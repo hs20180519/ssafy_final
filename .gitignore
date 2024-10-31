@@ -1,0 +1,8 @@
+/.metadata/
+Servers/
+.idea
+.settings
+
+WhereIsMyHome/.idea/
+WhereIsMyHome/.settings/
+WhereIsMyHome/target/

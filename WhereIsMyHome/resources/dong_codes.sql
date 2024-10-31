@@ -18,11 +18,11 @@ CREATE SCHEMA IF NOT EXISTS `ssafyhome` DEFAULT CHARACTER SET utf8mb4 COLLATE ut
 USE `ssafyhome` ;
 
 -- -----------------------------------------------------
--- Table `ssafyhome`.`dongcodes`
+-- Table `ssafyhome`.`dong_codes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ssafyhome`.`dongcodes` ;
+DROP TABLE IF EXISTS `ssafyhome`.`dong_codes` ;
 
-CREATE TABLE IF NOT EXISTS `ssafyhome`.`dongcodes` (
+CREATE TABLE IF NOT EXISTS `ssafyhome`.`dong_codes` (
   `dong_code` VARCHAR(10) NOT NULL,
   `sido_name` VARCHAR(30) NULL DEFAULT NULL,
   `gugun_name` VARCHAR(30) NULL DEFAULT NULL,

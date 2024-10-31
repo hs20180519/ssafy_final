@@ -1,10 +1,9 @@
-
 -- -----------------------------------------------------
--- Table `ssafyhome`.`houseinfos`
+-- Table `ssafyhome`.`house_infos`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ssafyhome`.`houseinfos` ;
+DROP TABLE IF EXISTS `ssafyhome`.`house_infos` ;
 
-CREATE TABLE IF NOT EXISTS `ssafyhome`.`houseinfos` (
+CREATE TABLE IF NOT EXISTS `ssafyhome`.`house_infos` (
   `apt_seq` VARCHAR(20) NOT NULL,
   `sgg_cd` VARCHAR(5) NULL DEFAULT NULL,
   `umd_cd` VARCHAR(5) NULL DEFAULT NULL,

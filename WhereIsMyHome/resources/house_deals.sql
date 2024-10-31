@@ -1,9 +1,9 @@
 -- -----------------------------------------------------
--- Table `ssafyhome`.`housedeals`
+-- Table `ssafyhome`.`house_deals`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ssafyhome`.`housedeals` ;
+DROP TABLE IF EXISTS `ssafyhome`.`house_deals` ;
 
-CREATE TABLE IF NOT EXISTS `ssafyhome`.`housedeals` (
+CREATE TABLE IF NOT EXISTS `ssafyhome`.`house_deals` (
   `no` INT NOT NULL AUTO_INCREMENT,
   `apt_seq` VARCHAR(20) NULL DEFAULT NULL,
   `apt_dong` VARCHAR(40) NULL DEFAULT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `ssafyhome`.`housedeals` (
   INDEX `apt_seq_to_house_info_idx` (`apt_seq` ASC) VISIBLE,
   CONSTRAINT `apt_seq_to_house_info`
     FOREIGN KEY (`apt_seq`)
-    REFERENCES `ssafyhome`.`houseinfos` (`apt_seq`))
+    REFERENCES `ssafyhome`.`house_infos` (`apt_seq`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 7084512
 DEFAULT CHARACTER SET = utf8mb4
