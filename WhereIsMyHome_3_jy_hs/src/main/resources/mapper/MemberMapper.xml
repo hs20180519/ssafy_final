@@ -9,16 +9,16 @@
 		property="role" /> </resultMap> -->
 
 	<!-- select * from members where id="ssafy" and password="1234"; -->
-	<select id="selectMember" parameterType="map" resultType="userDto">
+	<select id="getMember" parameterType="map" resultType="memberDto">
 		select * from
 		members
 		where id = #{id} and password = #{password}
 	</select>
 
 	<!-- insert into members values("ssafy", "1234", "ssafy@ssafy.com", "김싸피"); -->
-	<insert id="insertMember" parameterType="map">
+	<insert id="insertMember" parameterType="memberDto">
 		insert into members
-		values(#{id},#{password}, #{email}, #{name})
+		values (#{id},#{password}, #{email}, #{name})
 	</insert>
 
 </mapper>
