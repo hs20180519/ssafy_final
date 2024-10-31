@@ -1,4 +1,4 @@
-package com.ssafy.houseDeal;
+package com.ssafy.houseDeal.model;
 
 public class HouseDealDto {
 	private int no;
