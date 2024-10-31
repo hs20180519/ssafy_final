@@ -28,7 +28,7 @@ public class FavoriteAreaDaoImpl implements FavoriteAreaDao{
         try {
             conn = dbUtil.getConnection();
             StringBuilder sql = new StringBuilder();
-            sql.append("INSERT INTO favorite_areas (user_info_id, sido_name, gungu_name, dong_name) ")
+            sql.append("INSERT INTO favorite_areas (member_id, sido_name, gungu_name, dong_name) ")
                     .append("VALUES (?, ?, ?, ?)");
             pstmt = conn.prepareStatement(sql.toString());
             pstmt.setInt(1, favoriteArea.getUserInfoId());

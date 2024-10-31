@@ -36,7 +36,7 @@ public class HouseDealDaoImpl implements HouseDealDao {
 			conn = dbUtil.getConnection();
 			StringBuilder sql = new StringBuilder();
 			sql.append(
-					"INSERT INTO housedeals(apt_seq, floor, deal_year, deal_month, deal_day, exclu_use_ar, deal_amount) \n");
+					"INSERT INTO house_deals(apt_seq, floor, deal_year, deal_month, deal_day, exclu_use_ar, deal_amount) \n");
 			sql.append("VALUES");
 			sql.append("(?, ?, ?, ?, ?, ?, ?)");
 

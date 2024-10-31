@@ -29,13 +29,14 @@ public class UserInfoDaoImpl implements UserInfoDao {
 			conn = dbUtil.getConnection();
 			
 			StringBuilder sql = new StringBuilder();
-			sql.append("insert into user_infos(user_email, user_password, user_name) \n");
-			sql.append("values (?, ?, ?)");
+			sql.append("insert into members(id, email, password, name) \n");
+			sql.append("values (?, ?, ?, ?)");
 			
 			pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setString(1,  user.getUserEmail());
 			pstmt.setString(2, user.getUserPassword());
 			pstmt.setString(3, user.getUserName());
+			
 			
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
