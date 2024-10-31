@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.favoriteArea.model.mapper.FavoriteAreaMapper">
+
+    <resultMap id="favorite" type="favoriteAreaDto">
+        <result column="member_id" property="memberId" />
+        <result column="dong_code" property="dongCode" />
+    </resultMap>
+    <!-- select * from favorite_areas
+where member_id = "ssafy"; -->
+    <select id="getFavoriteAreaByMemberId" parameterType="String" resultMap="favorite">
+        select *
+        from favorite_areas
+        where member_id = #{memberId}
+    </select>
+
+    <!--insert into favorite_areas(member_id, dong_code)
+values("ssafy", 1111010100);  -->
+    <insert id="insertFavoriteArea" parameterType="Map">
+        insert into favorite_areas(member_id, dong_code)
+        values(#{memberId}, #{dongCode})
+    </insert>
+
+    <delete id="deleteFavoriteArea" parameterType="int">
+        delete from favorite_areas
+        where id=#{favoriteAreaId}
+    </delete>
+</mapper>
