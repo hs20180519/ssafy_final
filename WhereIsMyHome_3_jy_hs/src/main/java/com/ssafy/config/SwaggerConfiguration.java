@@ -17,27 +17,27 @@ public class SwaggerConfiguration {
 
 	@Bean
 	public OpenAPI openAPI() {
-		Info info = new Info().title("SSAFY Reservation API 명세서").description(
-				"<h3>SSAFY API Reference for Developers</h3>Swagger를 이용한 Reservation API<br><img src=\"/assets/favicon.png\" width=\"150\">")
+		Info info = new Info().title("SSAFY WhereIsMyHome API 명세서").description(
+				"<h3>SSAFY API Reference for Developers</h3>Swagger를 이용한 WhereIsMyHome API<br><img src=\"/assets/favicon.png\" width=\"150\">")
 				.version("v1").contact(new io.swagger.v3.oas.models.info.Contact().name("natural-hyeonsu")
 						.email("jyjy@ssafy.com").url("http://edu.ssafy.com"));
 
 		return new OpenAPI().components(new Components()).info(info);
 	}
 
-	@Bean
-	public GroupedOpenApi publicApi() {
-		return GroupedOpenApi.builder().group("ssafy-admin").pathsToMatch("/api/admin/**").build();
-	}
-
-	@Bean
-	public GroupedOpenApi adminApi() {
-		return GroupedOpenApi.builder().group("ssafy-user").pathsToMatch("/api/user/**").build();
-	}
-	
-	@Bean
-	public GroupedOpenApi fileApi() {
-		return GroupedOpenApi.builder().group("ssafy-reservation").pathsToMatch("/api/reservation/**").build();
-	}
+//	@Bean
+//	public GroupedOpenApi publicApi() {
+//		return GroupedOpenApi.builder().group("ssafy-admin").pathsToMatch("/api/admin/**").build();
+//	}
+//
+//	@Bean
+//	public GroupedOpenApi adminApi() {
+//		return GroupedOpenApi.builder().group("ssafy-user").pathsToMatch("/api/user/**").build();
+//	}
+//	
+//	@Bean
+//	public GroupedOpenApi fileApi() {
+//		return GroupedOpenApi.builder().group("ssafy-reservation").pathsToMatch("/api/reservation/**").build();
+//	}
 
 }
