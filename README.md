@@ -62,6 +62,12 @@ release-... 형식을 추천한다. ex) release-1.2
 
 hotfix-... 형식을 추천한다. ex) hotfix-1.2.1
 
+![memberSwagger](/uploads/6cef4399fc1d1448ae05829213526f4e/memberSwagger.png)
+
+![favoriteAreaSwagger](/uploads/7bb34f91df76ae9db6b759b8867e1f93/favoriteAreaSwagger.png)
+
 ![localhost_swagger-ui_index.html_urls.primaryName_house-deal](/uploads/130a810692b7b95164b8951a95ef99b4/localhost_swagger-ui_index.html_urls.primaryName_house-deal.png)
 
 ![localhost_swagger-ui_index.html_urls.primaryName_dong-code](/uploads/15ea83279b2c8d0ef61cc92c1e0a961f/localhost_swagger-ui_index.html_urls.primaryName_dong-code.png)
+
+
