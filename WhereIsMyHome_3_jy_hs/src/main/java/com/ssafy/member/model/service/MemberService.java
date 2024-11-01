@@ -13,6 +13,8 @@ public interface MemberService {
     
     void updateMember(MemberDto memberDto) throws SQLException;
     
+    MemberDto findMemberByMemberId(String memberId) throws SQLException;    
+    
     void deleteMember(String memberId) throws SQLException;
     
     List<MemberDto> searchMembers(Map<String, String> criteria) throws SQLException;

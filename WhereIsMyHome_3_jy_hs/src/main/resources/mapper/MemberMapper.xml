@@ -25,5 +25,10 @@
 		where id = #{id};
 	</update>
 
+	<select id="getMemberByMemberId" parameterType="String">
+		select * from
+		members
+		where id = #{id}
+	</select>
 </mapper>
     
