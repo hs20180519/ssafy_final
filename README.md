@@ -1,4 +1,72 @@
-# commit convention
+# SSAFY12_광주5_관통_Framework_3팀_김자연_정현수
+
+## :pushpin: 프로젝트 구성
+### 프로젝트 설명
+WhereIsMyHome 서비스는 사용자에게 편리하게 주택 매물 검색 기능을 기본으로 제공하는 서비스입니다. 본 프로젝트는 Java Servlet 기반 웹 프로젝트를 spring boot 프레임워크로 리팩토링하고, REST API 아키텍처를 적용하는 것을 목표로 합니다. <br>
+
+### 팀 구성
+|이름|역할|
+|:---:|:---:|
+|김자연(팀장)|매물 검색 및 검색 필터링 조건 api 개발|
+|정현수|회원 관리 및 관심지역 api 개발|
+
+### 기술 스택
+Java, Sring Boot, MyBatis, Swagger, MySQL
+
+### ERD
+![erd](/uploads/74cddb5ac4e4bbb69e465cd441632a79/erd.png)
+
+### 프로젝트 구조
+#### Member: 회원 도메인
+- MemberDto
+- MemberMapper
+- MemberService
+- MemberController
+#### HouseDeal: 매물 검색 도메인
+- HouseDealDto
+- HouseDealMapper
+- HouseDealService
+- HouseDealController
+#### FavoriteArea: 관심지역 도메인
+- FavoriteAreaDto
+- FavoriteAreaMapper
+- FavoriteAreaService
+- FavoriteAreaController
+#### DongCode: 지역 분류 코드 도메인
+- DongCodeDto
+- DongCodeMapper
+- DongCodeService
+- DongCodeController
+
+## :pushpin: API 목록
+### 회원관리 API
+- 회원 정보 조회
+- 회원 정보 수정
+- 회원 삭제
+- 로그인
+- 회원가입
+- 회원 검색
+- 전체 회원 조회
+
+![memberSwagger](/uploads/6cef4399fc1d1448ae05829213526f4e/memberSwagger.png)
+
+### 관심지역 API
+- 회원별 관심지역 조회
+- 관심지역 추가
+- 관심지역 삭제
+
+![favoriteAreaSwagger](/uploads/7bb34f91df76ae9db6b759b8867e1f93/favoriteAreaSwagger.png)
+
+### 매물 검색 API
+- 필터링 조건에 따른 주택 매물 목록 조회
+
+![house-deal-swagger](/uploads/130a810692b7b95164b8951a95ef99b4/localhost_swagger-ui_index.html_urls.primaryName_house-deal.png)
+
+### 필터링 조건 API
+- 필터링 조건 조회
+![dong-code-swagger](/uploads/15ea83279b2c8d0ef61cc92c1e0a961f/localhost_swagger-ui_index.html_urls.primaryName_dong-code.png)
+
+# :pushpin: Commit Convention
 
 feat : 기능 (새로운 기능)
 
@@ -24,50 +92,19 @@ rename : 파일 혹은 폴더명을 수정하거나 옮기는 작업만 한 경�
 
 remove : 파일을 삭제하는 작업만 수행한 경우
 
-### Gitmoji
-
-https://inpa.tistory.com/entry/GIT-%E2%9A%A1%EF%B8%8F-Gitmoji-%EC%82%AC%EC%9A%A9%EB%B2%95-Gitmoji-cli
-
-# Git Branch 전략 - Git Flow
+# :pushpin: Git Branch 전략 - GitHub Flow
 
 1. master
 2. feature
 3. release / hotfix → 필요 시
 
-https://devocean.sk.com/blog/techBoardDetail.do?ID=165571&boardType=techBlog
-
-branch 네이밍 규칙
-어떤 방식으로 브랜치의 이름을 정하는지 브랜치 종류에 따라 살펴보자.
-
 1) master branch, develop branch
 
-master와 develop 브랜치는 본래 이름 그대로 사용하는 경우가 일반적이다.
-
-2) feature branch
-
-어떤 이름도 가능하다. 단, master, develop, release-..., hotfix-... 같은 이름은 사용할 수 없다.
-
-feature/기능요약 형식을 추천한다. ex) feature/login
-
-feature/{issue-number}-{feature-name} 이슈추적을 사용한다면 이와 같은 형식을 따른다.
-ex) feature/1-init-project, feature/2-build-gradle-script-write
+2) feature branch: 이슈추적 방식 사용
+<br><br>feature/{issue-number}-{feature-name} 
 
 3) release branch
-
-release-RB_... 또는 release-... 또는 release/...같은 이름이 일반적이다.
-
-release-... 형식을 추천한다. ex) release-1.2
+<br><br>release/{version}
 
 4) hotfix branch
-
-hotfix-... 형식을 추천한다. ex) hotfix-1.2.1
-
-![memberSwagger](/uploads/6cef4399fc1d1448ae05829213526f4e/memberSwagger.png)
-
-![favoriteAreaSwagger](/uploads/7bb34f91df76ae9db6b759b8867e1f93/favoriteAreaSwagger.png)
-
-![localhost_swagger-ui_index.html_urls.primaryName_house-deal](/uploads/130a810692b7b95164b8951a95ef99b4/localhost_swagger-ui_index.html_urls.primaryName_house-deal.png)
-
-![localhost_swagger-ui_index.html_urls.primaryName_dong-code](/uploads/15ea83279b2c8d0ef61cc92c1e0a961f/localhost_swagger-ui_index.html_urls.primaryName_dong-code.png)
-
-
+<br><br>hotfix/{issue-number}
