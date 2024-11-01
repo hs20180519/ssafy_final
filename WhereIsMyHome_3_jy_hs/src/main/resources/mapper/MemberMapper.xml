@@ -4,22 +4,53 @@
 
 <mapper namespace="com.ssafy.member.model.mapper.MemberMapper">
 
-	<!-- <resultMap type="userDto" id="user"> <result column="id" property="id" 
-		/> <result column="password" property="password" /> <result column="role" 
-		property="role" /> </resultMap> -->
+	<!-- <resultMap type="memberDto" id="member">
+		<result column="id" property="id" />
+		<result column="password" property="password" />
+		<result column="name" property="name" />
+		<result column="email" property="email" />
+	</resultMap> -->
 
-	<!-- select * from members where id="ssafy" and password="1234"; -->
-	<select id="getMember" parameterType="map" resultType="memberDto">
+	<select id="getMember" parameterType="map"
+		resultType="memberDto">
 		select * from
 		members
-		where id = #{id} and password = #{password}
+		where id = #{id} and password =
+		#{password}
 	</select>
 
-	<!-- insert into members values("ssafy", "1234", "ssafy@ssafy.com", "김싸피"); -->
 	<insert id="insertMember" parameterType="memberDto">
 		insert into members
 		values (#{id},#{password}, #{email}, #{name})
 	</insert>
 
+	<update id="updateMember" parameterType="memberDto">
+		update members
+		set email
+		= #{email}, name = #{name}
+		where id = #{id};
+	</update>
+
+	<select id="getMemberByMemberId" parameterType="String">
+		select * 
+		from members
+		where id = #{id}
+	</select>
+
+	<delete id="deleteMember" parameterType="String">
+		delete from members
+		where id = #{id}
+	</delete>
+
+	<select id="getAllMembers" resultType="memberDto">
+		select *
+		from members
+	</select>
+	
+	<select id="searchMembers" parameterType="String" resultType = "memberDto">
+		select *
+		from members
+   		WHERE id LIKE CONCAT('%', #{id}, '%')
+	</select>
 </mapper>
     
