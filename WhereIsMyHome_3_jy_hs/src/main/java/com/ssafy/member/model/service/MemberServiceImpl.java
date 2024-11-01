@@ -42,15 +42,15 @@ public class MemberServiceImpl implements MemberService{
 		memberMapper.deleteMember(memberId);
 	}
 
-	@Override
-	public List<MemberDto> searchMembers(Map<String, String> criteria) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<MemberDto> getAllMembers() throws SQLException {
 		return memberMapper.getAllMembers();
+	}
+
+	@Override
+	public List<MemberDto> searchMembers(String memberId) throws SQLException {
+		return memberMapper.searchMembers(memberId);
 	}
 
 }

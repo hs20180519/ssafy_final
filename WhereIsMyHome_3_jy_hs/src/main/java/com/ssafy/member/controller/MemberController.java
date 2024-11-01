@@ -99,4 +99,18 @@ public class MemberController {
         }
     }
 	
+	// 회원 검색
+	@GetMapping("/search")
+	public ResponseEntity<List<MemberDto>> searchMembers(@RequestParam String memberId) {
+		try {
+			List<MemberDto> members = memberService.searchMembers(memberId);
+			if (members.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			}
+			return ResponseEntity.ok(members);
+		} catch (SQLException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+	
 }

@@ -16,4 +16,5 @@ public interface MemberMapper {
 	MemberDto getMemberByMemberId(String memberId) throws SQLException;
 	void deleteMember(String memberId) throws SQLException;
 	List<MemberDto>	getAllMembers() throws SQLException;
+	List<MemberDto> searchMembers(String memberId) throws SQLException;
 }
