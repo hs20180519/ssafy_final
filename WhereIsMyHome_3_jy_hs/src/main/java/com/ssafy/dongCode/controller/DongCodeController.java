@@ -11,15 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.dongCode.model.DongCodeDto;
 import com.ssafy.dongCode.model.service.DongCodeService;
 
+import lombok.AllArgsConstructor;
+
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/dongcode")
 public class DongCodeController {
 	
-	DongCodeService dongCodeService;
-	
-	public DongCodeController(DongCodeService dongCodeService) {
-		this.dongCodeService = dongCodeService;
-	}
+	private final DongCodeService dongCodeService;
 	
 	@GetMapping
 	public ResponseEntity<List<DongCodeDto>> getFilters(@RequestParam String parentCode) {
