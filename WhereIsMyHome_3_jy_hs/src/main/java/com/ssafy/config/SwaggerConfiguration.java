@@ -25,19 +25,24 @@ public class SwaggerConfiguration {
 		return new OpenAPI().components(new Components()).info(info);
 	}
 
-//	@Bean
-//	public GroupedOpenApi publicApi() {
-//		return GroupedOpenApi.builder().group("ssafy-admin").pathsToMatch("/api/admin/**").build();
-//	}
-//
-//	@Bean
-//	public GroupedOpenApi adminApi() {
-//		return GroupedOpenApi.builder().group("ssafy-user").pathsToMatch("/api/user/**").build();
-//	}
-//	
-//	@Bean
-//	public GroupedOpenApi fileApi() {
-//		return GroupedOpenApi.builder().group("ssafy-reservation").pathsToMatch("/api/reservation/**").build();
-//	}
+	@Bean
+	public GroupedOpenApi publicApi() {
+		return GroupedOpenApi.builder().group("house-deal").pathsToMatch("/api/house/**").build();
+	}
+
+	@Bean
+	public GroupedOpenApi memberApi() {
+		return GroupedOpenApi.builder().group("member").pathsToMatch("/api/member/**").build();
+	}
+	
+	@Bean
+	public GroupedOpenApi favoriteAreaApi() {
+		return GroupedOpenApi.builder().group("favorite-area").pathsToMatch("/api/favorite-area/**").build();
+	}
+	
+	@Bean
+	public GroupedOpenApi dongCode() {
+		return GroupedOpenApi.builder().group("dong-code").pathsToMatch("/api/dong-code/**").build();
+	}
 
 }
