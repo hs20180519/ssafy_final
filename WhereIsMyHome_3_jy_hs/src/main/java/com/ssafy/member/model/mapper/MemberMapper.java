@@ -10,5 +10,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface MemberMapper {
 	MemberDto getMember(Map<String, String> request) throws SQLException;
 	void insertMember(MemberDto memberDto) throws SQLException;
-
+	void updateMember(MemberDto memberDto) throws SQLException;
 }

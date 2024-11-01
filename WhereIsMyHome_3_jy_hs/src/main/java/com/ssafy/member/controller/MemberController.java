@@ -3,6 +3,7 @@ package com.ssafy.member.controller;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.member.model.service.MemberService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,4 +50,13 @@ public class MemberController {
         }
     }
 
+    @PutMapping("/{memberId}")
+    public ResponseEntity<MemberDto> updateMember(@PathVariable String memberId, @RequestBody MemberDto memberDto){
+    	try {
+    		memberService.updateMember(memberDto);
+    		return ResponseEntity.ok(memberDto);
+    	} catch (Exception e) {
+    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    	}
+    }
 }
