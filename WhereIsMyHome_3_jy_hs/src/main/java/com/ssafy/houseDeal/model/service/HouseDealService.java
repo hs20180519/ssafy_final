@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface HouseDealService {
-    List<HouseDealDto> getHouseDeals(Map<String, String> request);
+    List<HouseDealDto> getHouseDeals(Map<String, String> criteria);
 }

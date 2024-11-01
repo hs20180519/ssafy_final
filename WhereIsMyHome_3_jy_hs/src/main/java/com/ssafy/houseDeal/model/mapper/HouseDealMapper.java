@@ -8,6 +8,6 @@ import java.util.Map;
 
 @Mapper
 public interface HouseDealMapper {
-    List<HouseDealDto> getHouseDeals(Map map);
+    List<HouseDealDto> getHouseDeals(Map critera);
 
 }
