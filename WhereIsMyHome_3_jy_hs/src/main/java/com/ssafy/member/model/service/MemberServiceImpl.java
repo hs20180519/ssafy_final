@@ -36,16 +36,21 @@ public class MemberServiceImpl implements MemberService{
 	public MemberDto findMemberByMemberId(String memberId) throws SQLException {
 		return memberMapper.getMemberByMemberId(memberId);
 	}
+	
 	@Override
 	public void deleteMember(String memberId) throws SQLException {
-		// TODO Auto-generated method stub
-		
+		memberMapper.deleteMember(memberId);
 	}
 
 	@Override
 	public List<MemberDto> searchMembers(Map<String, String> criteria) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<MemberDto> getAllMembers() throws SQLException {
+		return memberMapper.getAllMembers();
 	}
 
 }

@@ -17,5 +17,7 @@ public interface MemberService {
     
     void deleteMember(String memberId) throws SQLException;
     
+    List<MemberDto> getAllMembers() throws SQLException;
+    
     List<MemberDto> searchMembers(Map<String, String> criteria) throws SQLException;
 }
