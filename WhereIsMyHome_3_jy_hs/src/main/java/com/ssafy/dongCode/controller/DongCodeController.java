@@ -13,6 +13,8 @@ import com.ssafy.dongCode.model.service.DongCodeService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
@@ -25,6 +27,10 @@ public class DongCodeController {
 	private final DongCodeService dongCodeService;
 	
 	@Operation(summary = "필터링 조건 가져오기", description = "상위 필터 선택 조건을 기반으로 해당 동 코드 필터 조건 목록을 가져옵니다.")
+    @ApiResponses({
+    	@ApiResponse(responseCode="200", description = "조건 목록 조회 성공"),
+    	@ApiResponse(responseCode="400", description = "잘못된 요청 - 필터 파라미터가 잘못되었거나 누락됨")
+    })
 	@Parameter(name="parentCode", description = "선택한 조건 코드", example="11")
 	@GetMapping
 	public ResponseEntity<List<DongCodeDto>> getFilters(@RequestParam String parentCode) {
