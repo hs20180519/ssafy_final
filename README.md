@@ -11,7 +11,13 @@ WhereIsMyHome 서비스는 사용자에게 편리하게 주택 매물 검색 기
 |정현수|회원 관리 및 관심지역 api 개발|
 
 ### 기술 스택
-Java, Sring Boot, MyBatis, Swagger, MySQL
+
+  <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
+  <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+  <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> 
+  <img src="https://img.shields.io/badge/apache tomcat-F8DC75?style=for-the-badge&logo=apachetomcat&logoColor=white">
+  <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+  <br>
 
 ### ERD
 ![erd](/uploads/74cddb5ac4e4bbb69e465cd441632a79/erd.png)
