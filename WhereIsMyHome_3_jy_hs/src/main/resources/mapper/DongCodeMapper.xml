@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+ <mapper namespace="com.ssafy.dongCode.model.mapper.DongCodeMapper">
+ 	<resultMap id="dongCode" type="dongCodeDto">
+ 		<result column="dong_code" property="dongCode" />
+ 		<result column="sido_name" property="sidoName" />
+ 		<result column="gugun_name" property="gugunName" />
+ 		<result column="dong_name" property="dongName" />
+ 	</resultMap>
+ 	
+ 	<select id="getFilters" resultMap="dongCode" parameterType="string">
+ 		select * from dong_codes
+ 		<where>
+ 			<if test="parentCode == ''">
+ 				dong_code like '%00000000'
+ 			</if>
+ 			<if test="parentCode.length() == 2">
+ 				dong_code like concat(#{parentCode}, '%00000')
+ 			</if>
+ 			<if test="parentCode.length() > 2">
+ 				dong_code like concat(#{parentCode}, '%')
+ 			</if>
+ 		</where>
+ 	</select>
+ </mapper>

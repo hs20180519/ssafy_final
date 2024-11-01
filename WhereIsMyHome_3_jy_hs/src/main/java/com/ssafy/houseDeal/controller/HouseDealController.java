@@ -18,7 +18,6 @@ public class HouseDealController {
         this.houseDealService = houseDealService;
     }
 
-    @ResponseBody
     @GetMapping
     public ResponseEntity<List<HouseDealDto>> getHouseDeals(@RequestParam Map<String, String> request) {
         List<HouseDealDto> houseDeals = houseDealService.getHouseDeals(request);
