@@ -1,24 +1,31 @@
 package com.ssafy.member.controller;
 
-import com.ssafy.member.model.MemberDto;
-import com.ssafy.member.model.service.MemberService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ssafy.member.model.MemberDto;
+import com.ssafy.member.model.service.MemberService;
+
+import lombok.AllArgsConstructor;
+
 @RestController
 @RequestMapping("api/member")
+@AllArgsConstructor
 public class MemberController {
 	private final MemberService memberService;
-
-	public MemberController(MemberService memberService) {
-		this.memberService = memberService;
-	}
 
 	// 사용자 인증 처리 추가시 restful하게 하려면 post
 	// responseBody : restController 적용시 모든 메소드에 자동 적용

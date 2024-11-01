@@ -2,6 +2,9 @@ package com.ssafy.member.model.service;
 
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.member.model.mapper.MemberMapper;
+
+import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -9,17 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@AllArgsConstructor
 public class MemberServiceImpl implements MemberService{
 
     private final MemberMapper memberMapper;
 
-    public MemberServiceImpl(MemberMapper memberMapper) {
-        this.memberMapper = memberMapper;
-    }
-
     @Override
-    public MemberDto login(Map<String, String> request) throws SQLException {
-        return memberMapper.getMember(request);
+    public MemberDto login(Map<String, String> loginInfo) throws SQLException {
+        return memberMapper.getMember(loginInfo);
     }
 
     @Override

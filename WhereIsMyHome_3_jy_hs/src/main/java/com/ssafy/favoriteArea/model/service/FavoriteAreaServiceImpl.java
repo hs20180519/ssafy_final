@@ -1,20 +1,20 @@
 package com.ssafy.favoriteArea.model.service;
 
-import com.ssafy.favoriteArea.model.FavoriteAreaDto;
-import com.ssafy.favoriteArea.model.mapper.FavoriteAreaMapper;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
+import com.ssafy.favoriteArea.model.FavoriteAreaDto;
+import com.ssafy.favoriteArea.model.mapper.FavoriteAreaMapper;
+
+import lombok.AllArgsConstructor;
+
 @Service
-public class FavoriteAreaServiceImpl implements  FavoriteAreaService{
+@AllArgsConstructor
+public class FavoriteAreaServiceImpl implements FavoriteAreaService{
 
     private final FavoriteAreaMapper favoriteAreaMapper;
-
-    public FavoriteAreaServiceImpl(FavoriteAreaMapper favoriteAreaMapper) {
-        this.favoriteAreaMapper = favoriteAreaMapper;
-    }
 
     @Override
     public List<FavoriteAreaDto> findFavoriteAreaByMemberId(String memberId) throws Exception {

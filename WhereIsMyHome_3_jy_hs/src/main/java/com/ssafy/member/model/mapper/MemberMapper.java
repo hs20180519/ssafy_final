@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface MemberMapper { 
-	MemberDto getMember(Map<String, String> request) throws SQLException;
+	MemberDto getMember(Map<String, String> loginInfo) throws SQLException;
 	void insertMember(MemberDto memberDto) throws SQLException;
 	void updateMember(MemberDto memberDto) throws SQLException;
 	MemberDto getMemberByMemberId(String memberId) throws SQLException;

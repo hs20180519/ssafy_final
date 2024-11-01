@@ -7,14 +7,13 @@ import org.springframework.stereotype.Service;
 import com.ssafy.dongCode.model.DongCodeDto;
 import com.ssafy.dongCode.model.mapper.DongCodeMapper;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class DongCodeServiceImpl implements DongCodeService {
 	
 	private final DongCodeMapper dongCodeMapper;
-	
-	public DongCodeServiceImpl(DongCodeMapper dongCodeMapper) {
-		this.dongCodeMapper = dongCodeMapper;
-	}
 
 	@Override
 	public List<DongCodeDto> getFilters(String parentCode) {
