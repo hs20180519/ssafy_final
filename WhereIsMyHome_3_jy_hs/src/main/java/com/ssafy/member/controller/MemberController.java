@@ -47,7 +47,7 @@ public class MemberController {
 				// String token = jwtService.generateToken(member); // 로그인 성공 시 토큰 발급 : 추후 추가
 				// return ResponseEntity.ok().header("Authorization", "Bearer " +
 				// token).body("로그인 성공");
-				String token = jwtTokenProvider.createToken(memberDto);
+				String token = jwtTokenProvider.generateToken(memberDto);
 				System.out.println("토큰은"+ token);
 				return ResponseEntity.ok().header("Authorization", "Bearer " + token).body("로그인 성공");
 			} else {
