@@ -42,12 +42,14 @@ public class MemberController {
 	public ResponseEntity<String> login(@RequestBody Map<String, String> request) {
 		try {
 			MemberDto memberDto = memberService.login(request);
+			System.out.println("로그인 시도: " + request);  // 로그 추가
+			System.out.println("memberDto: " + memberDto);  // 로그 추가
 			System.out.println(memberDto);
 			if (memberDto != null) {
 				// String token = jwtService.generateToken(member); // 로그인 성공 시 토큰 발급 : 추후 추가
 				// return ResponseEntity.ok().header("Authorization", "Bearer " +
 				// token).body("로그인 성공");
-				String token = jwtTokenProvider.generateToken(memberDto);
+				String token = jwtTokenProvider.generateToken(memberDto.getId());
 				System.out.println("토큰은"+ token);
 				return ResponseEntity.ok().header("Authorization", "Bearer " + token).body("로그인 성공");
 			} else {
