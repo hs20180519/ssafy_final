@@ -50,7 +50,7 @@ public class MemberController {
 				HttpHeaders headers = new HttpHeaders();
 				headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + token);
 
-				return ResponseEntity.ok().headers(headers).body("로그인 성공");
+				return ResponseEntity.ok().headers(headers).body("로그인 성공, 토큰: " + token);
 				// return ResponseEntity.ok().body("{\"message\": \"로그인 성공\", \"token\": \"Bearer " + token + "\"}");
 			} else {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
