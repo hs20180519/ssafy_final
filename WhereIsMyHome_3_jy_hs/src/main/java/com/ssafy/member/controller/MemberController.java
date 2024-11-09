@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,16 +43,15 @@ public class MemberController {
 	public ResponseEntity<String> login(@RequestBody Map<String, String> request) {
 		try {
 			MemberDto memberDto = memberService.login(request);
-			System.out.println("로그인 시도: " + request);  // 로그 추가
-			System.out.println("memberDto: " + memberDto);  // 로그 추가
-			System.out.println(memberDto);
 			if (memberDto != null) {
-				// String token = jwtService.generateToken(member); // 로그인 성공 시 토큰 발급 : 추후 추가
-				// return ResponseEntity.ok().header("Authorization", "Bearer " +
-				// token).body("로그인 성공");
 				String token = jwtTokenProvider.generateToken(memberDto.getId());
-				System.out.println("토큰은"+ token);
-				return ResponseEntity.ok().header("Authorization", "Bearer " + token).body("로그인 성공");
+				System.out.println("토큰 : "+ token);
+
+				HttpHeaders headers = new HttpHeaders();
+				headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+
+				return ResponseEntity.ok().headers(headers).body("로그인 성공");
+				// return ResponseEntity.ok().body("{\"message\": \"로그인 성공\", \"token\": \"Bearer " + token + "\"}");
 			} else {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
 			}
