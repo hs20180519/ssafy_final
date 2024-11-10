@@ -1,14 +1,12 @@
 package com.ssafy.auth.controller;
 
+import com.ssafy.auth.model.request.JoinVerificationRequest;
 import com.ssafy.auth.service.AuthService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +20,7 @@ public class AuthController {
     }
 
     @PostMapping("/join-verification")
-    public ResponseEntity<Boolean> verifyCodeForJoin(@RequestParam("code")String code, HttpSession session) {
-        return ResponseEntity.ok(authService.verifyCodeForJoin(code, session));
-
+    public ResponseEntity<Boolean> verifyCodeForJoin(@RequestBody JoinVerificationRequest request, HttpSession session) {
+        return ResponseEntity.ok(authService.verifyCodeForJoin(request, session));
     }
 }

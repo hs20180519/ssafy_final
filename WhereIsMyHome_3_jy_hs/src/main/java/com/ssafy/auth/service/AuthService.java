@@ -1,5 +1,6 @@
 package com.ssafy.auth.service;
 
+import com.ssafy.auth.model.request.JoinVerificationRequest;
 import com.ssafy.util.MailSenderUtil;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
@@ -11,21 +12,30 @@ public class AuthService {
 
     MailSenderUtil mailSenderUtil;
 
-    private final String VERIfICATION_JOIN_CODE = "verificatioinJoinCode";
+    private final String VERIFICATION_JOIN_CODE = "verificationJoinCode";
+    private final String VERIFICATION_JOIN_EMAIL = "verificationJoinEmail";
 
     public AuthService(MailSenderUtil mailSenderUtil) {
         this.mailSenderUtil = mailSenderUtil;
     }
     public int sendMailForJoin(String mail, HttpSession session) throws MessagingException {
         int code = mailSenderUtil.sendMail(mail);
-        session.setAttribute(VERIfICATION_JOIN_CODE, code);
+        session.setAttribute(VERIFICATION_JOIN_CODE, code);
+        session.setAttribute(VERIFICATION_JOIN_EMAIL, mail);
         return code;
     }
 
-    public boolean verifyCodeForJoin(String code, HttpSession session) {
-        String stored = (String) session.getAttribute(VERIfICATION_JOIN_CODE);
+    public boolean verifyCodeForJoin(JoinVerificationRequest request, HttpSession session) {
+        String stored = session.getAttribute(VERIFICATION_JOIN_CODE).toString();
+        String email = (String) session.getAttribute(VERIFICATION_JOIN_EMAIL);
 
-        return stored != null && stored.equals(code);
+        if ((stored != null && stored.equals(request.getCode())) &&
+                (email != null && email.equals(request.getEmail()))) {
+            session.removeAttribute(VERIFICATION_JOIN_CODE);
+            session.removeAttribute(VERIFICATION_JOIN_EMAIL);
+            return true;
+        }
+        return false;
     }
 
 }
