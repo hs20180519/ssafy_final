@@ -23,4 +23,9 @@ public class AuthController {
     public ResponseEntity<Boolean> verifyCodeForJoin(@RequestBody JoinVerificationRequest request, HttpSession session) {
         return ResponseEntity.ok(authService.verifyCodeForJoin(request, session));
     }
+
+    @GetMapping("/id")
+    public ResponseEntity<String> findId(@RequestParam("name") String name, @RequestParam("email") String email) {
+        return ResponseEntity.ok(authService.findId(name, email));
+    }
 }
