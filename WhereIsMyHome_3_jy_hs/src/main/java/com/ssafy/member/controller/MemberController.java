@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.member.model.service.MemberService;
+import com.ssafy.security.JwtTokenProvider;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,25 +33,30 @@ import lombok.AllArgsConstructor;
 @Tag(name = "Member", description = "회원 관련 API")
 public class MemberController {
 	private final MemberService memberService;
+	private final JwtTokenProvider jwtTokenProvider;
 
 	@Operation(summary = "로그인", description = "사용자 로그인 처리")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "로그인 성공"),
 			@ApiResponse(responseCode = "401", description = "로그인 실패 - 인증되지 않은 사용자"),
 			@ApiResponse(responseCode = "500", description = "서버 오류") })
 	@PostMapping("/login")
-	public ResponseEntity<MemberDto> login(@RequestBody Map<String, String> request) {
+	public ResponseEntity<String> login(@RequestBody Map<String, String> request) {
 		try {
 			MemberDto memberDto = memberService.login(request);
 			if (memberDto != null) {
-				// String token = jwtService.generateToken(member); // 로그인 성공 시 토큰 발급 : 추후 추가
-				// return ResponseEntity.ok().header("Authorization", "Bearer " +
-				// token).body("로그인 성공");
-				return ResponseEntity.ok(memberDto);
+				String token = jwtTokenProvider.generateToken(memberDto.getId());
+				System.out.println("토큰 : "+ token);
+
+				HttpHeaders headers = new HttpHeaders();
+				headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+
+				return ResponseEntity.ok().headers(headers).body("로그인 성공, 토큰: " + token);
+				// return ResponseEntity.ok().body("{\"message\": \"로그인 성공\", \"token\": \"Bearer " + token + "\"}");
 			} else {
-				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
 			}
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
 		}
 	}
 
