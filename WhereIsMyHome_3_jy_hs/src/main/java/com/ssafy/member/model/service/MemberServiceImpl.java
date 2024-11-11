@@ -17,16 +17,6 @@ public class MemberServiceImpl implements MemberService{
 
     private final MemberMapper memberMapper;
 
-    @Override
-    public MemberDto login(Map<String, String> loginInfo) throws SQLException {
-        return memberMapper.getMember(loginInfo);
-    }
-
-    @Override
-    public void join(MemberDto memberDto) throws SQLException {
-        memberMapper.insertMember(memberDto);
-    }
-
 	@Override
 	public void updateMember(MemberDto memberDto) throws SQLException {
 		memberMapper.updateMember(memberDto);
