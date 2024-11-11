@@ -19,6 +19,13 @@
 		#{password}
 	</select>
 
+	<select id="getMemberByNameAndEmail" parameterType="map"
+			resultType="memberDto">
+		select *
+		from members
+		where email=#{email} and name=#{name};
+	</select>
+
 	<insert id="insertMember" parameterType="memberDto">
 		insert into members
 		values (#{id},#{password}, #{email}, #{name})
@@ -53,4 +60,3 @@
    		WHERE id LIKE CONCAT('%', #{id}, '%')
 	</select>
 </mapper>
-    
