@@ -1,6 +1,6 @@
 package com.ssafy.auth.controller;
 
-import com.ssafy.auth.model.request.JoinVerificationRequest;
+import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.auth.service.AuthService;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.security.JwtTokenProvider;
@@ -53,25 +53,25 @@ public class AuthController {
 	@Operation(summary = "회원가입", description = "새로운 회원을 등록합니다.")
 	@ApiResponses({ @ApiResponse(responseCode = "201", description = "회원 가입 성공"),
 			@ApiResponse(responseCode = "500", description = "서버 오류 - 회원 가입 중 오류 발생") })
-	@PostMapping("/join")
-	public ResponseEntity<String> join(@RequestBody MemberDto memberDto) {
+	@PostMapping("/signup")
+	public ResponseEntity<String> signup(@RequestBody MemberDto memberDto) {
 		try {
-			authService.join(memberDto);
+			authService.signUp(memberDto);
 			return ResponseEntity.status(HttpStatus.CREATED).body("회원 가입이 완료되었습니다. 로그인 해주세요.");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 가입 중 오류가 발생했습니다.");
 		}
 	}
 
-	@PostMapping("/join-mail")
-	public String sendMailForJoin(String mail, HttpSession session) throws MessagingException {
-		return authService.sendMailForJoin(mail, session) + "";
+	@PostMapping("/signup-mail")
+	public String sendSignUpMail(String mail, HttpSession session) throws MessagingException {
+		return authService.sendSignUpMail(mail, session) + "";
 	}
 
-	@PostMapping("/join-verification")
-	public ResponseEntity<Boolean> verifyCodeForJoin(@RequestBody JoinVerificationRequest request,
+	@PostMapping("/signup-verification")
+	public ResponseEntity<Boolean> verifySignUpCode(@RequestBody SignUpVerificationRequest request,
 			HttpSession session) {
-		return ResponseEntity.ok(authService.verifyCodeForJoin(request, session));
+		return ResponseEntity.ok(authService.verifySignUpCode(request, session));
 	}
 
 	@GetMapping("/id")
