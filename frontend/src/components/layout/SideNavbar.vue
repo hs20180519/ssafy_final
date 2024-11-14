@@ -2,7 +2,7 @@
   <div class="navbar">
     <!-- Top Navigation Links -->
     <div class="nav-links">
-      <p>
+      <p @click="goToHome">
         <font-awesome-icon :icon="['fas', 'house']"/>
       </p>
       <p>
@@ -11,7 +11,7 @@
     </div>
 
     <div class="bottom-section">
-      <div class="profile-section" @click="toggleDropdown">
+      <div class="profile-section" @click="goToLogin">
         <font-awesome-icon :icon="['fas', 'user']"/>
       </div>
       <span><font-awesome-icon :icon="['fas', 'circle-info']"/> </span>
@@ -38,6 +38,12 @@ export default {
       if (this.isLoggedIn) {
         this.showDropdown = !this.showDropdown;
       }
+    },
+    goToHome() {
+      this.$router.push('/'); // 홈 페이지로 이동
+    },
+    goToLogin() {
+      this.$router.push('/login'); // 로그인 페이지로 이동
     },
     goToMyPage() {
       this.$router.push('/my-page');
