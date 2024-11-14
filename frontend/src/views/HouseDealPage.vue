@@ -1,11 +1,13 @@
 <script setup>
+// import SideNavbar from '@/components/layout/SideNavbar.vue';
+import { onMounted } from 'vue';
+
 
 </script>
 
 <template>
-    <div>
-        
-    </div>
+    <!-- <SideNavbar /> -->
+
 </template>
 
 <style scoped>

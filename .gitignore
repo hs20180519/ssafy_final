@@ -11,3 +11,5 @@ WhereIsMyHome_3_jy_hs/.idea/
 WhereIsMyHome_3_jy_hs/.settings/
 WhereIsMyHome_3_jy_hs/target/
 WhereIsMyHome_3_jy_hs/src/main/resources/application.properties
+
+.DS_Store

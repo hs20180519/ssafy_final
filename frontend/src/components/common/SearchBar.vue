@@ -1,14 +1,15 @@
 <script setup>
+import { ref } from 'vue'
 
+const keyword = ref("");
 </script>
 
 <template>
     <div>
-        <form action="">
-            <input type="text">
+        <form @submit.prevent="$emit('onSearch', keyword)">
+            <input type="text" v-model="keyword">
             <input type="submit">
         </form>
-        
     </div>
 </template>
 
