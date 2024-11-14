@@ -16,12 +16,12 @@ export default {
 </script>
 
 <style scoped>
-/* 로그인 페이지 스타일 */
+/* 회원가입 페이지 스타일 */
 .signup-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding-top: 50px;
 }
 
 </style>
