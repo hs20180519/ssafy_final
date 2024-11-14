@@ -11,7 +11,7 @@
 		<result column="email" property="email" />
 	</resultMap> -->
 
-	<select id="getMember" parameterType="map"
+	<select id="getMember" parameterType="loginRequest"
 		resultType="memberDto">
 		select * from
 		members
