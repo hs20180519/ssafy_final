@@ -34,10 +34,12 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      id: '', // 'id'로 변경
+      id: '',
       name: '',
       email: '',
       password: '',
@@ -46,12 +48,41 @@ export default {
   },
   methods: {
     handleSignup() {
-      // 회원가입 처리 로직 추가
-      console.log("회원가입 정보:", this.id, this.name, this.email, this.password, this.confirmPassword);
+      // 비밀번호 확인 로직
+      if (this.password !== this.confirmPassword) {
+        alert('비밀번호가 일치하지 않습니다.');
+        return;
+      }
+
+      // 회원가입 정보 전송
+      const memberData = {
+        id: this.id,
+        name: this.name,
+        email: this.email,
+        password: this.password
+      };
+
+      axios.post('http://localhost:80/api/auth/signup', memberData)
+        .then(response => {
+          console.log('회원가입 성공:', response.data);
+          alert('회원가입이 완료되었습니다.');
+          this.$router.push('/login');  // 회원가입 후 로그인 페이지로 리다이렉트
+        })
+        .catch(error => {
+          console.error('회원가입 오류:', error);
+          alert('회원가입 중 오류가 발생했습니다.');
+        });
     },
     sendVerificationCode() {
-      // 이메일 인증번호 전송 로직 추가
-      console.log("이메일 인증번호 전송:", this.email);
+      axios.post('http://localhost:80/api/auth/signup-mail', {mail: this.email})
+        .then(response => {
+          console.log('인증번호 전송 성공:', response.data);
+          alert('인증번호가 이메일로 전송되었습니다.');
+        })
+        .catch(error => {
+          console.error('인증번호 전송 오류:', error);
+          alert('인증번호 전송 중 오류가 발생했습니다.');
+        });
     }
   }
 };
