@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -41,9 +43,30 @@ export default {
     };
   },
   methods: {
-    handleLogin() {
-      console.log('로그인 시도:', this.username, this.password);
-      this.$emit('login', {username: this.username, password: this.password});
+    async handleLogin() {
+      try {
+        const response = await axios.post('http://localhost:80/api/auth/login', {
+          id: this.username,
+          password: this.password
+        });
+        console.log(response);
+
+        const token = response.headers['authorization'];
+
+        // 로그인 성공 시 처리
+        if (token) {
+          localStorage.setItem('auth_token', token); // 토큰 저장
+          alert('로그인 성공');
+          this.$router.push({name: 'Home'}); // 로그인 후 리디렉션 (홈 페이지 등)
+        }
+      } catch (error) {
+        // 로그인 실패 시 처리
+        if (error.response && error.response.status === 401) {
+          alert('로그인 실패: 아이디나 비밀번호가 잘못되었습니다.');
+        } else {
+          alert('서버 오류가 발생했습니다. 다시 시도해주세요.');
+        }
+      }
     }
   }
 };
