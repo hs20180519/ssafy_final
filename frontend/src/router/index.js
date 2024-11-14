@@ -1,8 +1,9 @@
 import {createRouter, createWebHistory} from 'vue-router';
 
 import HomePage from "@/views/HomePage.vue";
-import MemberLoginForm from "@/components/member/MemberLoginForm.vue";
+import MemberLoginPage from "@/views/MemberLoginPage.vue";
 import MemberSignUpPage from "@/views/MemberSignUpPage.vue";
+
 
 const routes = [
   {
@@ -13,13 +14,13 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: MemberLoginForm
+    component: MemberLoginPage
   },
-  // {
-  //   path: '/signup',
-  //   name: 'Signup',
-  //   component: MemberSignUpPage
-  // }
+  {
+    path: '/signup',
+    name: 'Signup',
+    component: MemberSignUpPage
+  }
 ];
 
 const router = createRouter({

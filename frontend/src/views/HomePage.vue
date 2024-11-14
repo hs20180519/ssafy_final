@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <Navbar/>
     <div class="main-content-wrapper">
       <MainContent/>
     </div>
@@ -8,13 +7,11 @@
 </template>
 
 <script>
-import Navbar from '@/components/layout/SideNavbar.vue'
 import MainContent from '@/components/main/MainContent.vue';
 
 export default {
   name: 'Home',
   components: {
-    Navbar,
     MainContent,
   },
 };

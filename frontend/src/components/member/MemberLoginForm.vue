@@ -24,6 +24,11 @@
       </div>
       <button type="submit">로그인</button>
     </form>
+
+    <div class="auth-links">
+      <router-link to="/forgot-password-id">Forgot password / ID?</router-link>
+      <router-link to="/signup">아직 회원이 아니세요?</router-link>
+    </div>
   </div>
 </template>
 
@@ -38,7 +43,6 @@ export default {
   methods: {
     handleLogin() {
       console.log('로그인 시도:', this.username, this.password);
-      // 로그인 처리 로직을 부모 컴포넌트에서 처리할 수 있도록 이벤트를 발생시킬 수 있습니다.
       this.$emit('login', {username: this.username, password: this.password});
     }
   }
@@ -64,9 +68,26 @@ button {
   color: white;
   border: none;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 button:hover {
   background-color: #0056b3;
+}
+
+.auth-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  font-size: 0.9em;
+}
+
+.auth-links a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.auth-links a:hover {
+  text-decoration: underline;
 }
 </style>

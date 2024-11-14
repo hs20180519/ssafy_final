@@ -1,25 +1,16 @@
 <template>
   <div class="login-page">
-    <member-login-form @login="handleLogin"/>
-    <div class="links">
-      <!--      <router-link to="/forgot-password-id">Forgot password / ID?</router-link>-->
-      <router-link to="/signup">아직 회원이 아니세요?</router-link>
-    </div>
+    <MemberLoginForm/>
   </div>
 </template>
 
 <script>
-import MemberLoginForm from '@/components/member/MemberLoginForm';
+import MemberLoginForm from "@/components/member/MemberLoginForm.vue"
 
 export default {
+  name: 'Login',
   components: {
-    MemberLoginForm
-  },
-  methods: {
-    handleLogin(credentials) {
-      console.log('로그인 시도:', credentials);
-      // 로그인 처리 로직을 여기에 추가
-    }
+    MemberLoginForm,
   }
 };
 </script>
