@@ -114,7 +114,7 @@ export default {
 .input-group button {
   margin-top: 10px;
   padding: 8px;
-  background-color: #007bff;
+  background-color: #70abd8;
   color: white;
   border: none;
   border-radius: 4px;
@@ -128,7 +128,7 @@ export default {
 button[type="submit"] {
   width: 100%;
   padding: 10px;
-  background-color: #28a745;
+  background-color: #d87070;
   color: white;
   border: none;
   border-radius: 4px;
@@ -136,6 +136,6 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #218838;
+  background-color: #773d3d;
 }
 </style>

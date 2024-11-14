@@ -81,21 +81,47 @@ export default {
 }
 
 .input-group {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 15px;
 }
 
-button {
-  width: 100%;
+.input-group label {
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.input-group button {
+  margin-top: 10px;
   padding: 10px;
-  background-color: #007bff;
+  background-color: #d87070; /* #d87070 색상 적용 */
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+.input-group button:hover {
+  background-color: #b85b5b; /* 버튼 hover 색상 */
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #d87070; /* #d87070 색상 적용 */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #b85b5b; /* 버튼 hover 색상 */
 }
 
 .auth-links {
@@ -106,7 +132,7 @@ button:hover {
 }
 
 .auth-links a {
-  color: #007bff;
+  color: #d87070;
   text-decoration: none;
 }
 
