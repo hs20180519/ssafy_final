@@ -18,9 +18,9 @@ public class SwaggerConfiguration {
 	@Bean
 	public OpenAPI openAPI() {
 		Info info = new Info().title("SSAFY WhereIsMyHome API 명세서").description(
-				"<h3>SSAFY API Reference for Developers</h3>Swagger를 이용한 WhereIsMyHome API<br><img src=\"/assets/favicon.png\" width=\"150\">")
-				.version("v1").contact(new io.swagger.v3.oas.models.info.Contact().name("natural-hyeonsu")
-						.email("jyjy@ssafy.com").url("http://edu.ssafy.com"));
+			"<h3>SSAFY API Reference for Developers</h3>Swagger를 이용한 WhereIsMyHome API<br><img src=\"/assets/favicon.png\" width=\"150\">")
+			.version("v1").contact(new io.swagger.v3.oas.models.info.Contact().name("natural-hyeonsu")
+				.email("jyjy@ssafy.com").url("http://edu.ssafy.com"));
 
 		return new OpenAPI().components(new Components()).info(info);
 	}
@@ -34,12 +34,12 @@ public class SwaggerConfiguration {
 	public GroupedOpenApi memberApi() {
 		return GroupedOpenApi.builder().group("member").pathsToMatch("/api/member/**").build();
 	}
-	
+
 	@Bean
 	public GroupedOpenApi favoriteAreaApi() {
 		return GroupedOpenApi.builder().group("favorite-area").pathsToMatch("/api/favorite-area/**").build();
 	}
-	
+
 	@Bean
 	public GroupedOpenApi dongCode() {
 		return GroupedOpenApi.builder().group("dong-code").pathsToMatch("/api/dong-code/**").build();
