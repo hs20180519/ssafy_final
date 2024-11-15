@@ -57,6 +57,6 @@ public class JwtFilter extends GenericFilterBean {
 
 	// role -> Authority
 	private Collection<? extends GrantedAuthority> mapRoleToAuthority(String role) {
-		return Collections.singletonList(new SimpleGrantedAuthority(role));
+		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
 	}
 }
