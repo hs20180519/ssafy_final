@@ -34,6 +34,13 @@
     <select id="getQuestionById" parameterType="int" resultMap="BoardQuestionResultMap">
         SELECT * FROM board_question WHERE id = #{id}
     </select>
+    
+    <!-- 조회수 증가 -->
+    <update id="updateViewCount" parameterType="int">
+    	UPDATE board_question 
+    	SET view_count = view_count+1
+    	WHERE id = #{id}
+    </update>
 
     <!-- 질문 등록 -->
     <insert id="createQuestion" parameterType="BoardQuestionDto">
