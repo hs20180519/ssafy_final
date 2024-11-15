@@ -1,8 +1,12 @@
 package com.ssafy.security;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -30,9 +34,10 @@ public class JwtFilter extends GenericFilterBean {
 
 		if (token != null && jwtTokenProvider.validateToken(token)) {
 			String memberId = jwtTokenProvider.getMemberIdFromToken(token);
+			String role = jwtTokenProvider.getMemberRoleFromToken(token);
 
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-				memberId, null, null); // username만 설정, 권한은 후에 설정
+				memberId, null, mapRoleToAuthority(role));
 
 			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -41,11 +46,17 @@ public class JwtFilter extends GenericFilterBean {
 		filterChain.doFilter(httpServletRequest, servletResponse);
 	}
 
+	// JWT에서 role 추출
 	private String resolveToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 		if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
 			return bearerToken.substring(7);
 		}
 		return null;
+	}
+
+	// role -> Authority
+	private Collection<? extends GrantedAuthority> mapRoleToAuthority(String role) {
+		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
 	}
 }

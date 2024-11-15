@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.board.model.mapper.BoardMapper">
+
+	<resultMap id="BoardQuestionResultMap" type="BoardQuestionDto">
+    <result column="id" property="id" />
+    <result column="title" property="title" />
+    <result column="content" property="content" />
+    <result column="author" property="author" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+    <result column="view_count" property="viewCount" />
+</resultMap>
+
+<resultMap id="BoardAnswerResultMap" type="BoardAnswerDto">
+    <result column="id" property="id" />
+    <result column="question_id" property="questionId" />
+    <result column="content" property="content" />
+    <result column="author" property="author" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+</resultMap>
+
+    <!-- 질문 관련 쿼리 -->
+
+    <!-- 모든 질문 조회 -->
+    <select id="getAllQuestions" resultMap="BoardQuestionResultMap">
+        SELECT * FROM board_question
+    </select>
+
+    <!-- 특정 질문 조회 -->
+    <select id="getQuestionById" parameterType="int" resultMap="BoardQuestionResultMap">
+        SELECT * FROM board_question WHERE id = #{id}
+    </select>
+    
+    <!-- 조회수 증가 -->
+    <update id="updateViewCount" parameterType="int">
+    	UPDATE board_question 
+    	SET view_count = view_count+1
+    	WHERE id = #{id}
+    </update>
+
+    <!-- 질문 등록 -->
+    <insert id="createQuestion" parameterType="BoardQuestionDto">
+        INSERT INTO board_question (title, content, author, created_at, updated_at, view_count)
+        VALUES (#{title}, #{content}, #{author}, #{createdAt}, #{updatedAt}, #{viewCount})
+    </insert>
+
+    <!-- 질문 수정 -->
+    <update id="updateQuestion" parameterType="BoardQuestionDto">
+        UPDATE board_question
+        SET title = #{title}, content = #{content}, updated_at = #{updatedAt}, view_count = #{viewCount}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 질문 삭제 -->
+    <delete id="deleteQuestion" parameterType="int">
+        DELETE FROM board_question WHERE id = #{id}
+    </delete>
+
+    <!-- 답변 관련 쿼리 -->
+
+    <!-- 특정 질문의 모든 답변 조회 -->
+    <select id="getAnswersByQuestionId" parameterType="int" resultMap="BoardAnswerResultMap">
+        SELECT * FROM board_answer WHERE question_id = #{questionId}
+    </select>
+
+    <!-- 답변 등록 -->
+    <insert id="createAnswer" parameterType="BoardAnswerDto">
+        INSERT INTO board_answer (question_id, content, author, created_at, updated_at)
+        VALUES (#{questionId}, #{content}, #{author}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <!-- 답변 수정 -->
+    <update id="updateAnswer" parameterType="BoardAnswerDto">
+        UPDATE board_answer
+        SET content = #{content}, updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 답변 삭제 -->
+    <delete id="deleteAnswer" parameterType="int">
+        DELETE FROM board_answer WHERE id = #{id}
+    </delete>
+
+</mapper>
