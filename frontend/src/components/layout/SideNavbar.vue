@@ -11,47 +11,47 @@
     </div>
 
     <div class="bottom-section">
-      <div class="profile-section" @click="goToLogin">
+      <div class="profile-section" @click="toggleDropdown">
         <font-awesome-icon :icon="['fas', 'user']"/>
       </div>
       <span><font-awesome-icon :icon="['fas', 'circle-info']"/> </span>
-
-      <div v-if="isLoggedIn && showDropdown" class="dropdown">
-        <p @click="goToMyPage">마이페이지</p>
-        <p @click="logout">로그아웃</p>
-      </div>
     </div>
   </div>
+  <DropdownMenu :showDropdown="showDropdown" />
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/authStore'; // Pinia store 임포트
+import DropdownMenu from '@/components/layout/DropDownMenu.vue'; // DropdownMenu 컴포넌트 임포트
+
 export default {
-  name: 'Navbar',
+  name: 'SideNavbar',
+  components: {
+    DropdownMenu,
+  },
   data() {
     return {
-      isLoggedIn: false,
       showDropdown: false,
     };
+  },
+  computed: {
+    // Pinia store로부터 로그인 상태와 사용자 정보 가져오기
+    isLoggedIn() {
+      const authStore = useAuthStore();
+      return authStore.isLoggedIn;
+    },
   },
   methods: {
     toggleDropdown() {
       if (this.isLoggedIn) {
         this.showDropdown = !this.showDropdown;
+      } else {
+        // 로그인되지 않은 상태에서 클릭하면 로그인 페이지로 이동
+        this.$router.push('/login');
       }
     },
     goToHome() {
       this.$router.push('/'); // 홈 페이지로 이동
-    },
-    goToLogin() {
-      this.$router.push('/login'); // 로그인 페이지로 이동
-    },
-    goToMyPage() {
-      this.$router.push('/my-page');
-      this.showDropdown = false;
-    },
-    logout() {
-      this.isLoggedIn = false;
-      this.showDropdown = false;
     },
   },
 };
@@ -91,24 +91,5 @@ export default {
 .profile-section {
   padding: 20px 0;
   cursor: pointer;
-}
-
-.dropdown {
-  background-color: #f0f0f0;
-  color: black;
-  position: absolute;
-  bottom: 70px;
-  width: 100px;
-  text-align: center;
-  border-radius: 5px;
-}
-
-.dropdown p {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.dropdown p:hover {
-  background-color: #e0e0e0;
 }
 </style>
