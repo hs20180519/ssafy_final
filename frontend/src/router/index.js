@@ -1,31 +1,26 @@
-// router/index.js
-import { createRouter, createWebHistory } from 'vue-router';
-import Login from '@/views/Login.vue';
-import SignUp from '@/views/SignUp.vue';
-import FindId from '@/views/FindId.vue';
-import Message from '@/views/Message.vue';
+import {createRouter, createWebHistory} from 'vue-router';
+
+import HomePage from "@/views/HomePage.vue";
+import MemberLoginPage from "@/views/MemberLoginPage.vue";
+import MemberSignUpPage from "@/views/MemberSignUpPage.vue";
+
 
 const routes = [
   {
     path: '/',
+    name: 'Home',
+    component: HomePage
+  },
+  {
+    path: '/login',
     name: 'Login',
-    component: Login,
+    component: MemberLoginPage
   },
   {
     path: '/signup',
-    name: 'SignUp',
-    component: SignUp,
-  },
-  {
-    path: '/find-id',
-    name: 'FindId',
-    component: FindId,
-  },
-  {
-    path: '/message',
-    name: 'Message',
-    component: Message,
-  },
+    name: 'Signup',
+    component: MemberSignUpPage
+  }
 ];
 
 const router = createRouter({
