@@ -14,6 +14,8 @@ public interface BoardMapper {
 
 	BoardQuestionDto getQuestionById(int id);
 
+	void updateViewCount(int id);
+
 	void createQuestion(BoardQuestionDto question);
 
 	void updateQuestion(BoardQuestionDto question);

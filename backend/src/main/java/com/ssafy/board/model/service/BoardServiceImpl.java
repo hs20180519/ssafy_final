@@ -23,6 +23,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public BoardQuestionDto getQuestionById(int id) {
+		boardMapper.updateViewCount(id);
 		return boardMapper.getQuestionById(id);
 	}
 
