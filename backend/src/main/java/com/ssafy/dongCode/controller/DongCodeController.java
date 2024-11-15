@@ -2,6 +2,7 @@ package com.ssafy.dongCode.controller;
 
 import java.util.List;
 
+import com.ssafy.dongCode.model.response.SearchResultResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,5 +37,11 @@ public class DongCodeController {
 	public ResponseEntity<List<DongCodeDto>> getFilters(@RequestParam String parentCode) {
 		List<DongCodeDto> list = dongCodeService.getFilters(parentCode);
 		return ResponseEntity.ok(list);
+	}
+
+	@GetMapping("/search")
+	public ResponseEntity<SearchResultResponse> searchByKeyword(@RequestParam String keyword) {
+		SearchResultResponse response = dongCodeService.searchByKeyword(keyword);
+		return ResponseEntity.ok(response);
 	}
 }

@@ -4,6 +4,7 @@
     <h1>당신의 다음 집을 검색해보세요</h1>
     <!--    <p>FIND YOUR NEXT HOME</p>-->
     <SearchBox/>
+    <SearchBarResult v-if="isLoaded" :result="result"/>
     <div class="auth-links">
       <router-link to="/login">로그인</router-link>
       /
