@@ -1,24 +1,30 @@
 <script setup>
+import { ref } from 'vue'
 import HouseDealItem from "./item/HouseDealItem.vue";
-import { defineProps, onMounted } from "vue";
+import { defineProps, watch } from "vue";
 
 const props = defineProps({
-    list : Object
+    list : Array
 })
 
-const result = props.list;
+const result = ref([]);
 
-onMounted(() => {
-    console.log(result);
+watch(() => props.list,
+    (newList) => {
+        result.value = newList;
 })
 
 
 </script>
 
 <template>
-    <HouseDealItem v-for='item in result' :key='item.no' :item='item'/>
+    <div class='housedeal-list'>
+        <HouseDealItem v-for='item in result' :key='item.no' :item='item'/>
+    </div>
 </template>
 
 <style scoped>
-
+.housedeal-list {
+    margin-left: 50px;
+}
 </style>

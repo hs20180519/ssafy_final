@@ -3,7 +3,7 @@
     <div class="logo">The Next Home</div>
     <h1>당신의 다음 집을 검색해보세요</h1>
     <!--    <p>FIND YOUR NEXT HOME</p>-->
-    <SearchBox/>
+    <SearchBox @onSearch='onSearch'/>
     <SearchBarResult v-if="isLoaded" :result="result"/>
     <div class="auth-links">
       <router-link to="/login">로그인</router-link>
@@ -14,7 +14,9 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 import SearchBox from '@/components/common/SearchBox.vue';
+import SearchBarResult from "@/components/common/SearchBoxResult.vue";
 
 export default {
   name: 'MainContent',
@@ -22,6 +24,34 @@ export default {
     SearchBox,
   },
 };
+</script>
+
+<script setup>
+import { defineEmits } from 'vue';
+import { searchKeyword } from "@/api/search";
+
+defineEmits([
+  'onSearch'
+])
+
+const isLoaded = ref(false);
+const result = ref();
+
+const onSearch = (searchQuery) => {
+  searchQuery
+    console.log(searchQuery);
+    searchKeyword(
+        searchQuery,
+        ({ data }) => {
+            result.value = data;
+            isLoaded.value = true;
+        },
+        (error) => {
+            console.log(error);
+        }
+    )
+}
+
 </script>
 
 <style scoped>

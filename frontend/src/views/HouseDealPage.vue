@@ -1,32 +1,27 @@
 <script setup>
 // import SideNavbar from '@/components/layout/SideNavbar.vue';
 import HouseDealList from "@/components/housedeal/HouseDealList.vue";
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { getHomeDealByKeyword } from '@/api/houseDeal';
 import { onMounted } from 'vue';
 import { useRoute } from 'vue-router'
+import MapResult from "@/components/common/MapResult.vue";
+import HouseDealFilter from "@/components/housedeal/HouseDealFilter.vue";
 
 const route = useRoute();
 
 const type = route.query.type;
 const keyword = route.query.keyword;
 
-const result = ref([]);
-
-watch(result, (newVal) => {
-    
-    result.value = newVal;
-    console.log(newVal)
-}, {
-    deep: true,
-    immediate: true
+const searchOption = ref({
+    type: type,
+    keyword: keyword
 })
 
+const result = ref([]);
+
 onMounted(() => {
-    console.log(type);
-    console.log(keyword);
     getResultList(type, keyword);
-    console.log("왜안나와?????", result.value)
 })
 
 const getResultList = (type, keyword) => {
@@ -37,8 +32,6 @@ const getResultList = (type, keyword) => {
         },
         ({ data }) => {
             result.value = data;
-            console.log(data);
-
         },
         (error) => {
             console.log(error);
@@ -62,8 +55,9 @@ const getResultList = (type, keyword) => {
 </script>
 
 <template>
-    HouseDealPage
-    <HouseDealList :list='result' />
+    <HouseDealFilter :searchOption='searchOption'/>
+    <HouseDealList :list="result" />
+    <MapResult />
 </template>
 
 <style scoped>

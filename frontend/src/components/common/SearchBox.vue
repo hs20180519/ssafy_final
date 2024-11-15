@@ -1,32 +1,15 @@
 <template>
   <div class="search-box">
     <input type="text" placeholder="광주 장덕동" v-model="searchQuery"/>
-    <font-awesome-icon :icon="['fas', 'magnifying-glass']" @click='onSearch' class="search-icon"/>
+    <font-awesome-icon :icon="['fas', 'magnifying-glass']" @click='$emit("onSearch", searchQuery)' class="search-icon"/>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import { searchKeyword } from "@/api/search";
 
-const isLoaded = ref(false);
-const result = ref();
 const searchQuery = ref("");
 
-const onSearch = () => {
-  searchQuery
-    console.log(searchQuery);
-    searchKeyword(
-        searchQuery,
-        ({ data }) => {
-            result.value = data;
-            isLoaded.value = true;
-        },
-        (error) => {
-            console.log(error);
-        }
-    )
-}
 </script>
 
 <style scoped>
