@@ -27,7 +27,7 @@
 	</select>
 
 	<insert id="insertMember" parameterType="memberDto">
-		insert into members
+		insert into members(id, password, email, name)
 		values (#{id},#{password}, #{email}, #{name})
 	</insert>
 
