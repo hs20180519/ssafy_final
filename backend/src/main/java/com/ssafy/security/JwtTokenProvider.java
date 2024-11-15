@@ -1,20 +1,17 @@
 package com.ssafy.security;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.crypto.SecretKey;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.Jwts;
-
-import javax.crypto.SecretKey;
 
 @Component
 public class JwtTokenProvider {
@@ -28,22 +25,28 @@ public class JwtTokenProvider {
 	private final SecretKey key = Jwts.SIG.HS256.key().build();
 
 	// JWT 생성
-	public String generateToken(String memberId) {
+	public String generateToken(String memberId, String role) {
 		Map<String, Object> claims = new HashMap<>();
-		claims.put("mid", memberId);
+		claims.put("role", role);
 
 		// 필요한 경우 claims에 추가적인 정보 설정
 		return Jwts.builder().claims(claims).subject(memberId).signWith(key) // 서명 JWS
-				.issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + expirationTime)).compact();
+			.issuedAt(new Date(System.currentTimeMillis()))
+			.expiration(new Date(System.currentTimeMillis() + expirationTime)).compact();
 	}
 
 	public String getMemberIdFromToken(String token) {
 		Jws<Claims> jws = Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
 
 		Claims claims = jws.getPayload();
-
 		return claims.getSubject();
+	}
+
+	public String getMemberRoleFromToken(String token) {
+		Jws<Claims> jws = Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+
+		Claims claims = jws.getPayload();
+		return claims.get("role", String.class);
 	}
 
 	// 토큰 유효성 검증

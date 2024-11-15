@@ -41,7 +41,8 @@ public class AuthController {
 		try {
 			MemberDto memberDto = authService.login(request);
 			if (memberDto != null) {
-				String token = jwtTokenProvider.generateToken(memberDto.getId());
+				String token = jwtTokenProvider.generateToken(memberDto.getId(), memberDto.getRole());
+				System.out.println(jwtTokenProvider.getMemberRoleFromToken(token));
 
 				HttpHeaders headers = new HttpHeaders();
 				headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + token);

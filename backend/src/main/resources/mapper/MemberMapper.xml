@@ -27,8 +27,8 @@
 	</select>
 
 	<insert id="insertMember" parameterType="memberDto">
-		insert into members(id, password, email, name)
-		values (#{id},#{password}, #{email}, #{name})
+		insert into members(id, password, email, name, role)
+		values (#{id},#{password}, #{email}, #{name}, #{role})
 	</insert>
 
 	<update id="updateMember" parameterType="memberDto">
