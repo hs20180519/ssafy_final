@@ -1,9 +1,9 @@
-import {createRouter, createWebHistory} from 'vue-router';
-
+// router/index.js
+import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from "@/views/HomePage.vue";
+import HouseDealPage from "@/views/HouseDealPage.vue";
 import MemberLoginPage from "@/views/MemberLoginPage.vue";
 import MemberSignUpPage from "@/views/MemberSignUpPage.vue";
-
 
 const routes = [
   {
@@ -15,6 +15,13 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: MemberLoginPage
+  },
+  {
+    path: '/house-deal',
+    name: 'HouseDeal',
+    component: HouseDealPage,
+    props: true
+    
   },
   {
     path: '/signup',

@@ -9,19 +9,43 @@
  		<result column="gugun_name" property="gugunName" />
  		<result column="dong_name" property="dongName" />
  	</resultMap>
+
+	<resultMap id="house" type="HouseDealSearchResult">
+		<result column="sido_name" property="sidoName" />
+		<result column="gugun_name" property="gugunName" />
+		<result column="dong_name" property="dongName" />
+		<result column="apt_seq" property="aptSeq" />
+		<result column="apt_nm" property="aptNm" />
+	</resultMap>
  	
  	<select id="getFilters" resultMap="dongCode" parameterType="string">
- 		select * from dong_codes
+ 		SELECT * FROM dong_codes
  		<where>
  			<if test="parentCode == ''">
- 				dong_code like '%00000000'
+ 				dong_code LIKE '%00000000'
  			</if>
  			<if test="parentCode.length() == 2">
- 				dong_code like concat(#{parentCode}, '%00000')
+ 				dong_code LIKE concat(#{parentCode}, '%00000')
  			</if>
  			<if test="parentCode.length() > 2">
- 				dong_code like concat(#{parentCode}, '%')
+ 				dong_code LIKE concat(#{parentCode}, '%')
  			</if>
  		</where>
  	</select>
+
+	<select id="getHouseByKeyword" resultMap="house" parameterType="String">
+		SELECT dc.sido_name, dc.gugun_name, dc.dong_name, d.apt_seq, i.apt_nm
+		FROM house_deals d
+		    JOIN house_infos i ON i.apt_seq = d.apt_seq
+			JOIN dong_codes dc ON dc.dong_code = concat(i.sgg_cd, umd_cd)
+		WHERE i.apt_nm LIKE concat("%", #{keyword}, "%")
+		GROUP BY dc.sido_name, dc.gugun_name, dc.dong_name, d.apt_seq, i.apt_nm
+	</select>
+
+	<select id="getDongCodeByKeyword" resultMap="dongCode" parameterType="String">
+		SELECT * FROM dong_codes
+		WHERE sido_name LIKE concat("%", #{keyword}, "%") OR
+		      gugun_name LIKE concat("%", #{keyword}, "%") OR
+		      dong_name LIKE concat("%", #{keyword}, "%")
+	</select>
  </mapper>

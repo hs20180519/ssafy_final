@@ -44,5 +44,13 @@ public class HouseDealController {
         List<HouseDealDto> houseDeals = houseDealService.getHouseDeals(request);
         return ResponseEntity.ok(houseDeals);
     }
+    
+    @GetMapping("/keyword")
+    public ResponseEntity<List<HouseDealDto>> getHouseDealsByKeyword(
+    		@RequestParam("type") String type,
+    		@RequestParam("code") String code) {
+    	List<HouseDealDto> houseDeals = houseDealService.getHouseDealsWithKeyword(type, code);
+    	return ResponseEntity.ok(houseDeals);
+    }
 
 }
