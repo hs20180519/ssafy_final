@@ -1,37 +1,36 @@
-<script setup>
-import { ref } from 'vue'
-
-import SearchBar from "@/components/common/SearchBar.vue";
-import SearchBarResult from "@/components/common/SearchBarResult.vue";
-import { searchKeyword } from "@/api/search"
-
-const isLoaded = ref(false);
-const result = ref();
-
-const onSearch = (keyword) => {
-    console.log(keyword);
-    searchKeyword(
-        keyword,
-        ({ data }) => {
-            result.value = data;
-            isLoaded.value = true;
-        },
-        (error) => {
-            console.log(error);
-        }
-    )
-}
-
-</script>
-
 <template>
-    <div>
-        Home
-        <SearchBar @onSearch="onSearch"/>
-        <SearchBarResult v-if="isLoaded" :result="result"/>
+  <div class="home">
+    <div class="main-content-wrapper">
+      <MainContent/>
     </div>
+  </div>
 </template>
 
+<script>
+import MainContent from '@/components/main/MainContent.vue';
+
+export default {
+  name: 'Home',
+  components: {
+    MainContent,
+  },
+};
+</script>
+
 <style scoped>
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
+
+.main-content-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 100px;
+}
 
 </style>

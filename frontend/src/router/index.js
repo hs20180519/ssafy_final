@@ -1,19 +1,32 @@
 // router/index.js
+import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from "@/views/HomePage.vue";
 import HouseDealPage from "@/views/HouseDealPage.vue";
-import { createRouter, createWebHistory } from 'vue-router';
+import MemberLoginPage from "@/views/MemberLoginPage.vue";
+import MemberSignUpPage from "@/views/MemberSignUpPage.vue";
 
 const routes = [
   {
     path: '/',
+    name: 'Home',
+    component: HomePage
+  },
+  {
+    path: '/login',
     name: 'Login',
-    component: HomePage,
+    component: MemberLoginPage
   },
   {
     path: '/house-deal',
     name: 'HouseDeal',
     component: HouseDealPage,
     props: true
+    
+  },
+  {
+    path: '/signup',
+    name: 'Signup',
+    component: MemberSignUpPage
   }
 ];
 

@@ -46,7 +46,7 @@ public class AuthController {
 				HttpHeaders headers = new HttpHeaders();
 				headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + token);
 
-				return ResponseEntity.ok().headers(headers).body("로그인 성공, 토큰: " + token);
+				return ResponseEntity.ok().headers(headers).body(memberDto.getName());
 			} else {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
 			}

@@ -37,7 +37,7 @@ public class SecurityConfig {
 				corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:8080".split(","))); // 프론트엔드 주소
 				corsConfig.addAllowedHeader("*"); // 모든 헤더 허용
 				corsConfig.addAllowedMethod("*"); // 모든 메서드 허용
-
+				corsConfig.addExposedHeader("Authorization"); // Authorization 헤더를 클라이언트에 노출
 				UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 				source.registerCorsConfiguration("/**", corsConfig); // 모든 패턴에 대하여 CORS 정책 적용
 
@@ -45,7 +45,7 @@ public class SecurityConfig {
 			})
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers("/api/**",
-					"/api/auth/join", "/css/**", "/js/**", "/images/**",
+					"/api/auth/signup", "/css/**", "/js/**", "/images/**",
 					"/v3/api-docs", "/v3/api-docs/**", "/swagger-resources",
 					"/swagger-resources/**", "/swagger-ui/**")
 
