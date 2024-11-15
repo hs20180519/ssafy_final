@@ -20,4 +20,11 @@ public class HouseDealServiceImpl implements HouseDealService {
     public List<HouseDealDto> getHouseDeals(Map<String, String> criteria) {
         return houseDealMapper.getHouseDeals(criteria);
     }
+
+	@Override
+	public List<HouseDealDto> getHouseDealsWithKeyword(String type, String code) {
+		// TODO Auto-generated method stub
+		System.out.println(code + " " + type);
+		return houseDealMapper.getHouseDealsWithKeyword(type, code);
+	}
 }

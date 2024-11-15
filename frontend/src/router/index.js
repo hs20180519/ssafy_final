@@ -1,7 +1,6 @@
 // router/index.js
 import HomePage from "@/views/HomePage.vue";
 import HouseDealPage from "@/views/HouseDealPage.vue";
-import { compile } from "vue";
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
