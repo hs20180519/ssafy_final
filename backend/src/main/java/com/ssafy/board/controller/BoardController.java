@@ -3,6 +3,7 @@ package com.ssafy.board.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,6 +72,7 @@ public class BoardController {
 	}
 
 	// 답변 등록
+	@PreAuthorize("hasRole('admin')") // 관리자만 작성 가능
 	@PostMapping("/questions/{questionId}/answers")
 	public void createAnswer(@PathVariable
 	int questionId, @RequestBody
@@ -80,6 +82,7 @@ public class BoardController {
 	}
 
 	// 답변 수정
+	@PreAuthorize("hasRole('admin')")
 	@PutMapping("/answers/{id}")
 	public void updateAnswer(@PathVariable
 	int id, @RequestBody
@@ -89,6 +92,7 @@ public class BoardController {
 	}
 
 	// 답변 삭제
+	@PreAuthorize("hasRole('admin')")
 	@DeleteMapping("/answers/{id}")
 	public void deleteAnswer(@PathVariable
 	int id) {
