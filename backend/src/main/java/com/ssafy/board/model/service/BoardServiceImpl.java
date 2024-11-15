@@ -1,5 +1,6 @@
 package com.ssafy.board.model.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,14 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public void createQuestion(BoardQuestionDto question) {
+		question.setCreatedAt(LocalDateTime.now());
+		question.setUpdatedAt(LocalDateTime.now());
 		boardMapper.createQuestion(question);
 	}
 
 	@Override
 	public void updateQuestion(BoardQuestionDto question) {
+		question.setUpdatedAt(LocalDateTime.now());
 		boardMapper.updateQuestion(question);
 	}
 
@@ -47,11 +51,14 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public void createAnswer(BoardAnswerDto answer) {
+		answer.setCreatedAt(LocalDateTime.now());
+		answer.setUpdatedAt(LocalDateTime.now());
 		boardMapper.createAnswer(answer);
 	}
 
 	@Override
 	public void updateAnswer(BoardAnswerDto answer) {
+		answer.setUpdatedAt(LocalDateTime.now());
 		boardMapper.updateAnswer(answer);
 	}
 
