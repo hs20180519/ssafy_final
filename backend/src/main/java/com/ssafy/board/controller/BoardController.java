@@ -53,12 +53,16 @@ public class BoardController {
 	public ResponseEntity<String> createQuestion(@RequestBody
 	BoardQuestionDto question, Authentication authentication) {
 		try {
+			System.out.println(authentication);
+			
+			
 			question.setAuthor((String)authentication.getPrincipal());
 			System.out.println(authentication.getPrincipal());
 			//			question.setAuthor(authentication.getPrincipal());
 			boardService.createQuestion(question);
 			return ResponseEntity.status(HttpStatus.CREATED).body("질문이 등록되었습니다.");
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("질문 등록 중 오류가 발생했습니다.");
 		}
 	}
