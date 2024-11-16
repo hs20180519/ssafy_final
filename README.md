@@ -103,10 +103,14 @@ https://www.figma.com/design/pDmPt7Uku5j0OIBwLVzeJB/ssafy-project?node-id=0-1&m=
 ### 로그인
 ![image](/uploads/25a4665d7f909dd102eca8755b984867/image.png)
 
-### QnA 게시판 조회 
-### QnA 게시글 등록
-### QnA 게시글 조회 및 답변 등록
+### QnA 게시판 조회 - vue 수정 예정
+![image](/uploads/ddff70be26a484f6dbc03c90d91f8a65/image.png)
 
+### QnA 게시글 등록
+![image](/uploads/601bdc7d98fad9e5f20c2368ab9592a8/image.png)
+
+### QnA 게시글 조회 및 답변 등록
+![image](/uploads/d22af8893810188018d25a5d398f700e/image.png)
 
 
 
