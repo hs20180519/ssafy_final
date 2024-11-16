@@ -1,14 +1,14 @@
-# SSAFY12_광주5_관통_Framework_3팀_김자연_정현수
+# SSAFY12_광주5_관통_Vue.js_3팀_김자연_정현수
 
 ## :pushpin: 프로젝트 구성
 ### 프로젝트 설명
-WhereIsMyHome 서비스는 사용자에게 편리하게 주택 매물 검색 기능을 기본으로 제공하는 서비스입니다. 본 프로젝트는 Java Servlet 기반 웹 프로젝트를 spring boot 프레임워크로 리팩토링하고, REST API 아키텍처를 적용하는 것을 목표로 합니다. <br>
+WhereIsMyHome 서비스는 사용자에게 편리하게 주택 매물 검색 기능을 기본으로 제공하는 서비스입니다. 본 프로젝트는 Vue.js를 활용하여 프론트엔드를 구현하고, 기존에 개발된 REST API와 연동하는 것을 목표로 합니다. <br>
 
 ### 팀 구성
 |이름|역할|
 |:---:|:---:|
-|김자연(팀장)|매물 검색 및 검색 필터링 조건 api 개발|
-|정현수|회원 관리, JWT적용, QnA게시판 및 관심지역 api 개발|
+|김자연(팀장)|매물 검색 페이지 구현|
+|정현수|회원 관리(회원가입, 로그인/로그아웃), QnA 페이지 구현|
 
 ### Notion
 https://twisty-stag-36c.notion.site/1309a41b7c4680f6b47ff0426dbb7f18
@@ -28,38 +28,6 @@ https://twisty-stag-36c.notion.site/1309a41b7c4680f6b47ff0426dbb7f18
 ### Figma
 ![image](/uploads/b71e0bc4d746670b2a6e04031261ace5/image.png)
 https://www.figma.com/design/pDmPt7Uku5j0OIBwLVzeJB/ssafy-project?node-id=0-1&m=dev&t=eETbAL6Y2r2h5Dcc-1
-
-### 프로젝트 구조
-#### Member: 회원 도메인
-- MemberDto
-- MemberMapper
-- MemberService
-- MemberController
-#### HouseDeal: 매물 검색 도메인
-- HouseDealDto
-- HouseDealMapper
-- HouseDealService
-- HouseDealController
-#### FavoriteArea: 관심지역 도메인
-- FavoriteAreaDto
-- FavoriteAreaMapper
-- FavoriteAreaService
-- FavoriteAreaController
-#### DongCode: 지역 분류 코드 도메인
-- DongCodeDto
-- DongCodeMapper
-- DongCodeService
-- DongCodeController
-#### Board : QnA 게시판 도메인
-- BoardAnswerDto
-- BoardQuestionDto
-- BoardMapper
-- BoardService
-- BoardController
-
-
-
-
 
 ## :pushpin: API 목록
 ### 회원관리 API
@@ -93,26 +61,43 @@ https://www.figma.com/design/pDmPt7Uku5j0OIBwLVzeJB/ssafy-project?node-id=0-1&m=
 - 답변 삭제
 
 
-## :pushpin: 화면 구성
+## :pushpin: 화면 구성 (추후 gif 추가 예정)
 ### 메인페이지
 ![image](/uploads/73b7e8df166e442c9ebb4c2655d33cc3/image.png)
 
-### 회원가입
+### 회원 관리
+#### 회원가입
 ![image](/uploads/e8e11bca8eff0e1244da22bb70011040/image.png)
 
-### 로그인
+#### 로그인
 ![image](/uploads/25a4665d7f909dd102eca8755b984867/image.png)
 
-### QnA 게시판 조회 - vue 수정 예정
+### QnA 게시판
+#### QnA 게시판 조회 - vue 수정 예정
 ![image](/uploads/ddff70be26a484f6dbc03c90d91f8a65/image.png)
 
-### QnA 게시글 등록
+#### QnA 게시글 등록
 ![image](/uploads/601bdc7d98fad9e5f20c2368ab9592a8/image.png)
 
-### QnA 게시글 조회 및 답변 등록
+#### QnA 게시글 조회 및 답변 등록
 ![image](/uploads/d22af8893810188018d25a5d398f700e/image.png)
 
+### 매물 검색
+#### 메인페이지에서 검색
+![image](/uploads/9cefea09c9729a511e05f81f67bfd013/image.png)<br />
+검색 결과를 클릭하면 해당 지역이나 매물에 해당하는 실거래가 페이지로 이동합니다.
 
+#### 매물 실거래가 목록 페이지
+![image](/uploads/1e8ad957cc9a3add10c2d12c038aca29/image.png)
+
+#### 매물 실거래가 목록 페이지에서 재검색
+![image](/uploads/c36b8ff782021f450e27e32ae97a75df/image.png)
+![image](/uploads/607b96c7917f5fe9e2b95f6dfd5575d9/image.png)
+
+#### 지역 필터링 검색
+![image](/uploads/16fbae03401a0b14f51b5ab8b1219a6a/image.png)
+![image](/uploads/453098e923e9d874ae406edeff40529a/image.png) <br />
+\* 더 많은 목록이 보이도록 페이지 축소하였습니다.
 
 # :pushpin: Commit Convention
 
