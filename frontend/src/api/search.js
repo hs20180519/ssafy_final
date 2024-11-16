@@ -8,6 +8,18 @@ function searchKeyword(param, success, fail) {
     } }).then(success).catch(fail);
 }
 
+function getFilter(param, success, fail) {
+    console.log(param.param)
+    searchApi.get('dong-code', {
+        params: {
+            parentCode: param.param==undefined ? '' : param.param
+        }
+    })
+        .then(success)
+        .catch(fail)
+}
+
 export {
-    searchKeyword
+    searchKeyword,
+    getFilter
 }
