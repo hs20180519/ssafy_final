@@ -93,6 +93,21 @@ https://www.figma.com/design/pDmPt7Uku5j0OIBwLVzeJB/ssafy-project?node-id=0-1&m=
 - 답변 삭제
 
 
+## :pushpin: 화면 구성
+### 메인페이지
+![image](/uploads/73b7e8df166e442c9ebb4c2655d33cc3/image.png)
+
+### 회원가입
+![image](/uploads/e8e11bca8eff0e1244da22bb70011040/image.png)
+
+### 로그인
+![image](/uploads/25a4665d7f909dd102eca8755b984867/image.png)
+
+### QnA 게시판 조회 
+### QnA 게시글 등록
+### QnA 게시글 조회 및 답변 등록
+
+
 
 
 # :pushpin: Commit Convention
