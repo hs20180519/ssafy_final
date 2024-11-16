@@ -8,7 +8,7 @@ WhereIsMyHome 서비스는 사용자에게 편리하게 주택 매물 검색 기
 |이름|역할|
 |:---:|:---:|
 |김자연(팀장)|매물 검색 및 검색 필터링 조건 api 개발|
-|정현수|회원 관리 및 관심지역 api 개발|
+|정현수|회원 관리, JWT적용, QnA게시판 및 관심지역 api 개발|
 
 ### Notion
 https://twisty-stag-36c.notion.site/1309a41b7c4680f6b47ff0426dbb7f18
@@ -24,6 +24,10 @@ https://twisty-stag-36c.notion.site/1309a41b7c4680f6b47ff0426dbb7f18
 
 ### ERD
 ![image](/uploads/0152eee85de1869c3b9c142fbd1cbc99/image.png)
+
+### Figma
+![image](/uploads/b71e0bc4d746670b2a6e04031261ace5/image.png)
+https://www.figma.com/design/pDmPt7Uku5j0OIBwLVzeJB/ssafy-project?node-id=0-1&m=dev&t=eETbAL6Y2r2h5Dcc-1
 
 ### 프로젝트 구조
 #### Member: 회원 도메인
