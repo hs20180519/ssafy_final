@@ -1,10 +1,9 @@
 <script setup>
-// import SideNavbar from '@/components/layout/SideNavbar.vue';
 import HouseDealList from "@/components/housedeal/HouseDealList.vue";
 import { ref } from 'vue'
 import { getHomeDealByKeyword } from '@/api/houseDeal';
 import { onMounted } from 'vue';
-import { useRoute } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import MapResult from "@/components/common/MapResult.vue";
 import HouseDealFilter from "@/components/housedeal/HouseDealFilter.vue";
 
@@ -13,15 +12,23 @@ const route = useRoute();
 const type = route.query.type;
 const keyword = route.query.keyword;
 
-const searchOption = ref({
-    type: type,
-    keyword: keyword
-})
+const lat = ref();
+const lng = ref();
+
 
 const result = ref([]);
 
 onMounted(() => {
     getResultList(type, keyword);
+})
+
+// query나 params가 변경되었을 때 실행(e.g. houseDealPage에서 재검색)
+onBeforeRouteUpdate((to, from, next) => {
+    console.log("route updated!", from.query, " to " , to.query)
+
+    getResultList(to.query.type, to.query.keyword);
+
+    next();
 })
 
 const getResultList = (type, keyword) => {
@@ -31,6 +38,7 @@ const getResultList = (type, keyword) => {
             keyword: keyword
         },
         ({ data }) => {
+            console.log("getResultList: ", data);
             result.value = data;
         },
         (error) => {
@@ -39,27 +47,38 @@ const getResultList = (type, keyword) => {
     )
 }
 
-
-// const getResultList = async (type, keyword) => {
-//     try {
-//         const {data} = await getHomeDealByKeyword({ type, keyword });
-//         console.log(data);
-//         result.value = data;
-//     } catch (error) {
-//         console.error("데이터 로드 실패:", error);
-//     }
-// };
-
-
+const onItemClick = (latitude, longitude) => {
+    lat.value = latitude;
+    lng.value = longitude;
+}
 
 </script>
 
 <template>
-    <HouseDealFilter :searchOption='searchOption'/>
-    <HouseDealList :list="result" />
-    <MapResult />
+    <HouseDealFilter />
+    <div class="container">
+        <div class="list-container">
+        <HouseDealList :list="result" @onItemClick="onItemClick" />
+        </div>
+
+        <div class="map-container">
+        <MapResult :lat="lat" :lng="lng" />
+        </div>
+    </div>
 </template>
 
 <style scoped>
+.container {
+  display: flex; 
+  gap: 20px; 
+}
 
+.list-container {
+  flex: 1; 
+}
+
+.map-container {
+  flex: 1; 
+  /* max-width: 500px;  */
+}
 </style>

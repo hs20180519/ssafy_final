@@ -2,26 +2,48 @@
 import { onMounted, ref } from 'vue'
 import SearchBox from "@/components/common/SearchBox.vue";
 import VSelect from "@/components/common/VSelect.vue";
-import { getFilter } from "@/api/search"
+import { getFilter, searchKeyword } from "@/api/search"
+import { useHouseDealStore } from '@/stores/houseDealStore';
+import SearchBoxResult from '../common/SearchBoxResult.vue';
 
 const props = defineProps({
     searchOption: Object
 })
 
+const houseDealStore = useHouseDealStore();
+
 const sidoOptions = ref([]);
 const gugunOptions = ref([]);
 const dongOptions = ref([]);
 
-const isHouse = ref(false);
+const isLoaded = ref(false);
+const result = ref();
 
 onMounted(() => {
-    getSidoFilter("");
-    isHouse.value = props.searchOption.type == "house" ? true : false;
+    // console.log(houseDealStore.searchOption);
+    if(houseDealStore.searchOption.sidoName) {
+        // console.log()
+        getDongFilter(houseDealStore.searchOption.dongCode);
+    } else {
+        getSidoFilter("");
+    }
+
+    
+    console.log(props.searchOption)
 })
 
-defineEmits([
-    'onKeySelect'
-])
+const onSearch = () => {
+    searchKeyword(
+      houseDealStore.keyword,
+        ({ data }) => {
+            result.value = data;
+            isLoaded.value = true;
+        },
+        (error) => {
+            console.log(error);
+        }
+    )
+}
 
 const onSelectSido = (code) => {
     console.log("시도선택: ", code);
@@ -87,7 +109,8 @@ const getDongFilter = (code) => {
 
 <template>
     <div class='housedeal-filter'>
-        <SearchBox :text='isHouse ? searchOption.keyword : ""'/>
+        <SearchBox @onSearch='onSearch'/>
+        <SearchBoxResult v-if="isLoaded" :result="result" @onResultClicked="isLoaded = false"/>
         <VSelect :selectOption=sidoOptions @onKeySelect='onSelectSido'/>
         <VSelect :selectOption=gugunOptions @onKeySelect='onSelectGugun' />
         <VSelect :selectOption=dongOptions @onKeySelect='onSelectDong' />

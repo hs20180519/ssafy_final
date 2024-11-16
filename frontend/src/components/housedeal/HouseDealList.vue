@@ -1,11 +1,15 @@
 <script setup>
 import { ref } from 'vue'
 import HouseDealItem from "./item/HouseDealItem.vue";
-import { defineProps, watch } from "vue";
+import { defineProps, watch, defineEmits } from "vue";
 
 const props = defineProps({
     list : Array
 })
+
+const emit = defineEmits([
+    'onItemClick'
+])
 
 const result = ref([]);
 
@@ -14,17 +18,22 @@ watch(() => props.list,
         result.value = newList;
 })
 
+const onClick = (item) => {
+    emit('onItemClick', item.latitude, item.longitude);
+}
+
 
 </script>
 
 <template>
     <div class='housedeal-list'>
-        <HouseDealItem v-for='item in result' :key='item.no' :item='item'/>
+        <HouseDealItem @click="onClick(item)" v-for='item in result' :key='item.no' :item='item'/>
     </div>
 </template>
 
 <style scoped>
 .housedeal-list {
     margin-left: 50px;
+    width: 30%;
 }
 </style>
