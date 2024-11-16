@@ -10,6 +10,9 @@ WhereIsMyHome 서비스는 사용자에게 편리하게 주택 매물 검색 기
 |김자연(팀장)|매물 검색 및 검색 필터링 조건 api 개발|
 |정현수|회원 관리 및 관심지역 api 개발|
 
+### Notion
+https://twisty-stag-36c.notion.site/1309a41b7c4680f6b47ff0426dbb7f18
+
 ### 기술 스택
 
   <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
@@ -20,7 +23,7 @@ WhereIsMyHome 서비스는 사용자에게 편리하게 주택 매물 검색 기
   <br>
 
 ### ERD
-![erd](/uploads/74cddb5ac4e4bbb69e465cd441632a79/erd.png)
+![image](/uploads/0152eee85de1869c3b9c142fbd1cbc99/image.png)
 
 ### 프로젝트 구조
 #### Member: 회원 도메인
@@ -43,6 +46,16 @@ WhereIsMyHome 서비스는 사용자에게 편리하게 주택 매물 검색 기
 - DongCodeMapper
 - DongCodeService
 - DongCodeController
+#### Board : QnA 게시판 도메인
+- BoardAnswerDto
+- BoardQuestionDto
+- BoardMapper
+- BoardService
+- BoardController
+
+
+
+
 
 ## :pushpin: API 목록
 ### 회원관리 API
@@ -54,23 +67,29 @@ WhereIsMyHome 서비스는 사용자에게 편리하게 주택 매물 검색 기
 - 회원 검색
 - 전체 회원 조회
 
-![memberSwagger](/uploads/6cef4399fc1d1448ae05829213526f4e/memberSwagger.png)
-
 ### 관심지역 API
 - 회원별 관심지역 조회
 - 관심지역 추가
 - 관심지역 삭제
 
-![favoriteAreaSwagger](/uploads/7bb34f91df76ae9db6b759b8867e1f93/favoriteAreaSwagger.png)
-
 ### 매물 검색 API
 - 필터링 조건에 따른 주택 매물 목록 조회
 
-![house-deal-swagger](/uploads/130a810692b7b95164b8951a95ef99b4/localhost_swagger-ui_index.html_urls.primaryName_house-deal.png)
-
 ### 필터링 조건 API
 - 필터링 조건 조회
-![dong-code-swagger](/uploads/15ea83279b2c8d0ef61cc92c1e0a961f/localhost_swagger-ui_index.html_urls.primaryName_dong-code.png)
+
+### QnA 게시판 API
+- 모든 질문 조회
+- 질문 상세 조회
+- 질문 등록
+- 질문 수정
+- 특정 질문에 대한 모든 답변 조회
+- 답변 등록
+- 답변 수정
+- 답변 삭제
+
+
+
 
 # :pushpin: Commit Convention
 
