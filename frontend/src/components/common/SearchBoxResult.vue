@@ -1,10 +1,15 @@
 <script setup>
 import router from '@/router';
-import { defineProps, onMounted, onUpdated, ref } from 'vue';
+import { defineProps, defineEmits, onMounted, onUpdated, ref } from 'vue';
+import { useHouseDealStore } from '@/stores/houseDealStore';
+
+const houseDealStore = useHouseDealStore();
 
 const props = defineProps({
     result: Object
 })
+
+const emit = defineEmits(['onResultClicked']);
 
 const regions = ref();
 const houses = ref();
@@ -22,21 +27,31 @@ onMounted(() => {
     houses.value = props.result.houses;
 })
 
+
 function goDetail(type, data) {
-    console.log(data, type);
+    let code = data;
+    emit('onResultClicked');
+    if(type == 'region') {
+        code = data.dongCode;
+        houseDealStore.setRegion(data.sidoName, data.gugunName, data.dongName, data.dongCode)
+    }
+
+    console.log("goDetail 호출", code, type);
     router.push({
         name: "HouseDeal",
         query: {
             type: type,
-            keyword: data
+            keyword: code
         }
     })
+    
 }
+
 </script>
 
 <template>
     <h2>지역</h2>
-    <div v-for="region in regions" :key="region.dongCode" @click="goDetail('region', region.dongCode)">
+    <div v-for="region in regions" :key="region.dongCode" @click="goDetail('region', region)">
         {{ region.sidoName }} {{ region.gugunName }} {{ region.dongName }}
     </div>
 
@@ -45,6 +60,7 @@ function goDetail(type, data) {
         {{ house.aptNm }}: {{ house.sidoName }} {{ house.gugunName }} {{ house.dongName }}
     </div>
 </template>
+
 
 <style scoped>
 

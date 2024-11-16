@@ -12,7 +12,9 @@ onUpdated(() => {
 
 <template>
     <div>
-        {{ item }}
+        <h3>{{ item.aptNm }}</h3>
+        거래일시: {{ item.dealYear }}.{{ item.dealMonth }}.{{ item.dealDay }} <br>
+        거래금액: {{ item.dealAmount }}
     </div>
 </template>
 

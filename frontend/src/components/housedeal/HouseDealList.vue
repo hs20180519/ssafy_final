@@ -1,24 +1,39 @@
 <script setup>
+import { ref } from 'vue'
 import HouseDealItem from "./item/HouseDealItem.vue";
-import { defineProps, onMounted } from "vue";
+import { defineProps, watch, defineEmits } from "vue";
 
 const props = defineProps({
-    list : Object
+    list : Array
 })
 
-const result = props.list;
+const emit = defineEmits([
+    'onItemClick'
+])
 
-onMounted(() => {
-    console.log(result);
+const result = ref([]);
+
+watch(() => props.list,
+    (newList) => {
+        result.value = newList;
 })
+
+const onClick = (item) => {
+    emit('onItemClick', item.latitude, item.longitude);
+}
 
 
 </script>
 
 <template>
-    <HouseDealItem v-for='item in result' :key='item.no' :item='item'/>
+    <div class='housedeal-list'>
+        <HouseDealItem @click="onClick(item)" v-for='item in result' :key='item.no' :item='item'/>
+    </div>
 </template>
 
 <style scoped>
-
+.housedeal-list {
+    margin-left: 50px;
+    width: 30%;
+}
 </style>
