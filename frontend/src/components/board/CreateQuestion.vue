@@ -34,7 +34,7 @@ export default {
           },
           {
             headers: {
-              Authorization: `${token}`, // 토큰을 Authorization 헤더에 포함
+              Authorization: `Bearer ${token}`, // 토큰을 Authorization 헤더에 포함
             },
           });
         // console.log(response)
