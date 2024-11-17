@@ -33,8 +33,6 @@ onMounted(() => {
             selectedGugun.value = dongCode.slice(0,5) + "00000";
             selectedDong.value = dongCode;
 
-            console.log("지역 선택해서 들어옴: ", selectedSido.value, selectedGugun.value, selectedDong.value)
-
             getGugunFilter(selectedSido.value).then(() => {
                 getDongFilter(selectedGugun.value);
             })

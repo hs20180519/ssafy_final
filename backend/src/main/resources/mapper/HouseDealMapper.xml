@@ -37,6 +37,7 @@
             <if test="dongCode != null and dongCode != ''">
                 AND i.umd_cd = #{dongCode}
             </if>
+            AND i.apt_nm LIKE concat("%", #{keyword}, "%")
         </where>
         limit 20;
     </select>
