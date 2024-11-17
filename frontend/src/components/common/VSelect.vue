@@ -1,9 +1,17 @@
 <script setup>
-import { ref } from "vue";
-defineProps({ selectOption: Array });
+import { onMounted, ref, watch } from "vue";
+const props = defineProps({ selectOption: Array, selectedOption: String });
 const emit = defineEmits(["onKeySelect"]);
 
-const key = ref("");
+const key = ref(props.selectedOption);
+
+watch(
+  () => props.selectedOption,
+  (newVal) => {
+      key.value = newVal;
+      console.log("Vselect:" , key.value);
+    }
+);
 
 const onSelect = () => {
   console.log(key.value + "선택");
