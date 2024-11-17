@@ -20,12 +20,14 @@ import com.ssafy.board.model.BoardAnswerDto;
 import com.ssafy.board.model.BoardQuestionDto;
 import com.ssafy.board.model.service.BoardService;
 
+import lombok.AllArgsConstructor;
+
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/board")
 public class BoardController {
 
-	@Autowired
-	private BoardService boardService;
+	private final BoardService boardService;
 
 	// 질문 CRUD
 
@@ -54,8 +56,7 @@ public class BoardController {
 	BoardQuestionDto question, Authentication authentication) {
 		try {
 			System.out.println(authentication);
-			
-			
+
 			question.setAuthor((String)authentication.getPrincipal());
 			System.out.println(authentication.getPrincipal());
 			//			question.setAuthor(authentication.getPrincipal());
