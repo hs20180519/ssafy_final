@@ -1,5 +1,5 @@
 // router/index.js
-import { createRouter, createWebHistory } from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 import HomePage from "@/views/HomePage.vue";
 import HouseDealPage from "@/views/HouseDealPage.vue";
 import MemberLoginPage from "@/views/MemberLoginPage.vue";
@@ -45,10 +45,10 @@ const routes = [
     props: true, // URL 경로 파라미터를 props로 전달
   },
   {
-    path: "/board/questions/:id/edit", // Add the Edit page route
+    path: "/board/questions/:id/edit",
     name: "QuestionEdit",
-    component: QuestionEdit, // Reference the Edit component
-    props: true, // Pass the question ID as a prop
+    component: QuestionEdit,
+    props: true,
   },
   {
     path: "/board/create",
