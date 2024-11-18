@@ -88,4 +88,9 @@ public class AuthController {
 	String email) {
 		return ResponseEntity.ok(authService.findId(name, email));
 	}
+	
+	@PostMapping("/password-reset-mail")
+	public String sendResetPasswordMail(@RequestBody String email) {
+		return authService.sendResetPasswordEmail(email);
+	}
 }
