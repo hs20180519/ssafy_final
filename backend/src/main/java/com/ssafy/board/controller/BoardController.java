@@ -2,7 +2,6 @@ package com.ssafy.board.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,12 +19,14 @@ import com.ssafy.board.model.BoardAnswerDto;
 import com.ssafy.board.model.BoardQuestionDto;
 import com.ssafy.board.model.service.BoardService;
 
+import lombok.AllArgsConstructor;
+
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/board")
 public class BoardController {
 
-	@Autowired
-	private BoardService boardService;
+	private final BoardService boardService;
 
 	// 질문 CRUD
 
@@ -53,12 +54,13 @@ public class BoardController {
 	public ResponseEntity<String> createQuestion(@RequestBody
 	BoardQuestionDto question, Authentication authentication) {
 		try {
-			question.setAuthor((String)authentication.getPrincipal());
 			System.out.println(authentication.getPrincipal());
-			//			question.setAuthor(authentication.getPrincipal());
+			question.setAuthor((String)authentication.getPrincipal());
+			System.out.println(question);
 			boardService.createQuestion(question);
 			return ResponseEntity.status(HttpStatus.CREATED).body("질문이 등록되었습니다.");
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("질문 등록 중 오류가 발생했습니다.");
 		}
 	}
@@ -74,9 +76,15 @@ public class BoardController {
 			// 질문을 조회하여 작성자 정보 가져오기
 			BoardQuestionDto existingQuestion = boardService.getQuestionById(id);
 
+			String author = (String)authentication.getPrincipal();
+			String role = (authentication.getAuthorities().stream()
+				.map(authority -> authority.getAuthority())
+				.findFirst()
+				.orElse("No Authority"));
+
 			// 작성자와 현재 로그인된 사용자 비교
-			if (!existingQuestion.getAuthor().equals(authentication.getPrincipal())
-				&& !authentication.getAuthorities().contains("ROLE_admin")) {
+			if (!existingQuestion.getAuthor().equals(author)
+				&& !role.contains("ROLE_admin")) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("작성자가 아니므로 수정할 수 없습니다.");
 			}
 
@@ -96,9 +104,15 @@ public class BoardController {
 			// 질문을 조회하여 작성자 정보 가져오기
 			BoardQuestionDto existingQuestion = boardService.getQuestionById(id);
 
+			String author = (String)authentication.getPrincipal();
+			String role = (authentication.getAuthorities().stream()
+				.map(authority -> authority.getAuthority())
+				.findFirst()
+				.orElse("No Authority"));
+
 			// 작성자와 현재 로그인된 사용자 비교
-			if (!existingQuestion.getAuthor().equals(authentication.getPrincipal())
-				&& !authentication.getAuthorities().contains("ROLE_admin")) {
+			if (!existingQuestion.getAuthor().equals(author)
+				&& !role.contains("ROLE_admin")) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("작성자가 아니므로 수정할 수 없습니다.");
 			}
 
@@ -124,9 +138,12 @@ public class BoardController {
 	@PostMapping("/questions/{questionId}/answers")
 	public ResponseEntity<String> createAnswer(@PathVariable
 	int questionId, @RequestBody
-	BoardAnswerDto answer) {
+	BoardAnswerDto answer, Authentication authentication) {
 		try {
+			String author = (String)authentication.getPrincipal();
+
 			answer.setQuestionId(questionId);
+			answer.setAuthor(author);
 			boardService.createAnswer(answer);
 			return ResponseEntity.status(HttpStatus.CREATED).body("답변이 등록되었습니다.");
 		} catch (Exception e) {

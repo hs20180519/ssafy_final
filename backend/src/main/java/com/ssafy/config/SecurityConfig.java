@@ -44,7 +44,7 @@ public class SecurityConfig {
 				corsCustomizer.configurationSource(source);
 			})
 			.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/api/auth/login",
+				.requestMatchers("/api/auth/**",
 					"/api/auth/signup", "/css/**", "/js/**", "/images/**",
 					"/v3/api-docs", "/v3/api-docs/**", "/swagger-resources",
 					"/swagger-resources/**", "/swagger-ui/**")
