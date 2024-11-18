@@ -21,4 +21,5 @@ public interface AuthService {
 
 	public String findId(String name, String email);
 
+	public String sendResetPasswordEmail(String email);
 }

@@ -17,4 +17,6 @@ public interface MemberService {
     List<MemberDto> getAllMembers() throws SQLException;
     
     List<MemberDto> searchMembers(String memberId) throws SQLException;
+    
+    boolean existsByEmail(String email);
 }

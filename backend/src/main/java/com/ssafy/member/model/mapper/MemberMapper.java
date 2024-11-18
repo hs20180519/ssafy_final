@@ -28,4 +28,6 @@ public interface MemberMapper {
 	List<MemberDto> getAllMembers() throws SQLException;
 
 	List<MemberDto> searchMembers(String memberId) throws SQLException;
+	
+	int getMemberCountByEmail(String email);
 }

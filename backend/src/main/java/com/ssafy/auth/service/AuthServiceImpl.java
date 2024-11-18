@@ -8,6 +8,7 @@ import com.ssafy.auth.model.request.LoginRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.member.model.mapper.MemberMapper;
+import com.ssafy.member.model.service.MemberService;
 import com.ssafy.util.MailSenderUtil;
 
 import jakarta.mail.MessagingException;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthServiceImpl implements AuthService {
 
 	MailSenderUtil mailSenderUtil;
+	private final MemberService memberService;
 	private final MemberMapper memberMapper;
 
 	private final String VERIFICATION_SIGNUP_CODE = "verificationSignUpCode";
@@ -61,5 +63,21 @@ public class AuthServiceImpl implements AuthService {
 		MemberDto member = memberMapper.getMemberByNameAndEmail(name, email);
 		return member.getId();
 	}
+
+	@Override
+	public String sendResetPasswordEmail(String email) {
+		if(!memberService.existsByEmail(email)) {
+			// TODO: exception 처리
+			return null;
+		}
+		
+		
+		return null;
+	}
+	
+	private String generateUUID() {
+		return null;
+	}
+
 
 }

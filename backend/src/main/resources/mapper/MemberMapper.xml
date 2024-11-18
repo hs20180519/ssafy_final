@@ -59,4 +59,10 @@
 		from members
    		WHERE id LIKE CONCAT('%', #{id}, '%')
 	</select>
+	
+	<select id="getMemberCountByEmail" parameterType="String" resultType="int">
+		SELECT count(*)
+		FROM members
+		WHERE email = #{email}
+	</select>
 </mapper>
