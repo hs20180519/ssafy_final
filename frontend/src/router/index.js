@@ -9,7 +9,7 @@ import MemberSignUpPage from "@/views/MemberSignUpPage.vue";
 import BoardListPage from "@/views/board/BoardListPage.vue";
 import BoardQuestionDetailsPage from "@/views/board/BoardQuestionDetailsPage.vue";
 import CreateQuestionPage from "@/views/board/CreateQuestionPage.vue";
-import QuestionEdit from "@/components/board/question/QuestionEdit.vue";
+import EditQuestionPage from "@/views/board/EditQuestionPage.vue";
 
 const routes = [
   {
@@ -46,8 +46,8 @@ const routes = [
   },
   {
     path: "/board/questions/:id/edit",
-    name: "QuestionEdit",
-    component: QuestionEdit,
+    name: "EditQuestion",
+    component: EditQuestionPage,
     props: true,
   },
   {
