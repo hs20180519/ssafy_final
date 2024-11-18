@@ -42,9 +42,8 @@ export default {
       }
     },
     editQuestion() {
-      console.log("Edit question");
       this.$router.push({
-        name: "QuestionEdit",
+        name: "EditQuestion",
         params: {questionId: this.question.id},
       });
     },

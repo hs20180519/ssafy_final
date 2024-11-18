@@ -35,7 +35,7 @@ import {getQuestionDetails, updateQuestion} from "@/api/board"; // Import the fu
 import {useAuthStore} from "@/stores/authStore";
 
 export default {
-  name: "QuestionEdit",
+  name: "EditQuestion",
   data() {
     return {
       question: {
@@ -92,7 +92,6 @@ export default {
 <style scoped>
 .question-edit {
   margin: 20px;
-  padding: 120px;
 }
 
 h2 {
