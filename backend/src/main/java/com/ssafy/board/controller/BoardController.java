@@ -2,7 +2,6 @@ package com.ssafy.board.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -55,11 +54,7 @@ public class BoardController {
 	public ResponseEntity<String> createQuestion(@RequestBody
 	BoardQuestionDto question, Authentication authentication) {
 		try {
-			System.out.println(authentication);
-
 			question.setAuthor((String)authentication.getPrincipal());
-			System.out.println(authentication.getPrincipal());
-			//			question.setAuthor(authentication.getPrincipal());
 			boardService.createQuestion(question);
 			return ResponseEntity.status(HttpStatus.CREATED).body("질문이 등록되었습니다.");
 		} catch (Exception e) {

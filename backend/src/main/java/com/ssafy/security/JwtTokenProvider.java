@@ -8,7 +8,6 @@ import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -53,16 +52,8 @@ public class JwtTokenProvider {
 	// 토큰 유효성 검증
 	public boolean validateToken(String token) {
 		try {
-			System.out.println("토큰 유효성 검사 with " + token);
-			System.out.println(Jwts.parser().verifyWith(key).build().parseSignedClaims(token));
-			System.out.println("토큰 유효함");
+			Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
 			return true;
-		} catch (io.jsonwebtoken.ExpiredJwtException e) {
-			System.out.println("토큰 유효 시간 만료 " + e);
-			return false;
-		} catch (io.jsonwebtoken.IncorrectClaimException e) {
-			System.out.println("일치하는 토큰 없음 " + e);
-			return false;
 		} catch (Exception e) {
 			System.out.println(e);
 			return false;
