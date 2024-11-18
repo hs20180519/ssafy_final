@@ -56,3 +56,56 @@ export async function getQuestions(token) {
     .then()
     .catch();
 }
+export async function updateQuestion(
+  questionId,
+  question,
+  token,
+  success,
+  fail
+) {
+  return boardApi
+    .put(`/board/questions/${questionId}`, question, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(success)
+    .catch(fail);
+}
+
+export async function deleteQuestion(questionId, token, success, fail) {
+  return boardApi
+    .delete(`/board/questions/${questionId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(success)
+    .catch(fail);
+}
+
+export async function updateAnswer(answerId, content, token, success, fail) {
+  return boardApi
+    .put(
+      `/board/answers/${answerId}`,
+      { content },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    .then(success)
+    .catch(fail);
+}
+
+export async function deleteAnswer(answerId, token, success, fail) {
+  return boardApi
+    .delete(`/board/answers/${answerId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(success)
+    .catch(fail);
+}
