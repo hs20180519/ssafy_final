@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import { getQuestionDetails, updateQuestion } from "@/api/board"; // Import the functions
-import { useAuthStore } from "@/stores/authStore";
+import {getQuestionDetails, updateQuestion} from "@/api/board"; // Import the functions
+import {useAuthStore} from "@/stores/authStore";
 
 export default {
   name: "QuestionEdit",
@@ -50,7 +50,8 @@ export default {
   methods: {
     // Fetch question details to pre-fill the form
     async fetchQuestionDetails() {
-      const questionId = this.$route.params.questionId;
+      console.log(this.$route.params);
+      const questionId = this.$route.params.id;
       const authStore = useAuthStore();
       const token = authStore.getAuthToken;
 
@@ -76,7 +77,7 @@ export default {
           token,
           (response) => {
             console.log("질문이 수정되었습니다:", response);
-            this.$router.push({ name: "board" }); // Redirect to board list or appropriate page
+            this.$router.push({name: "board"}); // Redirect to board list or appropriate page
           },
           (error) => {
             console.error("질문 수정 중 오류 발생:", error);
@@ -93,6 +94,7 @@ export default {
 <style scoped>
 .question-edit {
   margin: 20px;
+  padding: 120px;
 }
 
 h2 {
