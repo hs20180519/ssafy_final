@@ -46,13 +46,10 @@ public class JwtFilter extends GenericFilterBean {
 		filterChain.doFilter(httpServletRequest, servletResponse);
 	}
 
-	// JWT에서 role 추출
 	private String resolveToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 		if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-			bearerToken = bearerToken.substring(7);
-			System.out.println("Resolved Token: " + bearerToken);
-			return bearerToken;
+			return bearerToken.substring(7);
 		}
 		return null;
 	}
