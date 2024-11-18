@@ -60,15 +60,15 @@ export default {
           this.question.id,
           token,
           (response) => {
-            console.log("Question deleted:", response);
+            console.log("삭제 완료:", response);
             this.$router.push({ name: "BoardList" }); // Redirect to the board list or a relevant page after deletion
           },
           (error) => {
-            console.error("Error deleting question:", error);
+            console.error("에러 발생", error);
           }
         );
       } catch (error) {
-        console.error("Failed to delete question:", error);
+        console.error("삭제 실패", error);
       }
     },
   },
