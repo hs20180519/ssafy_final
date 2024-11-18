@@ -53,7 +53,7 @@ const onItemClick = (item) => {
 </script>
 
 <template>
-    <HouseDealFilter />
+    <HouseDealFilter class='filter-container'/>
     <div class="container">
         <div class="list-container">
         <HouseDealList :list="result" @onItemClick="onItemClick" />
@@ -66,6 +66,9 @@ const onItemClick = (item) => {
 </template>
 
 <style scoped>
+.filter-container {
+    width: 50%;
+}
 .container {
   display: flex; 
   gap: 20px; 

@@ -1,6 +1,6 @@
 <script setup>
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
-import { defineProps, onMounted, watch, ref } from "vue";
+import { defineProps, watch, ref } from "vue";
 
 const props = defineProps({
     clickedItem: Object
@@ -30,7 +30,7 @@ watch(
             <div v-if="markervisible">
                 <KakaoMapMarker :lat=latitude :lng=longitude>
                     <template v-slot:infoWindow>
-                        <div style="padding: 5px;text-align: center;">{{ info }}</div>
+                        <div style="padding: 5px;text-align: center">{{ info }}</div>
                     </template>
                 </KakaoMapMarker>
             </div>

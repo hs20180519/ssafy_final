@@ -21,7 +21,7 @@ const searchQuery = ref("");
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 0.5em;
-  width: 700px;
+  width: 100%;
 }
 
 input {
