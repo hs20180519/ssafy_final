@@ -34,7 +34,7 @@
 
 <script>
 import axios from 'axios';
-import { useAuthStore } from "@/stores/authStore";
+import {useAuthStore} from "@/stores/authStore";
 
 export default {
   data() {
@@ -50,15 +50,16 @@ export default {
           id: this.username,
           password: this.password
         });
-      
+
 
         const token = response.headers['authorization'];
         const memberName = response.data;
 
         // 로그인 성공 시 처리
         if (token) {
+          const accessToken = token.replace('Bearer ', '');
           const authStore = useAuthStore();
-          authStore.login(token, memberName);
+          authStore.login(accessToken, memberName);
 
           alert('로그인 성공');
           this.$router.push({name: 'Home'}); // 로그인 후 리디렉션
