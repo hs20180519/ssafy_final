@@ -41,9 +41,6 @@ export default {
         console.error("질문 상세 조회 중 오류 발생:", error);
       }
     },
-    refreshAnswers() {
-      this.fetchAnswers(); // 새로 답변 목록을 불러와 화면에 반영
-    },
     editQuestion() {
       console.log("Edit question");
       this.$router.push({
