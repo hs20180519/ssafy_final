@@ -14,11 +14,16 @@ import {
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { useKakao } from "vue3-kakao-maps";
+
 library.add(faHouse, faUser, faCircleInfo, faStar, faMagnifyingGlass);
 
-const app = createApp(App);
-app.component("font-awesome-icon", FontAwesomeIcon);
-app.use(createPinia());
-app.use(router);
+useKakao(import.meta.env.VITE_KAKAO_APP_KEY)
 
-app.mount("#app");
+const app = createApp(App)
+app.component('font-awesome-icon', FontAwesomeIcon);
+app.use(createPinia())
+app.use(router)
+
+
+app.mount('#app')

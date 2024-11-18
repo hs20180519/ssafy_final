@@ -1,32 +1,17 @@
 <template>
   <div class="search-box">
-    <input type="text" placeholder="광주 장덕동" v-model="searchQuery"/>
-    <font-awesome-icon :icon="['fas', 'magnifying-glass']" @click='onSearch' class="search-icon"/>
+    <input type="text" placeholder="지역, 단지명 또는 매물명을 입력해주세요." v-model="houseDealStore.keyword"/>
+    <font-awesome-icon :icon="['fas', 'magnifying-glass']" @click.prevent='$emit("onSearch", searchQuery)' class="search-icon"/>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import { searchKeyword } from "@/api/search";
+import { useHouseDealStore } from '@/stores/houseDealStore';
 
-const isLoaded = ref(false);
-const result = ref();
+const houseDealStore = useHouseDealStore();
 const searchQuery = ref("");
 
-const onSearch = () => {
-  searchQuery
-    console.log(searchQuery);
-    searchKeyword(
-        searchQuery,
-        ({ data }) => {
-            result.value = data;
-            isLoaded.value = true;
-        },
-        (error) => {
-            console.log(error);
-        }
-    )
-}
 </script>
 
 <style scoped>

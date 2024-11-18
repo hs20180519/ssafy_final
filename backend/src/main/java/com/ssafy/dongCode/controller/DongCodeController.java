@@ -34,7 +34,7 @@ public class DongCodeController {
     })
 	@Parameter(name="parentCode", description = "선택한 조건 코드", example="11")
 	@GetMapping
-	public ResponseEntity<List<DongCodeDto>> getFilters(@RequestParam String parentCode) {
+	public ResponseEntity<List<DongCodeDto>> getFilters(@RequestParam(required = false) String parentCode) {
 		List<DongCodeDto> list = dongCodeService.getFilters(parentCode);
 		return ResponseEntity.ok(list);
 	}
