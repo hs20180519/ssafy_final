@@ -5,7 +5,7 @@
   </template>
   
   <script>
-  import CreateQuestion from '@/components/board/CreateQuestion.vue';
+  import CreateQuestion from '@/components/board/question/CreateQuestion.vue';
   
   export default {
     name: 'CreateQuestionPage',
@@ -17,7 +17,7 @@
   
   <style scoped>
   .create-question-page {
-    padding: 20px;
+    padding: 120px;
   }
   </style>
   
