@@ -14,7 +14,9 @@
       <div class="profile-section" @click="toggleDropdown">
         <font-awesome-icon :icon="['fas', 'user']"/>
       </div>
-      <span><font-awesome-icon :icon="['fas', 'circle-info']"/> </span>
+      <div>
+        <p @click="goToBoard">
+     <font-awesome-icon :icon="['fas', 'circle-info']"/></p></div>
     </div>
   </div>
   <DropdownMenu :showDropdown="showDropdown" />
@@ -53,6 +55,9 @@ export default {
     goToHome() {
       this.$router.push('/'); // 홈 페이지로 이동
     },
+    goToBoard() {
+      this.$router.push('/board')
+    }
   },
 };
 </script>
