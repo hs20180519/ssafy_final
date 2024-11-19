@@ -92,6 +92,7 @@ const getSidoFilter = (code) => {
                 ({ data }) => {
                 console.log(data);
                 sidoOptions.value = data.map(({ dongCode, sidoName }) => ({ value: dongCode, label: sidoName}));
+                sidoOptions.value.unshift({ value: "", label: "전체" })
                 resolve();
             },
             (error) => {
@@ -112,7 +113,8 @@ const getGugunFilter = (code) => {
             ({ data }) => {
                 gugunOptions.value = data
                     .filter(item => item.gugunName !== null)
-                    .map(({ dongCode, gugunName }) => ({ value: dongCode, label: gugunName}))
+                    .map(({ dongCode, gugunName }) => ({ value: dongCode, label: gugunName }));
+                gugunOptions.value.unshift({ value: "", label: "전체" })
                 console.log(data);
                 resolve();
             },
@@ -133,7 +135,8 @@ const getDongFilter = (code) => {
         ({ data }) => {
             dongOptions.value = data
                 .filter(item => item.dongName !== null)
-                .map(({ dongCode, dongName }) => ({value: dongCode, label: dongName}))
+                .map(({ dongCode, dongName }) => ({ value: dongCode, label: dongName }));
+            dongOptions.value.unshift({ value: "", label: "전체" });
             console.log(data);
         }
     )

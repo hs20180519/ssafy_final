@@ -23,7 +23,7 @@ watch(
     :options='selectOption'
     placeholder='선택해주세요'
     style='width: 30%; padding: 5px'
-    @change='onSelect'
+    @change='$emit("onKeySelect", key)'
   />
 
 </template>
