@@ -1,17 +1,10 @@
 package com.ssafy.auth.controller;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-
+import com.ssafy.auth.model.request.ResetPasswordRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.auth.model.request.LoginRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
@@ -74,8 +67,8 @@ public class AuthController {
 	}
 
 	@PostMapping("/signup-email")
-	public String sendSignUpMail(String mail, HttpSession session) throws MessagingException {
-		return authService.sendSignUpMail(mail, session);
+	public ResponseEntity<String> sendSignUpMail(String mail, HttpSession session) throws MessagingException {
+		return ResponseEntity.ok(authService.sendSignUpMail(mail, session));
 	}
 
 	@PostMapping("/signup-verification")
@@ -99,5 +92,16 @@ public class AuthController {
 		} catch(MessagingException e) {
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("서버 오류");
 		}
+	}
+
+	@PostMapping("/password-reset-verification")
+	public ResponseEntity<Boolean> verifyResetPasswordCode(@RequestParam("uuid") String uuid) {
+		return ResponseEntity.ok(authService.verifyResetPasswordCode(uuid));
+	}
+
+	@PutMapping("/password")
+	public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordRequest request) {
+		authService.resetPassword(request);
+		return ResponseEntity.noContent().build();
 	}
 }

@@ -30,4 +30,6 @@ public interface MemberMapper {
 	List<MemberDto> searchMembers(String memberId) throws SQLException;
 	
 	int getMemberCountByEmail(String email);
+
+	void updatePassword(@Param("email") String email, @Param("password") String password);
 }
