@@ -41,8 +41,18 @@ public class HouseDealController {
     })
     @GetMapping
     public ResponseEntity<List<HouseDealDto>> getHouseDeals(
-    		@ModelAttribute GetHouseDealRequest request) {
-    	System.out.println(request);
+    		@RequestParam("sidoCode") String sidoCode,
+    		@RequestParam("gugunCode") String gugunCode,
+    		@RequestParam("dongCode") String dongCode,
+    		@RequestParam("keyword") String keyword) {
+    	GetHouseDealRequest request = GetHouseDealRequest.builder()
+    			.dongCode(dongCode)
+    			.gugunCode(gugunCode)
+    			.dongCode(dongCode)
+    			.keyword(keyword)
+    			.build();
+    	
+    	// 파라미터 타입 바꾸기
         List<HouseDealDto> houseDeals = houseDealService.getHouseDeals(request);
         return ResponseEntity.ok(houseDeals);
     }

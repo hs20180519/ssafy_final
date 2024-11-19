@@ -17,8 +17,8 @@ public class HouseDealServiceImpl implements HouseDealService {
     private final HouseDealMapper houseDealMapper;
 
     @Override
-    public List<HouseDealDto> getHouseDeals(GetHouseDealRequest criteria) {
-        return houseDealMapper.getHouseDeals(criteria);
+    public List<HouseDealDto> getHouseDeals(GetHouseDealRequest request) {
+        return houseDealMapper.getHouseDeals(request);
     }
 
 	@Override
