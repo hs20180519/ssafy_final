@@ -1,16 +1,17 @@
 package com.ssafy.houseDeal.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.houseDeal.model.HouseDealDto;
 import com.ssafy.houseDeal.model.service.HouseDealService;
+import com.ssafy.houseDeal.request.GetHouseDealRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,7 +41,18 @@ public class HouseDealController {
     })
     @GetMapping
     public ResponseEntity<List<HouseDealDto>> getHouseDeals(
-    		@RequestParam Map<String, String> request) {
+    		@RequestParam("sidoCode") String sidoCode,
+    		@RequestParam("gugunCode") String gugunCode,
+    		@RequestParam("dongCode") String dongCode,
+    		@RequestParam("keyword") String keyword) {
+    	GetHouseDealRequest request = GetHouseDealRequest.builder()
+    			.dongCode(dongCode)
+    			.gugunCode(gugunCode)
+    			.dongCode(dongCode)
+    			.keyword(keyword)
+    			.build();
+    	
+    	// 파라미터 타입 바꾸기
         List<HouseDealDto> houseDeals = houseDealService.getHouseDeals(request);
         return ResponseEntity.ok(houseDeals);
     }

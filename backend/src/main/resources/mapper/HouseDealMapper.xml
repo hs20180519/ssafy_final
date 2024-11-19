@@ -13,6 +13,9 @@
         <result column="deal_amount" property="dealAmount" />
         <result column="sgg_cd" property="sggCd" />
         <result column="umd_cd" property="umdCd" />
+        <result column="sido_name" property="sidoName" />
+        <result column="gugun_name" property="gugunName" />
+        <result column="dong_name" property="dongName" />
         <result column="road_nm_sgg_cd" property="roadNmSggCd" />
         <result column="road_nm" property="roadNm" />
         <result column="road_nm_bonbun" property="roadNmBonbun" />
@@ -22,11 +25,10 @@
     </resultMap>
 
     <select id="getHouseDeals" parameterType="map" resultMap="houseDeal">
-        SELECT d.no, d.apt_seq, apt_dong, floor, deal_year, deal_month, deal_day,
-               exclu_use_ar, deal_amount, i.sgg_cd, i.umd_cd, jibun, road_nm_sgg_cd, road_nm,
-               road_nm_bonbun, road_nm_bubun, apt_nm, build_year, latitude, longitude
+		SELECT dc.sido_name, dc.gugun_name, dc.dong_name, d.apt_seq, i.apt_nm
         FROM house_deals d
         JOIN house_infos i ON i.apt_seq = d.apt_seq
+        JOIN dong_codes dc ON dc.dong_code = concat(i.sgg_cd, umd_cd)
         <where>
             <if test="sidoCode != null and sidoCode != ''">
                 i.sgg_cd LIKE concat(#{sidoCode}, '%')
@@ -37,7 +39,11 @@
             <if test="dongCode != null and dongCode != ''">
                 AND i.umd_cd = #{dongCode}
             </if>
+            <if test="keyword != null">
+	            AND i.apt_nm LIKE concat("%", #{keyword}, "%")
+            </if>
         </where>
+        GROUP BY dc.sido_name, dc.gugun_name, dc.dong_name, d.apt_seq, i.apt_nm
         limit 20;
     </select>
     
