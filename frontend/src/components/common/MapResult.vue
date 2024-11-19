@@ -14,7 +14,6 @@ const markervisible = ref(false);
 watch(
     () => props.clickedItem,
     (newItem) => {
-        console.log("clickedItem: ", props.clickedItem)
         markervisible.value = true;
         latitude.value = newItem.latitude;
         longitude.value = newItem.longitude;
