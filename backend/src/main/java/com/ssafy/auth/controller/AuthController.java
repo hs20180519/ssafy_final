@@ -67,15 +67,14 @@ public class AuthController {
 	}
 
 	@PostMapping("/signup-email")
-	public ResponseEntity<String> sendSignUpMail(String mail, HttpSession session) throws MessagingException {
-		return ResponseEntity.ok(authService.sendSignUpMail(mail, session));
+	public ResponseEntity<String> sendSignUpMail(@RequestParam String email) throws MessagingException {
+		return ResponseEntity.ok(authService.sendSignUpMail(email));
 	}
 
 	@PostMapping("/signup-verification")
 	public ResponseEntity<Boolean> verifySignUpCode(@RequestBody
-	SignUpVerificationRequest request,
-		HttpSession session) {
-		return ResponseEntity.ok(authService.verifySignUpCode(request, session));
+	SignUpVerificationRequest request) {
+		return ResponseEntity.ok(authService.verifySignUpCode(request));
 	}
 
 	@GetMapping("/id")

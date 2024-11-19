@@ -30,12 +30,13 @@ public class AuthServiceImpl implements AuthService {
 	private final MemberMapper memberMapper;
 	private final StringRedisTemplate redisTemplate;
 
-	private final String VERIFICATION_SIGNUP_CODE = "verificationSignUpCode";
-	private final String VERIFICATION_SIGNUP_EMAIL = "verificationSignUpEmail";
+	private final String VERIFICATION_SIGNUP = "signup: ";
 	private final String VERIFICATION_PASSWORD_RESET = "passwordReset: ";
 
 	@Value("${smtp.reset_password.expiration_time}")
-	private long expirationTime;
+	private long resetPasswordExpirationTime;
+	@Value("${smtp.signup.expiration_time}")
+	private long signUpExpirationTime;
 
 	@Override
 	public MemberDto login(LoginRequest loginInfo) throws SQLException {
@@ -48,22 +49,17 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public String sendSignUpMail(String mail, HttpSession session) throws MessagingException {
-		String code = signUpEmailService.send(mail);
-		session.setAttribute(VERIFICATION_SIGNUP_CODE, code);
-		session.setAttribute(VERIFICATION_SIGNUP_EMAIL, mail);
+	public String sendSignUpMail(String email) throws MessagingException {
+		String code = signUpEmailService.send(email);
+
+		redisTemplate.opsForValue().set(VERIFICATION_SIGNUP + code, email);
 		return code;
 	}
 
 	@Override
-	public boolean verifySignUpCode(SignUpVerificationRequest request, HttpSession session) {
-		String stored = session.getAttribute(VERIFICATION_SIGNUP_CODE).toString();
-		String email = (String)session.getAttribute(VERIFICATION_SIGNUP_EMAIL);
-
-		if ((stored != null && stored.equals(request.getCode())) &&
-			(email != null && email.equals(request.getEmail()))) {
-			session.removeAttribute(VERIFICATION_SIGNUP_CODE);
-			session.removeAttribute(VERIFICATION_SIGNUP_EMAIL);
+	public boolean verifySignUpCode(SignUpVerificationRequest request) {
+		String email = redisTemplate.opsForValue().get(VERIFICATION_SIGNUP + request.getCode());
+		if(email != null && email.equals(request.getEmail())) {
 			return true;
 		}
 		return false;
@@ -85,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
 		String uuid = passwordResetEmailService.send(email);
 
 		redisTemplate.opsForValue().set(VERIFICATION_PASSWORD_RESET + uuid, email,
-				Duration.ofMillis(expirationTime));
+				Duration.ofMillis(resetPasswordExpirationTime));
 
 		return uuid;
 	}

@@ -16,9 +16,9 @@ public interface AuthService {
 
 	public void signUp(MemberDto memberDto) throws SQLException;
 
-	public String sendSignUpMail(String mail, HttpSession session) throws MessagingException;
+	public String sendSignUpMail(String mail) throws MessagingException;
 
-	public boolean verifySignUpCode(SignUpVerificationRequest request, HttpSession session);
+	public boolean verifySignUpCode(SignUpVerificationRequest request);
 
 	public String findId(String name, String email);
 
