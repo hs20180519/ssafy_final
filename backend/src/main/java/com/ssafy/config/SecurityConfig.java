@@ -9,13 +9,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.ssafy.security.JwtFilter;
 import com.ssafy.token.TokenProvider;
 
-import io.jsonwebtoken.lang.Arrays;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -31,18 +28,23 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.csrf(AbstractHttpConfigurer::disable)
-			.cors(corsCustomizer -> {
-				CorsConfiguration corsConfig = new CorsConfiguration();
-				corsConfig.setAllowCredentials(true); // 자격증명 요청 허용
-				corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:8080".split(","))); // 프론트엔드 주소
-				corsConfig.addAllowedHeader("*"); // 모든 헤더 허용
-				corsConfig.addAllowedMethod("*"); // 모든 메서드 허용
-				corsConfig.addExposedHeader("Authorization"); // Authorization 헤더를 클라이언트에 노출
-				UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-				source.registerCorsConfiguration("/**", corsConfig); // 모든 패턴에 대하여 CORS 정책 적용
-
-				corsCustomizer.configurationSource(source);
-			})
+			//			.cors(corsCustomizer -> {
+			//				CorsConfiguration corsConfig = new CorsConfiguration();
+			//				corsConfig.setAllowCredentials(true); // 자격증명 요청 허용
+			//				//				corsConfig.setAllowedOriginPatterns(Collections.singletonList("*"));
+			//				corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+			//				corsConfig.setAllowedHeaders(
+			//					Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "chatRoomId"));
+			//				corsConfig.setExposedHeaders(Arrays.asList("Set-Cookie", "Authorization"));
+			//				corsConfig.setAllowedOrigins(List.of("http://localhost:8080")); // 프론트엔드 주소
+			//				//				corsConfig.addAllowedHeader("*"); // 모든 헤더 허용
+			//				//				corsConfig.addAllowedMethod("*"); // 모든 메서드 허용
+			//				//				corsConfig.addExposedHeader("Authorization"); // Authorization 헤더를 클라이언트에 노출
+			//				UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+			//				source.registerCorsConfiguration("/**", corsConfig); // 모든 패턴에 대하여 CORS 정책 적용
+			//
+			//				corsCustomizer.configurationSource(source);
+			//			})
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers("/api/auth/**",
 					"/api/auth/signup", "/css/**", "/js/**", "/images/**",

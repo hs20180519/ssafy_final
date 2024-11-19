@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CookieValue;
 //import org.springframework.security.core.token.TokenService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/auth")
 public class AuthController {
 	private final AuthService authService;
-	private final TokenProvider jwtTokenProvider;
+	private final TokenProvider tokenProvider;
 	private final TokenService tokenService;
 
 	@Operation(summary = "로그인", description = "사용자 로그인 처리")
@@ -42,18 +45,28 @@ public class AuthController {
 		@ApiResponse(responseCode = "500", description = "서버 오류")})
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody
-	LoginRequest request) {
+	LoginRequest request, HttpServletResponse response) {
 		try {
 			MemberDto memberDto = authService.login(request);
 			if (memberDto != null) {
 				// Access Token 생성
-				String accessToken = jwtTokenProvider.generateAccessToken(memberDto.getId(), memberDto.getRole());
+				String accessToken = tokenProvider.generateAccessToken(memberDto.getId(), memberDto.getRole());
 
 				// Refresh Token 생성 및 Redis 저장
-				String refreshToken = jwtTokenProvider.generateRefreshToken(memberDto.getId());
-				//				System.out.println("레디스에 저장되는 값" + refreshToken + " " + memberDto.getId());
+				String refreshToken = tokenProvider.generateRefreshToken(memberDto.getId());
 				tokenService.storeRefreshToken(memberDto.getId(), refreshToken);
 
+				System.out.println(accessToken + " " + refreshToken);
+				// 새 Refresh Token을 HTTP-Only 쿠키로 생성
+				Cookie cookie = new Cookie("refreshToken", refreshToken);
+				cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
+				cookie.setSecure(true); // HTTPS에서만 사용
+				cookie.setPath("/"); // 모든 경로에 대해 유효
+				cookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유효
+
+				response.addCookie(cookie); // 응답에 쿠키 추가
+
+				System.out.println(cookie);
 				// 응답 헤더에 Access Token 포함, Refresh Token은 Body에 포함
 				HttpHeaders headers = new HttpHeaders();
 				headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
@@ -75,30 +88,30 @@ public class AuthController {
 		@ApiResponse(responseCode = "500", description = "서버 오류")
 	})
 	@PostMapping("/refresh")
-	public ResponseEntity<?> refreshAccessToken(@RequestBody
-	Map<String, String> body) {
+	public ResponseEntity<?> refreshAccessToken(@CookieValue(name = "refreshToken", required = false)
+	String refreshToken, HttpServletResponse response) {
 		try {
-			System.out.println(body);
-			String refreshToken = body.get("refreshToken");
-			System.out.println(refreshToken);
-			// Refresh Token 에서 사용자 ID 추출
-			System.out.println("memberId얻어올거");
-			String memberId = jwtTokenProvider.getMemberIdFromToken(refreshToken);
-
-			System.out.println(memberId);
-			// Refresh Token 검증
-			String storedRefreshToken = tokenService.getRefreshToken(memberId);
-
 			// Refresh Token 유효성 검사
-			if (storedRefreshToken == null || !storedRefreshToken.equals(refreshToken)) {
-				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("유효하지 않은 Refresh Token");
+			if (refreshToken == null || !tokenProvider.validateToken(refreshToken)) {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 Refresh Token");
 			}
 
-			// Refresh Token이 유효하면, 새로운 Access Token을 발급
-			String role = jwtTokenProvider.getMemberRoleFromToken(refreshToken);
-			String newAccessToken = jwtTokenProvider.generateAccessToken(memberId, role);
+			String memberId = tokenProvider.getMemberIdFromToken(refreshToken);
+			String role = tokenProvider.getMemberRoleFromToken(refreshToken);
 
-			// 새 Access Token을 HTTP 응답 헤더에 추가
+			// 새 Access Token 및 Refresh Token 생성
+			String newAccessToken = tokenProvider.generateAccessToken(memberId, role);
+			String newRefreshToken = tokenProvider.generateRefreshToken(memberId);
+
+			// 새 Refresh Token을 HTTP-Only 쿠키로 생성
+			Cookie cookie = new Cookie("refreshToken", newRefreshToken);
+			cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
+			cookie.setSecure(true); // HTTPS에서만 사용
+			cookie.setPath("/"); // 모든 경로에 대해 유효
+			cookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유효
+
+			response.addCookie(cookie); // 응답에 쿠키 추가
+
 			HttpHeaders headers = new HttpHeaders();
 			headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + newAccessToken);
 

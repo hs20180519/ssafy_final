@@ -2,7 +2,6 @@ import axios from "axios";
 
 const { VITE_VUE_API_URL } = import.meta.env;
 import { useAuthStore } from "@/stores/authStore";
-import { refreshAccessToken } from "../member";
 
 export const authApi = () => {
   const instance = axios.create({
@@ -10,6 +9,7 @@ export const authApi = () => {
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
+    // withCredentials: true, // 쿠키 포함
   });
 
   // 요청 인터셉터
@@ -43,23 +43,27 @@ export const authApi = () => {
         originalRequest._retry = true;
 
         try {
-          const refreshToken = authStore.getRefreshToken; // Pinia에서 리프레시 토큰 가져오기
-
-          console.log(refreshToken);
-          const response = await refreshAccessToken(refreshToken); // 리프레시 토큰으로 새로운 액세스 토큰 요청
+          const response = await axios.post(
+            `${VITE_VUE_API_URL}/auth/refresh`, // 서버의 토큰 재발급 API
+            {},
+            { withCredentials: true } // 쿠키 포함 설정
+          );
 
           console.log(response);
+
+          // 새로 발급받은 Access Token
           const newAccessToken = response.headers["authorization"].replace(
             "Bearer ",
             ""
           );
 
-          authStore.login(newAccessToken, authStore.getMember, refreshToken); // 새로운 액세스 토큰으로 로그인 상태 갱신
+          // 상태 업데이트
+          authStore.login(newAccessToken, authStore.getMember); // 새로운 액세스 토큰으로 로그인 상태 갱신
 
           console.log(authStore.authToken);
-          // 새로운 액세스 토큰을 기존 요청에 추가하고 재시도
+
+          // 기존 요청 헤더에 새로운 Access Token 추가
           originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-          // authStore.authToken(newAccessToken);
 
           return axios(originalRequest);
         } catch (refreshError) {

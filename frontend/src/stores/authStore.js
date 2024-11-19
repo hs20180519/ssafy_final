@@ -5,27 +5,23 @@ export const useAuthStore = defineStore("auth", {
     isLoggedIn: false,
     authToken: null,
     memberName: null,
-    refreshToken: null,
   }),
   getters: {
     isAuthenticated: (state) => !!state.authToken,
     getAuthToken: (state) => state.authToken,
     getMember: (state) => state.memberName,
-    getRefreshToken: (state) => state.refreshToken,
   },
   actions: {
-    login(token, memberName, refreshToken) {
+    login(token, memberName) {
       this.isLoggedIn = true;
       this.authToken = token;
       this.memberName = memberName;
-      this.refreshToken = refreshToken;
       this.saveToSessionStorage();
     },
     logout() {
       this.isLoggedIn = false;
       this.authToken = null;
       this.memberName = null;
-      this.refreshToken = null;
       this.removeFromSessionStorage();
     },
     // 세션 스토리지에 상태 저장
@@ -36,7 +32,6 @@ export const useAuthStore = defineStore("auth", {
           isLoggedIn: this.isLoggedIn,
           authToken: this.authToken,
           memberName: this.memberName,
-          refreshToken: this.refreshToken,
         })
       );
     },
@@ -48,12 +43,10 @@ export const useAuthStore = defineStore("auth", {
     restoreFromSessionStorage() {
       const storedData = sessionStorage.getItem("auth");
       if (storedData) {
-        const { isLoggedIn, authToken, memberName, refreshToken } =
-          JSON.parse(storedData);
+        const { isLoggedIn, authToken, memberName } = JSON.parse(storedData);
         this.isLoggedIn = isLoggedIn;
         this.authToken = authToken;
         this.memberName = memberName;
-        this.refreshToken = refreshToken;
       }
     },
   },
