@@ -12,8 +12,7 @@ const route = useRoute();
 const type = route.query.type;
 const keyword = route.query.keyword;
 
-const lat = ref();
-const lng = ref();
+const clickedItem = ref({});
 
 
 const result = ref([]);
@@ -47,27 +46,29 @@ const getResultList = (type, keyword) => {
     )
 }
 
-const onItemClick = (latitude, longitude) => {
-    lat.value = latitude;
-    lng.value = longitude;
+const onItemClick = (item) => {
+    clickedItem.value = item
 }
 
 </script>
 
 <template>
-    <HouseDealFilter />
+    <HouseDealFilter class='filter-container'/>
     <div class="container">
         <div class="list-container">
         <HouseDealList :list="result" @onItemClick="onItemClick" />
         </div>
 
         <div class="map-container">
-        <MapResult :lat="lat" :lng="lng" />
+        <MapResult :clickedItem="clickedItem" />
         </div>
     </div>
 </template>
 
 <style scoped>
+.filter-container {
+    width: 50%;
+}
 .container {
   display: flex; 
   gap: 20px; 

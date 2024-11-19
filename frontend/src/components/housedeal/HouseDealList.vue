@@ -19,7 +19,7 @@ watch(() => props.list,
 })
 
 const onClick = (item) => {
-    emit('onItemClick', item.latitude, item.longitude);
+    emit('onItemClick', item);
 }
 
 

@@ -1,27 +1,31 @@
 <script setup>
-import { ref } from "vue";
-defineProps({ selectOption: Array });
+import { ref, watch } from "vue";
+import { ElSelectV2 } from "element-plus";
+const props = defineProps({ selectOption: Array, selectedOption: String });
 const emit = defineEmits(["onKeySelect"]);
 
-const key = ref("");
+const key = ref(props.selectedOption);
 
-const onSelect = () => {
-  console.log(key.value + "선택");
-  emit("onKeySelect", key.value);
-};
+watch(
+  () => props.selectedOption,
+  (newVal) => {
+    key.value = newVal;
+    emit("onKeySelect", key.value);
+    console.log("Vselect:" , key.value);
+  }
+);
+
 </script>
 
 <template>
-  <select v-model="key" class="form-select form-select-sm ms-5 me-1 w-50" @change="onSelect">
-    <option
-      v-for="option in selectOption"
-      :key="option.value"
-      :value="option.value"
-      :disabled="option.value === '' ? true : false"
-    >
-      {{ option.text }}
-    </option>
-  </select>
+  <el-select-v2
+    v-model='key'
+    :options='selectOption'
+    placeholder='선택해주세요'
+    style='width: 30%; padding: 5px'
+    @change='$emit("onKeySelect", key)'
+  />
+
 </template>
 
 <style scoped></style>
