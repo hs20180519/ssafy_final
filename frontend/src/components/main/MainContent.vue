@@ -3,9 +3,9 @@
     <div class="logo">The Next Home</div>
     <h1>당신의 다음 집을 검색해보세요</h1>
     <!--    <p>FIND YOUR NEXT HOME</p>-->
-    <SearchBox @onSearch='onSearch'/>
-    <SearchBoxResult v-if="isLoaded" :result="result"/>
-    <div class="auth-links">
+    <SearchBox @onSearch="onSearch" />
+    <SearchBoxResult v-if="isLoaded" :result="result" />
+    <div class="auth-links" v-if="!authStore.isLoggedIn">
       <router-link to="/login">로그인</router-link>
       /
       <router-link to="/signup">회원가입</router-link>
@@ -14,12 +14,13 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import SearchBox from '@/components/common/SearchBox.vue';
-import SearchBoxResult from '@/components/common/SearchBoxResult.vue';
+import { ref } from "vue";
+import SearchBox from "@/components/common/SearchBox.vue";
+import SearchBoxResult from "@/components/common/SearchBoxResult.vue";
+import { useAuthStore } from "@/stores/authStore";
 
 export default {
-  name: 'MainContent',
+  name: "MainContent",
   components: {
     SearchBox,
   },
@@ -27,36 +28,34 @@ export default {
 </script>
 
 <script setup>
-import { defineEmits, onMounted } from 'vue';
+import { defineEmits, onMounted } from "vue";
 import { searchKeyword } from "@/api/search";
-import { useHouseDealStore } from '@/stores/houseDealStore';
+import { useHouseDealStore } from "@/stores/houseDealStore";
 
-defineEmits([
-  'onSearch'
-])
+defineEmits(["onSearch"]);
 
 const houseDealStore = useHouseDealStore();
+const authStore = useAuthStore();
 
 const isLoaded = ref(false);
 const result = ref();
 
 onMounted(() => {
-  houseDealStore.setKeyword("")
-})
+  houseDealStore.setKeyword("");
+});
 
 const onSearch = () => {
-    searchKeyword(
-      houseDealStore.keyword,
-        ({ data }) => {
-            result.value = data;
-            isLoaded.value = true;
-        },
-        (error) => {
-            console.log(error);
-        }
-    )
-}
-
+  searchKeyword(
+    houseDealStore.keyword,
+    ({ data }) => {
+      result.value = data;
+      isLoaded.value = true;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
 </script>
 
 <style scoped>
