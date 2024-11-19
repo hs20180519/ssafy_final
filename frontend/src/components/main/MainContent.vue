@@ -78,19 +78,6 @@ const onSearch = () => {
   width: 150%;
 }
 
-.search-box-result {
-  margin-top: 10px;
-  background-color: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  z-index: 10; /* auth-links보다 더 높은 레이어 */
-  position: absolute; /* 겹치기 위해 절대 위치 설정 */
-  top: 80%; /* SearchBox 바로 아래 */
-  left: 0;
-}
-
 .logo {
   font-size: 2em;
   font-weight: bold;
