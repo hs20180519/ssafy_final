@@ -19,12 +19,42 @@ export const useAuthStore = defineStore("auth", {
       this.authToken = token;
       this.memberName = memberName;
       this.refreshToken = refreshToken;
+      this.saveToSeesionStorage();
     },
     logout() {
       this.isLoggedIn = false;
       this.authToken = null;
       this.memberName = null;
       this.refreshToken = null;
+      this.removeFromSessionStorage();
+    },
+    // 세션 스토리지에 상태 저장
+    saveToSeesionStorage() {
+      sessionStorage.setItem(
+        "auth",
+        JSON.stringify({
+          isLoggedIn: this.isLoggedIn,
+          authToken: this.authToken,
+          memberName: this.memberName,
+          refreshToken: this.refreshToken,
+        })
+      );
+    },
+    // 세션 스토리지에서 상태 제거
+    removeFromSessionStorage() {
+      sessionStorage.removeItem("auth");
+    },
+    // 세션 스토리지에서 상태 복원
+    restoreFromSessionStorage() {
+      const storedData = sessionStorage.getItem("auth");
+      if (storedData) {
+        const { isLoggedIn, authToken, memberName, refreshToken } =
+          JSON.parse(storedData);
+        this.isLoggedIn = isLoggedIn;
+        this.authToken = authToken;
+        this.memberName = memberName;
+        this.refreshToken = refreshToken;
+      }
     },
   },
 });
