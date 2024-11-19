@@ -15,11 +15,11 @@ public interface AuthService {
 
 	public void signUp(MemberDto memberDto) throws SQLException;
 
-	public int sendSignUpMail(String mail, HttpSession session) throws MessagingException;
+	public String sendSignUpMail(String mail, HttpSession session) throws MessagingException;
 
 	public boolean verifySignUpCode(SignUpVerificationRequest request, HttpSession session);
 
 	public String findId(String name, String email);
 
-	public String sendResetPasswordEmail(String email);
+	public String sendResetPasswordEmail(String email) throws MessagingException;
 }

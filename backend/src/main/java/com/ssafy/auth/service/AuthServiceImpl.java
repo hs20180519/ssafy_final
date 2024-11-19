@@ -6,10 +6,11 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.auth.model.request.LoginRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
+import com.ssafy.email.service.PasswordResetEmailService;
+import com.ssafy.email.service.SignUpEmailService;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.member.model.mapper.MemberMapper;
 import com.ssafy.member.model.service.MemberService;
-import com.ssafy.util.MailSenderUtil;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
@@ -19,7 +20,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-	MailSenderUtil mailSenderUtil;
+	private final SignUpEmailService signUpEmailService;
+	private final PasswordResetEmailService passwordResetEmailService;
 	private final MemberService memberService;
 	private final MemberMapper memberMapper;
 
@@ -37,8 +39,8 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public int sendSignUpMail(String mail, HttpSession session) throws MessagingException {
-		int code = mailSenderUtil.sendMail(mail);
+	public String sendSignUpMail(String mail, HttpSession session) throws MessagingException {
+		String code = signUpEmailService.send(mail);
 		session.setAttribute(VERIFICATION_SIGNUP_CODE, code);
 		session.setAttribute(VERIFICATION_SIGNUP_EMAIL, mail);
 		return code;
@@ -65,19 +67,16 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public String sendResetPasswordEmail(String email) {
+	public String sendResetPasswordEmail(String email) throws MessagingException {
 		if(!memberService.existsByEmail(email)) {
 			// TODO: exception 처리
 			return null;
 		}
 		
-		
-		return null;
+		return passwordResetEmailService.send(email);
 	}
 	
-	private String generateUUID() {
-		return null;
-	}
+
 
 
 }

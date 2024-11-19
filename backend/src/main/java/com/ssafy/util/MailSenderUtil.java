@@ -26,7 +26,7 @@ public class MailSenderUtil {
 
 	private String setContext(int code) {
 		//		MimeMessage msg = javaMailSender.createMimeMessage();
-		//		
+		//		email
 		//		try {
 		//			msg.setFrom(sender);
 		//			msg.setRecipients(MimeMessage.RecipientType.TO, mail);
@@ -35,7 +35,7 @@ public class MailSenderUtil {
 		//			body += "<h3>이메일 전송 테스트 메일입니다.</h3>";
 		//			body += "<h1>" + code + "</h1>";
 		//			
-		//			msg.setText(body, "UTF-8", "html");
+		//			msg.setText(body, "UTF-8", "htmlapplication.yml");
 		//		} catch(MessagingException e) {
 		//			e.printStackTrace();
 		//		}

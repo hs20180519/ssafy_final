@@ -1,6 +1,6 @@
 <script setup>
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
-import { defineProps, onMounted, watch, ref } from "vue";
+import { defineProps, watch, ref } from "vue";
 
 const props = defineProps({
     lat: String,

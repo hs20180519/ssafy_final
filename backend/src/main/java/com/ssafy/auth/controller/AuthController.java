@@ -1,5 +1,8 @@
 package com.ssafy.auth.controller;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,9 +73,9 @@ public class AuthController {
 		}
 	}
 
-	@PostMapping("/signup-mail")
+	@PostMapping("/signup-email")
 	public String sendSignUpMail(String mail, HttpSession session) throws MessagingException {
-		return authService.sendSignUpMail(mail, session) + "";
+		return authService.sendSignUpMail(mail, session);
 	}
 
 	@PostMapping("/signup-verification")
@@ -89,8 +92,12 @@ public class AuthController {
 		return ResponseEntity.ok(authService.findId(name, email));
 	}
 	
-	@PostMapping("/password-reset-mail")
-	public String sendResetPasswordMail(@RequestBody String email) {
-		return authService.sendResetPasswordEmail(email);
+	@PostMapping("/password-reset-email")
+	public ResponseEntity<String> sendResetPasswordEmail(@RequestParam String email) {
+		try {
+			return ResponseEntity.ok(authService.sendResetPasswordEmail(email));
+		} catch(MessagingException e) {
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("서버 오류");
+		}
 	}
 }
