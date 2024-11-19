@@ -17,11 +17,9 @@ export const authApi = () => {
     (config) => {
       const authStore = useAuthStore();
       const token = authStore.getAuthToken;
-
       if (token) {
         config.headers["Authorization"] = `Bearer ${token}`;
       }
-
       return config;
     },
     (error) => {
@@ -48,8 +46,6 @@ export const authApi = () => {
             {withCredentials: true} // 쿠키 포함 설정
           );
 
-          console.log(response);
-
           // 새로 발급받은 Access Token
           const newAccessToken = response.headers["authorization"].replace(
             "Bearer ",
@@ -59,9 +55,6 @@ export const authApi = () => {
 
           // 상태 업데이트
           authStore.login(newAccessToken, authStore.getMember); // 새로운 액세스 토큰으로 로그인 상태 갱신
-
-          console.log(authStore.authToken);
-
           // 기존 요청 헤더에 새로운 Access Token 추가
           originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
 

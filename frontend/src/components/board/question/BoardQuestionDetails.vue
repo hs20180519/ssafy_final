@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { getQuestionDetails, deleteQuestion } from "@/api/board";
+import {getQuestionDetails, deleteQuestion} from "@/api/board";
 
 export default {
   name: "QuestionDetails",
@@ -36,7 +36,7 @@ export default {
     editQuestion() {
       this.$router.push({
         name: "EditQuestion",
-        params: { questionId: this.question.id },
+        params: {questionId: this.question.id},
       });
     },
 
@@ -45,8 +45,7 @@ export default {
         await deleteQuestion(
           this.question.id,
           (response) => {
-            console.log("삭제 완료:", response);
-            this.$router.push({ name: "BoardList" }); // Redirect to the board list or a relevant page after deletion
+            this.$router.push({name: "BoardList"}); // Redirect to the board list or a relevant page after deletion
           },
           (error) => {
             console.error("에러 발생", error);

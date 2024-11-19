@@ -54,8 +54,6 @@ export default {
 
         const token = response.headers["authorization"];
         const memberName = response.data.name;
-        const refreshToken = response.data.refreshToken;
-        console.log(token + " " + memberName + " " + refreshToken);
 
         // 로그인 성공 시 처리
         if (token) {
