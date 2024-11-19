@@ -1,4 +1,4 @@
-package com.ssafy.security;
+package com.ssafy.token;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -14,22 +14,35 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
 @Component
-public class JwtTokenProvider {
+public class TokenProvider {
 
 	@Value("${jwt.secret}")
 	private String secretKey;
 
-	@Value("${jwt.expiration_time}")
-	private long expirationTime;
+	@Value("${jwt.access_expiration_time}")
+	private long accessTokenexpirationTime;
+
+	@Value("${jwt.refresh_expiration_time}")
+	private long refreshTokenExpirationTime;
 
 	private final SecretKey key = Jwts.SIG.HS256.key().build();
 
-	// JWT 생성
-	public String generateToken(String memberId, String role) {
-		Map<String, Object> claims = new HashMap<>();
-		claims.put("role", role);
+	// Access Token 생성
+	public String generateAccessToken(String memberId, String role) {
+		return generateToken(memberId, role, accessTokenexpirationTime);
+	}
 
-		// 필요한 경우 claims에 추가적인 정보 설정
+	// Refresh Token 생성
+	public String generateRefreshToken(String memberId) {
+		return generateToken(memberId, null, refreshTokenExpirationTime);
+	}
+
+	// JWT 생성
+	public String generateToken(String memberId, String role, long expirationTime) {
+		Map<String, Object> claims = new HashMap<>();
+		if (role != null) {
+			claims.put("role", role);
+		}
 		return Jwts.builder().claims(claims).subject(memberId).signWith(key) // 서명 JWS
 			.issuedAt(new Date(System.currentTimeMillis()))
 			.expiration(new Date(System.currentTimeMillis() + expirationTime)).compact();
@@ -37,16 +50,12 @@ public class JwtTokenProvider {
 
 	public String getMemberIdFromToken(String token) {
 		Jws<Claims> jws = Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
-
-		Claims claims = jws.getPayload();
-		return claims.getSubject();
+		return jws.getPayload().getSubject();
 	}
 
 	public String getMemberRoleFromToken(String token) {
 		Jws<Claims> jws = Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
-
-		Claims claims = jws.getPayload();
-		return claims.get("role", String.class);
+		return jws.getPayload().get("role", String.class);
 	}
 
 	// 토큰 유효성 검증

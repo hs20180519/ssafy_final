@@ -13,7 +13,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.ssafy.security.JwtFilter;
-import com.ssafy.security.JwtTokenProvider;
+import com.ssafy.token.TokenProvider;
 
 import io.jsonwebtoken.lang.Arrays;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final JwtTokenProvider jwtTokenProvider;
+	private final TokenProvider jwtTokenProvider;
 
 	private final JwtFilter jwtFilter;
 
