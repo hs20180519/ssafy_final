@@ -21,6 +21,9 @@ public class HouseDealDto {
 	private String dealAmount;
 	private String sggCd;
 	private String umdCd;
+	private String sidoName;
+	private String gugunName;
+	private String dongName;
 	private String jibun;
 	private String roadNmSggCd;
 	private String roadNm;
