@@ -31,8 +31,7 @@
 </template>
 
 <script>
-import {getQuestionDetails, updateQuestion} from "@/api/board"; // Import the functions
-import {useAuthStore} from "@/stores/authStore";
+import { getQuestionDetails, updateQuestion } from "@/api/board";
 
 export default {
   name: "EditQuestion",
@@ -48,34 +47,29 @@ export default {
     this.fetchQuestionDetails();
   },
   methods: {
-    // Fetch question details to pre-fill the form
     async fetchQuestionDetails() {
       const questionId = this.$route.params.id;
-      const authStore = useAuthStore();
-      const token = authStore.getAuthToken;
 
       try {
-        const response = await getQuestionDetails(questionId, token);
+        const response = await getQuestionDetails(questionId);
         this.question = response.data;
       } catch (error) {
         console.error("질문 상세 조회 중 오류 발생:", error);
       }
     },
 
-    // Submit the edited question
     async submitEdit() {
       const questionId = this.$route.params.id;
-      const authStore = useAuthStore();
-      const token = authStore.getAuthToken;
-
       try {
         await updateQuestion(
           questionId,
           this.question,
-          token,
           (response) => {
             console.log("질문이 수정되었습니다:", response);
-            this.$router.push({name: "BoardQuestionDetails", params: {questionId: questionId}}); // Redirect to board list or appropriate page
+            this.$router.push({
+              name: "BoardQuestionDetails",
+              params: { questionId: questionId },
+            }); // Redirect to board list or appropriate page
           },
           (error) => {
             console.error("질문 수정 중 오류 발생:", error);

@@ -33,47 +33,49 @@
 </template>
 
 <script>
-import axios from 'axios';
-import {useAuthStore} from "@/stores/authStore";
+import { login } from "@/api/member";
+import { useAuthStore } from "@/stores/authStore";
 
 export default {
   data() {
     return {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
     };
   },
   methods: {
     async handleLogin() {
       try {
-        const response = await axios.post('http://localhost:80/api/auth/login', {
+        const response = await login({
           id: this.username,
-          password: this.password
+          password: this.password,
         });
+        // TODO : username -> id
 
-
-        const token = response.headers['authorization'];
-        const memberName = response.data;
+        const token = response.headers["authorization"];
+        const memberName = response.data.name;
 
         // 로그인 성공 시 처리
         if (token) {
-          const accessToken = token.replace('Bearer ', '');
-          const authStore = useAuthStore();
-          authStore.login(accessToken, memberName);
+          const accessToken = token.replace("Bearer ", "");
+          const refreshToken = response.data.refreshToken;
 
-          alert('로그인 성공');
-          this.$router.push({name: 'Home'}); // 로그인 후 리디렉션
+          const authStore = useAuthStore();
+          authStore.login(accessToken, memberName, refreshToken);
+
+          alert("로그인 성공");
+          this.$router.push({ name: "Home" }); // 로그인 후 리디렉션
         }
       } catch (error) {
         // 로그인 실패 시 처리
         if (error.response && error.response.status === 401) {
-          alert('로그인 실패: 아이디나 비밀번호가 잘못되었습니다.');
+          alert("로그인 실패: 아이디나 비밀번호가 잘못되었습니다.");
         } else {
-          alert('서버 오류가 발생했습니다. 다시 시도해주세요.');
+          alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
