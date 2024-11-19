@@ -21,7 +21,7 @@ public class TokenProvider {
 	private String secretKey;
 
 	@Value("${jwt.access_expiration_time}")
-	private long accessTokenexpirationTime;
+	private long accessTokenExpirationTime;
 
 	@Value("${jwt.refresh_expiration_time}")
 	private long refreshTokenExpirationTime;
@@ -30,7 +30,7 @@ public class TokenProvider {
 
 	// Access Token 생성
 	public String generateAccessToken(String memberId, String role) {
-		return generateToken(memberId, role, accessTokenexpirationTime);
+		return generateToken(memberId, role, accessTokenExpirationTime);
 	}
 
 	// Refresh Token 생성

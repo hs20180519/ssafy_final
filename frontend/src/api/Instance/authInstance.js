@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const { VITE_VUE_API_URL } = import.meta.env;
-import { useAuthStore } from "@/stores/authStore";
+const {VITE_VUE_API_URL} = import.meta.env;
+import {useAuthStore} from "@/stores/authStore";
 
 export const authApi = () => {
   const instance = axios.create({
@@ -9,7 +9,7 @@ export const authApi = () => {
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
-    // withCredentials: true, // 쿠키 포함
+    withCredentials: true, // 쿠키 포함
   });
 
   // 요청 인터셉터
@@ -36,7 +36,6 @@ export const authApi = () => {
     },
     async (error) => {
       const originalRequest = error.config;
-      const authStore = useAuthStore();
 
       // 401 오류 발생 시, 리프레시 토큰을 사용하여 액세스 토큰 갱신 시도
       if (error.response.status === 401 && !originalRequest._retry) {
@@ -46,7 +45,7 @@ export const authApi = () => {
           const response = await axios.post(
             `${VITE_VUE_API_URL}/auth/refresh`, // 서버의 토큰 재발급 API
             {},
-            { withCredentials: true } // 쿠키 포함 설정
+            {withCredentials: true} // 쿠키 포함 설정
           );
 
           console.log(response);
@@ -56,6 +55,7 @@ export const authApi = () => {
             "Bearer ",
             ""
           );
+          const authStore = useAuthStore();
 
           // 상태 업데이트
           authStore.login(newAccessToken, authStore.getMember); // 새로운 액세스 토큰으로 로그인 상태 갱신
@@ -67,8 +67,8 @@ export const authApi = () => {
 
           return axios(originalRequest);
         } catch (refreshError) {
-          console.error("액세스 토큰 갱신 실패", refreshError);
-          // 액세스 토큰 갱신 실패 시 로그아웃 처리 등
+          console.error("토큰 갱신 실패", refreshError);
+
         }
       }
 
