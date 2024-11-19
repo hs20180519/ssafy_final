@@ -51,15 +51,9 @@ public class TokenProvider {
 
 	public String getMemberIdFromToken(String token) {
 		try {
-			System.out.println("들어는오니");
 			Jws<Claims> jws = Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
-
 			Claims claims = jws.getPayload();
-			System.out.println(claims);
 			return claims.getSubject();
-		} catch (ExpiredJwtException e) {
-			e.printStackTrace();
-			return null;
 		} catch (Exception e) {
 			System.out.println("토큰 파싱 오류: " + e.getMessage());
 			return null;

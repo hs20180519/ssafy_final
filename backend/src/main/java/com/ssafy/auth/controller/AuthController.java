@@ -56,17 +56,13 @@ public class AuthController {
 				String refreshToken = tokenProvider.generateRefreshToken(memberDto.getId());
 				tokenService.storeRefreshToken(memberDto.getId(), refreshToken);
 
-				System.out.println(accessToken + " " + refreshToken);
 				// 새 Refresh Token을 HTTP-Only 쿠키로 생성
 				Cookie cookie = new Cookie("refreshToken", refreshToken);
 				cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
-				cookie.setSecure(true); // HTTPS에서만 사용
 				cookie.setPath("/"); // 모든 경로에 대해 유효
 				cookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유효
 
 				response.addCookie(cookie); // 응답에 쿠키 추가
-
-				System.out.println(cookie);
 				// 응답 헤더에 Access Token 포함, Refresh Token은 Body에 포함
 				HttpHeaders headers = new HttpHeaders();
 				headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
@@ -106,7 +102,6 @@ public class AuthController {
 			// 새 Refresh Token을 HTTP-Only 쿠키로 생성
 			Cookie cookie = new Cookie("refreshToken", newRefreshToken);
 			cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
-			cookie.setSecure(true); // HTTPS에서만 사용
 			cookie.setPath("/"); // 모든 경로에 대해 유효
 			cookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유효
 
