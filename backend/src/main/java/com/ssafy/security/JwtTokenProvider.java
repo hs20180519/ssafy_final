@@ -55,6 +55,7 @@ public class JwtTokenProvider {
 			Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
 			return true;
 		} catch (Exception e) {
+			System.out.println(e);
 			return false;
 		}
 	}
