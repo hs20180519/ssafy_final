@@ -1,6 +1,6 @@
-import { api } from "./Instance/authInstance";
+import { authApi } from "./Instance/authInstance";
 
-const boardApi = api();
+const boardApi = authApi();
 
 export function createQuestion(body, success, fail) {
   return boardApi.post("/board/questions", body).then(success).catch(fail);

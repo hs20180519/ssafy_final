@@ -19,7 +19,7 @@ export const useAuthStore = defineStore("auth", {
       this.authToken = token;
       this.memberName = memberName;
       this.refreshToken = refreshToken;
-      this.saveToSeesionStorage();
+      this.saveToSessionStorage();
     },
     logout() {
       this.isLoggedIn = false;
@@ -29,7 +29,7 @@ export const useAuthStore = defineStore("auth", {
       this.removeFromSessionStorage();
     },
     // 세션 스토리지에 상태 저장
-    saveToSeesionStorage() {
+    saveToSessionStorage() {
       sessionStorage.setItem(
         "auth",
         JSON.stringify({

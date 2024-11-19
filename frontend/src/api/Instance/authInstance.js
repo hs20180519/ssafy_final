@@ -4,7 +4,7 @@ const { VITE_VUE_API_URL } = import.meta.env;
 import { useAuthStore } from "@/stores/authStore";
 import { refreshAccessToken } from "../member";
 
-export const api = () => {
+export const authApi = () => {
   const instance = axios.create({
     baseURL: VITE_VUE_API_URL,
     headers: {
@@ -44,20 +44,27 @@ export const api = () => {
 
         try {
           const refreshToken = authStore.getRefreshToken; // Pinia에서 리프레시 토큰 가져오기
+
+          console.log(refreshToken);
           const response = await refreshAccessToken(refreshToken); // 리프레시 토큰으로 새로운 액세스 토큰 요청
 
+          console.log(response);
           const newAccessToken = response.headers["authorization"].replace(
             "Bearer ",
             ""
           );
-          authStore.login(newAccessToken, authStore.getMember); // 새로운 액세스 토큰으로 로그인 상태 갱신
 
+          authStore.login(newAccessToken, authStore.getMember, refreshToken); // 새로운 액세스 토큰으로 로그인 상태 갱신
+
+          console.log(authStore.authToken);
           // 새로운 액세스 토큰을 기존 요청에 추가하고 재시도
           originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          // authStore.authToken(newAccessToken);
+
           return axios(originalRequest);
         } catch (refreshError) {
-          console.error("리프레시 토큰 갱신 실패", refreshError);
-          // 리프레시 토큰 갱신 실패 시 로그아웃 처리 등
+          console.error("액세스 토큰 갱신 실패", refreshError);
+          // 액세스 토큰 갱신 실패 시 로그아웃 처리 등
         }
       }
 

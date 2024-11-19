@@ -7,5 +7,5 @@ export function login(body) {
 }
 
 export function refreshAccessToken(refreshToken) {
-  return memberApi.post("/auth/refresh", { refreshToken });
+  return memberApi.post("/auth/refresh", { refreshToken: refreshToken });
 }

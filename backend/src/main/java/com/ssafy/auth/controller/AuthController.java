@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.token.TokenService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,11 +78,14 @@ public class AuthController {
 	public ResponseEntity<?> refreshAccessToken(@RequestBody
 	Map<String, String> body) {
 		try {
+			System.out.println(body);
 			String refreshToken = body.get("refreshToken");
-
+			System.out.println(refreshToken);
 			// Refresh Token 에서 사용자 ID 추출
+			System.out.println("memberId얻어올거");
 			String memberId = jwtTokenProvider.getMemberIdFromToken(refreshToken);
 
+			System.out.println(memberId);
 			// Refresh Token 검증
 			String storedRefreshToken = tokenService.getRefreshToken(memberId);
 
@@ -99,6 +103,22 @@ public class AuthController {
 			headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + newAccessToken);
 
 			return ResponseEntity.ok().headers(headers).body("새로운 Access Token이 발급되었습니다.");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+		}
+	}
+
+	@Operation(summary = "로그아웃", description = "사용자가 로그아웃을 하면 서버에서 세션을 종료하고, 클라이언트에서 토큰을 삭제합니다.")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+		@ApiResponse(responseCode = "500", description = "서버 오류")
+	})
+	@PostMapping("/logout")
+	public ResponseEntity<?> logout(Authentication authentication) {
+		try {
+			String memberId = (String)authentication.getPrincipal();
+			tokenService.deleteRefreshToken(memberId); // 리프레시 토큰 삭제
+			return ResponseEntity.ok().body("로그아웃 성공");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
 		}
