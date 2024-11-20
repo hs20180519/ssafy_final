@@ -47,6 +47,11 @@ public class AuthServiceImpl implements AuthService {
 		String hashedPassword = passwordEncoder.encode(memberDto.getPassword());
 		memberDto.setPassword(hashedPassword);
 
+		// 기본 역할 설정
+		if (memberDto.getRole() == null || memberDto.getRole().isEmpty()) {
+			memberDto.setRole("USER"); // 기본값으로 "USER" 설정
+		}
+
 		memberMapper.insertMember(memberDto);
 	}
 
