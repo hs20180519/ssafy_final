@@ -120,7 +120,7 @@ public class BoardController {
 	}
 
 	// 답변 등록
-	@PreAuthorize("hasRole('ROLE_admin')") // 관리자만 작성 가능
+	@PreAuthorize("hasRole('admin')") // 관리자만 작성 가능
 	@PostMapping("/questions/{questionId}/answers")
 	public ResponseEntity<String> createAnswer(@PathVariable
 	int questionId, @RequestBody
