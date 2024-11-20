@@ -10,13 +10,8 @@
 		<result column="name" property="name" />
 		<result column="email" property="email" />
 	</resultMap> -->
-
-	<select id="getMember" parameterType="loginRequest"
-		resultType="memberDto">
-		select * from
-		members
-		where id = #{id} and password =
-		#{password}
+	
+	<select id="getPasswordByMemberId" parameterType="String">
 	</select>
 
 	<select id="getMemberByNameAndEmail" parameterType="map"

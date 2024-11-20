@@ -19,6 +19,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -32,20 +33,30 @@ public class JwtFilter extends GenericFilterBean {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 		throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest)servletRequest;
+		HttpServletResponse httpServletResponse = (HttpServletResponse)servletResponse;
+
 		String token = resolveToken(httpServletRequest);
 
-		if (token != null && jwtTokenProvider.validateToken(token)) {
-			String memberId = jwtTokenProvider.getMemberIdFromToken(token);
-			String role = jwtTokenProvider.getMemberRoleFromToken(token);
+		if (token != null) {
+			// 토큰 검증
+			if (jwtTokenProvider.validateToken(token)) {
+				String memberId = jwtTokenProvider.getMemberIdFromToken(token);
+				String role = jwtTokenProvider.getMemberRoleFromToken(token);
 
-			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-				memberId, null, mapRoleToAuthority(role));
+				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+					memberId, null, mapRoleToAuthority(role));
 
-			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			} else {
+				// 유효하지 않은 토큰일 경우 401 반환
+				httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				httpServletResponse.getWriter().write("Invalid or Expired Access Token");
+				return; // 필터 체인 중단
+			}
 		}
 
-		filterChain.doFilter(httpServletRequest, servletResponse);
+		filterChain.doFilter(httpServletRequest, httpServletResponse);
 	}
 
 	private String resolveToken(HttpServletRequest request) {

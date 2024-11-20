@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,11 +32,44 @@ import lombok.AllArgsConstructor;
 public class MemberController {
 	private final MemberService memberService;
 
+	@Operation(summary = "비밀번호 확인", description = "회원 정보 수정 전 비밀번호를 확인합니다.")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "비밀번호 확인 성공"),
+		@ApiResponse(responseCode = "500", description = "서버 오류 - 비밀번호 확인 중 오류 발생")
+	})
+	@PostMapping("/verify-password")
+	public ResponseEntity<String> verifyPassword(@RequestBody
+	String password, Authentication authentication) {
+		try {
+			// 현재 로그인된 사용자 ID 가져오기
+			String memberId = (String)authentication.getPrincipal();
+
+			// 사용자 정보 조회
+			MemberDto memberDto = memberService.findMemberByMemberId(memberId);
+
+			if (memberDto == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
+			}
+
+			// 비밀번호 검증
+			if (memberService.verifyPassword(password, memberDto.getPassword())) {
+				return ResponseEntity.ok("비밀번호 확인 성공");
+			} else {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
+			}
+		} catch (Exception e) {
+			// 예외 처리
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 - 비밀번호 확인 중 오류 발생");
+		}
+	}
+
 	@Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다.")
 	@ApiResponses({@ApiResponse(responseCode = "200", description = "회원 정보 수정 성공"),
 		@ApiResponse(responseCode = "500", description = "서버 오류 - 회원 정보 수정 중 오류 발생")})
 	@PutMapping("/{memberId}")
-	public ResponseEntity<MemberDto> updateMember(@PathVariable String memberId, @RequestBody MemberDto memberDto) {
+	public ResponseEntity<MemberDto> updateMember(@PathVariable
+	String memberId, @RequestBody
+	MemberDto memberDto) {
 		try {
 			memberService.updateMember(memberDto);
 			return ResponseEntity.ok(memberDto);
@@ -47,7 +82,8 @@ public class MemberController {
 	@ApiResponses({@ApiResponse(responseCode = "200", description = "회원 정보 조회 성공"),
 		@ApiResponse(responseCode = "500", description = "서버 오류 - 회원 정보 조회 중 오류 발생")})
 	@GetMapping("/{memberId}")
-	public ResponseEntity<MemberDto> findMember(@PathVariable String memberId) {
+	public ResponseEntity<MemberDto> findMember(@PathVariable
+	String memberId) {
 		try {
 			MemberDto memberDto = memberService.findMemberByMemberId(memberId);
 			return ResponseEntity.ok(memberDto);
@@ -61,7 +97,8 @@ public class MemberController {
 		@ApiResponse(responseCode = "404", description = "회원 없음 - 존재하지 않는 회원 ID"),
 		@ApiResponse(responseCode = "500", description = "서버 오류 - 삭제 중 오류 발생")})
 	@DeleteMapping("/{memberId}")
-	public ResponseEntity<String> deleteMember(@PathVariable String memberId) {
+	public ResponseEntity<String> deleteMember(@PathVariable
+	String memberId) {
 		try {
 			MemberDto memberDto = memberService.findMemberByMemberId(memberId);
 			if (memberDto == null) {
@@ -92,7 +129,8 @@ public class MemberController {
 		@ApiResponse(responseCode = "404", description = "회원 없음 - 해당 ID의 회원을 찾을 수 없음"),
 		@ApiResponse(responseCode = "500", description = "서버 오류 - 회원 검색 중 오류 발생")})
 	@GetMapping("/search")
-	public ResponseEntity<List<MemberDto>> searchMembers(@RequestParam String memberId) {
+	public ResponseEntity<List<MemberDto>> searchMembers(@RequestParam
+	String memberId) {
 		try {
 			List<MemberDto> members = memberService.searchMembers(memberId);
 			if (members.isEmpty()) {

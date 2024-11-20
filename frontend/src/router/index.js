@@ -1,5 +1,5 @@
 // router/index.js
-import {createRouter, createWebHistory} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "@/views/HomePage.vue";
 import HouseDealPage from "@/views/HouseDealPage.vue";
 import MemberLoginPage from "@/views/member/MemberLoginPage.vue";
@@ -11,6 +11,9 @@ import BoardQuestionDetailsPage from "@/views/board/BoardQuestionDetailsPage.vue
 import CreateQuestionPage from "@/views/board/CreateQuestionPage.vue";
 import EditQuestionPage from "@/views/board/EditQuestionPage.vue";
 import MemberFindPage from "@/views/member/MemberFindPage.vue";
+
+// member
+import VerifyPasswordPage from "@/views/MemberVerifyPasswordPage.vue";
 
 const routes = [
   {
@@ -60,7 +63,12 @@ const routes = [
     path: "/forgot-password-id",
     name: "MemberFind",
     component: MemberFindPage
-  }
+  },
+  {
+    path: "/member/verify-password",
+    name: "VerifyPassword",
+    component: VerifyPasswordPage,
+  },
 ];
 
 const router = createRouter({
