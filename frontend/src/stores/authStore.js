@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
+import { jwtDecode } from "jwt-decode";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     isLoggedIn: false,
     authToken: null,
     memberName: null,
+    tokenExpiry: null, // 만료 시간 추가
   }),
   getters: {
     isAuthenticated: (state) => !!state.authToken,
@@ -16,12 +18,22 @@ export const useAuthStore = defineStore("auth", {
       this.isLoggedIn = true;
       this.authToken = token;
       this.memberName = memberName;
+
+      try {
+        const { exp } = jwtDecode(token); // 만료 시간 설정
+        this.tokenExpiry = exp * 1000;
+      } catch (error) {
+        console.error("Invalid token:", error);
+        this.logout();
+      }
+
       this.saveToSessionStorage();
     },
     logout() {
       this.isLoggedIn = false;
       this.authToken = null;
       this.memberName = null;
+      this.tokenExpiry = null;
       this.removeFromSessionStorage();
     },
     // 세션 스토리지에 상태 저장
@@ -32,6 +44,7 @@ export const useAuthStore = defineStore("auth", {
           isLoggedIn: this.isLoggedIn,
           authToken: this.authToken,
           memberName: this.memberName,
+          tokenExpiry: this.tokenExpiry,
         })
       );
     },
@@ -43,10 +56,12 @@ export const useAuthStore = defineStore("auth", {
     restoreFromSessionStorage() {
       const storedData = sessionStorage.getItem("auth");
       if (storedData) {
-        const { isLoggedIn, authToken, memberName } = JSON.parse(storedData);
+        const { isLoggedIn, authToken, memberName, tokenExpiry } =
+          JSON.parse(storedData);
         this.isLoggedIn = isLoggedIn;
         this.authToken = authToken;
         this.memberName = memberName;
+        this.tokenExpiry = tokenExpiry;
       }
     },
   },
