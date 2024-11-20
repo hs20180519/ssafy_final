@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import com.ssafy.auth.model.request.LoginRequest;
 import com.ssafy.auth.model.request.ResetPasswordRequest;
+import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.member.model.MemberDto;
 
@@ -22,7 +23,7 @@ public interface AuthService {
 
 	public String findId(String name, String email);
 
-	public String sendResetPasswordEmail(String email) throws MessagingException;
+	public String sendResetPasswordEmail(SendResetPasswordEmailRequest request) throws MessagingException;
 
 	public boolean verifyResetPasswordCode(String uuid);
 

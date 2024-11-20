@@ -14,6 +14,7 @@ import MemberFindPage from "@/views/member/MemberFindPage.vue";
 
 // member
 import VerifyPasswordPage from "@/views/MemberVerifyPasswordPage.vue";
+import MemberPasswordResetPage from "@/views/member/MemberPasswordResetPage.vue";
 
 const routes = [
   {
@@ -69,6 +70,12 @@ const routes = [
     name: "VerifyPassword",
     component: VerifyPasswordPage,
   },
+  {
+    path:"/auth/password-reset-verification",
+    name: "PasswordReset",
+    component: MemberPasswordResetPage,
+    props: true
+  }
 ];
 
 const router = createRouter({

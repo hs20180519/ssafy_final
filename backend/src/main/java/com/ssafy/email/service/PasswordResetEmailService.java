@@ -35,7 +35,9 @@ public class PasswordResetEmailService implements EmailService {
 		
 		String uuid = generateUUID();
 		String url = URL_HEAD + "email=" + email + "&uuid=" + uuid;
-		context.setVariable("url", url);
+		context.setVariable("baseUrl", URL_HEAD);
+		context.setVariable("email", email);
+		context.setVariable("uuid", uuid);
 		
 		message.addRecipients(MimeMessage.RecipientType.TO, email);
 		message.setSubject(SUBJECT);

@@ -3,6 +3,7 @@ package com.ssafy.auth.controller;
 
 import java.util.Map;
 
+import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -182,9 +183,9 @@ public class AuthController {
 	}
 	
 	@PostMapping("/password-reset-email")
-	public ResponseEntity<String> sendResetPasswordEmail(@RequestParam String email) {
+	public ResponseEntity<String> sendResetPasswordEmail(@RequestBody SendResetPasswordEmailRequest request) {
 		try {
-			return ResponseEntity.ok(authService.sendResetPasswordEmail(email));
+			return ResponseEntity.ok(authService.sendResetPasswordEmail(request));
 		} catch(MessagingException e) {
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("서버 오류");
 		}

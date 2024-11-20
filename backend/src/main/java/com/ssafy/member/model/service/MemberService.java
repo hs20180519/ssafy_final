@@ -18,5 +18,5 @@ public interface MemberService {
 
 	List<MemberDto> searchMembers(String memberId) throws SQLException;
 	
-	boolean existsByEmail(String email);
+	boolean existsByEmailAndId(String email, String id);
 }

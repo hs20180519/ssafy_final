@@ -23,14 +23,31 @@ function findId(param, success, fail) {
   .catch(fail);
 }
 
-function sendPasswordResetEmail(param, success, fail) {
-  noAuth.post('/auth/password-reset-email', null, {
+function sendPasswordResetEmail(body, success, fail) {
+  noAuth.post('/auth/password-reset-email', body)
+  .then(success)
+  .catch(fail)
+}
+
+function verifyResetUUID(param, success, fail) {
+  noAuth.post('/auth/password-reset-verification', null, {
     params: {
-      email: param.email
+      uuid: param.uuid
     }
   })
   .then(success)
   .catch(fail)
 }
 
-export {findId, sendPasswordResetEmail}
+function resetPassword(body, success, fail) {
+  noAuth.put('/auth/password', body, null)
+  .then(success)
+  .catch(fail)
+}
+
+export {
+  findId,
+  sendPasswordResetEmail,
+  verifyResetUUID,
+  resetPassword
+}

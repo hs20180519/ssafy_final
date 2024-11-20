@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.time.Duration;
 
 import com.ssafy.auth.model.request.ResetPasswordRequest;
+import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -95,15 +96,15 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public String sendResetPasswordEmail(String email) throws MessagingException {
-		if(!memberService.existsByEmail(email)) {
+	public String sendResetPasswordEmail(SendResetPasswordEmailRequest request) throws MessagingException {
+		if(!memberService.existsByEmailAndId(request.getEmail(), request.getId())) {
 			// TODO: exception 처리
 			return null;
 		}
 
-		String uuid = passwordResetEmailService.send(email);
+		String uuid = passwordResetEmailService.send(request.getEmail());
 
-		redisTemplate.opsForValue().set(VERIFICATION_PASSWORD_RESET + uuid, email,
+		redisTemplate.opsForValue().set(VERIFICATION_PASSWORD_RESET + uuid, request.getEmail(),
 				Duration.ofMillis(resetPasswordExpirationTime));
 
 		return uuid;
@@ -123,6 +124,7 @@ public class AuthServiceImpl implements AuthService {
 	public void resetPassword(ResetPasswordRequest request) {
 		if(request.getConfirmNewPassword().equals(request.getNewPassword())) {
 			memberMapper.updatePassword(request.getEmail(), request.getNewPassword());
+			redisTemplate.delete(VERIFICATION_PASSWORD_RESET + request.getUuid());
 		}
 	}
 

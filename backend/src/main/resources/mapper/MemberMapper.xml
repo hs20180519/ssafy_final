@@ -55,10 +55,10 @@
    		WHERE id LIKE CONCAT('%', #{id}, '%')
 	</select>
 	
-	<select id="getMemberCountByEmail" parameterType="String" resultType="int">
+	<select id="getMemberCountByEmailAndId" parameterType="String" resultType="int">
 		SELECT count(*)
 		FROM members
-		WHERE email = #{email}
+		WHERE email = #{email} and id = #{id}
 	</select>
 
 	<update id="updatePassword" parameterType="map">

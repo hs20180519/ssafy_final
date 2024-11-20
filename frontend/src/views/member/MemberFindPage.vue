@@ -2,7 +2,7 @@
 // import { TabsPaneContext } from 'element-plus';
 import MemberIdFindForm from "@/components/member/MemberIdFindForm.vue";
 import MemberIdFindResult from "@/components/member/MemberIdFindResult.vue";
-import MemberPasswordResetForm from "@/components/member/MemberPasswordResetForm.vue";
+import MemberPasswordResetReqForm from "@/components/member/MemberPasswordResetReqForm.vue";
 import { ref } from 'vue'
 
 const activeName = ref("findId")
@@ -37,7 +37,7 @@ const maskId = (id) => {
                 <MemberIdFindResult v-if='!isIdFormLoaded' :foundId='maskId(foundId)' @goBack='isIdFormLoaded = true' />
             </el-tab-pane>
             <el-tab-pane label="비밀번호 찾기" name="findPassword">
-                <MemberPasswordResetForm v-if='isPasswordFormLoaded'/>
+                <MemberPasswordResetReqForm v-if='isPasswordFormLoaded'/>
             </el-tab-pane>
         </el-tabs>
     </div>
