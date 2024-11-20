@@ -16,6 +16,9 @@ import {
 
 import { useKakao } from "vue3-kakao-maps";
 
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+
 library.add(faHouse, faUser, faCircleInfo, faStar, faMagnifyingGlass);
 
 <<<<<<< HEAD

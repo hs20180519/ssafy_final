@@ -2,14 +2,15 @@
 import {createRouter, createWebHistory} from "vue-router";
 import HomePage from "@/views/HomePage.vue";
 import HouseDealPage from "@/views/HouseDealPage.vue";
-import MemberLoginPage from "@/views/MemberLoginPage.vue";
-import MemberSignUpPage from "@/views/MemberSignUpPage.vue";
+import MemberLoginPage from "@/views/member/MemberLoginPage.vue";
+import MemberSignUpPage from "@/views/member/MemberSignUpPage.vue";
 
 // board
 import BoardListPage from "@/views/board/BoardListPage.vue";
 import BoardQuestionDetailsPage from "@/views/board/BoardQuestionDetailsPage.vue";
 import CreateQuestionPage from "@/views/board/CreateQuestionPage.vue";
 import EditQuestionPage from "@/views/board/EditQuestionPage.vue";
+import MemberFindPage from "@/views/member/MemberFindPage.vue";
 
 const routes = [
   {
@@ -55,6 +56,11 @@ const routes = [
     name: "CreateQuestion",
     component: CreateQuestionPage,
   },
+  {
+    path: "/forgot-password-id",
+    name: "MemberFind",
+    component: MemberFindPage
+  }
 ];
 
 const router = createRouter({
