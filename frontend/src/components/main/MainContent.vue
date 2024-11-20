@@ -16,12 +16,13 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import SearchBox from '@/components/common/SearchBox.vue';
-import SearchBoxResult from '@/components/common/SearchBoxResult.vue';
+import { ref } from "vue";
+import SearchBox from "@/components/common/SearchBox.vue";
+import SearchBoxResult from "@/components/common/SearchBoxResult.vue";
+import { useAuthStore } from "@/stores/authStore";
 
 export default {
-  name: 'MainContent',
+  name: "MainContent",
   components: {
     SearchBox,
   },
@@ -29,22 +30,21 @@ export default {
 </script>
 
 <script setup>
-import { defineEmits, onMounted } from 'vue';
+import { defineEmits, onMounted } from "vue";
 import { searchKeyword } from "@/api/search";
-import { useHouseDealStore } from '@/stores/houseDealStore';
+import { useHouseDealStore } from "@/stores/houseDealStore";
 
-defineEmits([
-  'onSearch'
-])
+defineEmits(["onSearch"]);
 
 const houseDealStore = useHouseDealStore();
+const authStore = useAuthStore();
 
 const isLoaded = ref(false);
 const result = ref();
 
 onMounted(() => {
-  houseDealStore.setKeyword("")
-})
+  houseDealStore.setKeyword("");
+});
 
 const onSearch = () => {
     searchKeyword(

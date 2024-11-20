@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import { useAuthStore } from "./stores/authStore";
 
 import App from "./App.vue";
 import router from "./router";
@@ -18,12 +19,14 @@ import { useKakao } from "vue3-kakao-maps";
 
 library.add(faHouse, faUser, faCircleInfo, faStar, faMagnifyingGlass);
 
-useKakao(import.meta.env.VITE_KAKAO_APP_KEY)
+useKakao(import.meta.env.VITE_KAKAO_APP_KEY);
 
-const app = createApp(App)
-app.component('font-awesome-icon', FontAwesomeIcon);
-app.use(createPinia())
-app.use(router)
+const app = createApp(App);
+app.component("font-awesome-icon", FontAwesomeIcon);
+app.use(createPinia());
 
+const authStore = useAuthStore();
+authStore.restoreFromSessionStorage(); // 페이지 로드 시 상태 복원
 
-app.mount('#app')
+app.use(router);
+app.mount("#app");

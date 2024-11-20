@@ -1,4 +1,4 @@
-import { api } from "./axiosInstance";
+import { api } from "./Instance/axiosInstance";
 
 const houseDealApi = api();
 
@@ -7,8 +7,11 @@ function getHomeDealByKeyword(param, success, fail) {
     houseDealApi.get('/house/keyword', {
         params: {
         type: param.type,
-        code: param.keyword
-    } }).then(success).catch(fail);
+        code: param.keyword,
+      },
+    })
+    .then(success)
+    .catch(fail);
 }
 
 function getHouseDeal(param, success, fail) {
