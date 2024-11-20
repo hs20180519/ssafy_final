@@ -1,6 +1,6 @@
 <script setup>
 import router from '@/router';
-import { defineProps, defineEmits, onMounted, onUpdated, ref } from 'vue';
+import { defineProps, defineEmits, watch, ref } from 'vue';
 import { useHouseDealStore } from '@/stores/houseDealStore';
 
 const houseDealStore = useHouseDealStore();
@@ -14,18 +14,17 @@ const emit = defineEmits(['onResultClicked']);
 const regions = ref();
 const houses = ref();
 
-onUpdated(() => {
-    console.log(props.result);
-    regions.value = props.result.regions;
-    houses.value = props.result.houses;
-    
-})
-
-onMounted(() => {
-    console.log(props.result);
-    regions.value = props.result.regions;
-    houses.value = props.result.houses;
-})
+watch(
+    () => props.result,
+    ((newVal) => {
+        regions.value = newVal.regions;
+        houses.value = newVal.houses;
+        console.log("변경 감지: ", houses.value);
+    }),
+    {
+        immediate: true
+    }
+)
 
 
 function goDetail(type, data) {
@@ -50,14 +49,16 @@ function goDetail(type, data) {
 </script>
 
 <template>
-    <h2>지역</h2>
-    <div v-for="region in regions" :key="region.dongCode" @click="goDetail('region', region)">
-        {{ region.sidoName }} {{ region.gugunName }} {{ region.dongName }}
-    </div>
+    <div>
+        <h2>지역</h2>
+        <div v-for="region in regions" :key="region.dongCode" @click="goDetail('region', region)">
+            {{ region.sidoName }} {{ region.gugunName }} {{ region.dongName }}
+        </div>
 
-    <h2>매물</h2>
-    <div v-for="house in houses" :key="house.aptSeq" @click="goDetail('house', house.aptSeq)">
-        {{ house.aptNm }}: {{ house.sidoName }} {{ house.gugunName }} {{ house.dongName }}
+        <h2>매물</h2>
+        <div v-for="house in houses" :key="house.aptSeq" @click="goDetail('house', house.aptSeq)">
+            {{ house.aptNm }}: {{ house.sidoName }} {{ house.gugunName }} {{ house.dongName }}
+        </div>
     </div>
 </template>
 

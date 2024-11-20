@@ -1,14 +1,14 @@
 package com.ssafy.houseDeal.model.service;
 
-import com.ssafy.houseDeal.model.HouseDealDto;
-import com.ssafy.houseDeal.model.mapper.HouseDealMapper;
-
-import lombok.AllArgsConstructor;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import com.ssafy.houseDeal.model.HouseDealDto;
+import com.ssafy.houseDeal.model.mapper.HouseDealMapper;
+import com.ssafy.houseDeal.request.GetHouseDealRequest;
+
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -17,7 +17,7 @@ public class HouseDealServiceImpl implements HouseDealService {
     private final HouseDealMapper houseDealMapper;
 
     @Override
-    public List<HouseDealDto> getHouseDeals(Map<String, String> criteria) {
+    public List<HouseDealDto> getHouseDeals(GetHouseDealRequest criteria) {
         return houseDealMapper.getHouseDeals(criteria);
     }
 

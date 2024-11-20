@@ -30,7 +30,7 @@ watch(
             <div v-if="markervisible">
                 <KakaoMapMarker :lat=latitude :lng=longitude>
                     <template v-slot:infoWindow>
-                        <div style="padding: 5px;text-align: center;">{{ info }}</div>
+                        <div style="padding: 5px;text-align: center">{{ info }}</div>
                     </template>
                 </KakaoMapMarker>
             </div>

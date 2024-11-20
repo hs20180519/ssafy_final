@@ -31,6 +31,7 @@
  				dong_code LIKE concat(#{parentCode}, '%')
  			</if>
  		</where>
+ 		ORDER BY binary(gugun_name), binary(dong_name)
  	</select>
 
 	<select id="getHouseByKeyword" resultMap="house" parameterType="String">

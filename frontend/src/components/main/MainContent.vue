@@ -3,8 +3,10 @@
     <div class="logo">The Next Home</div>
     <h1>당신의 다음 집을 검색해보세요</h1>
     <!--    <p>FIND YOUR NEXT HOME</p>-->
-    <SearchBox @onSearch='onSearch'/>
-    <SearchBoxResult v-if="isLoaded" :result="result"/>
+    <div class='search-container'>
+      <SearchBox @onSearch='onSearch'/>
+      <SearchBoxResult v-if="isLoaded" :result="result" class='search-box-result'/>
+    </div>
     <div class="auth-links">
       <router-link to="/login">로그인</router-link>
       /
@@ -57,6 +59,7 @@ const onSearch = () => {
     )
 }
 
+
 </script>
 
 <style scoped>
@@ -67,6 +70,25 @@ const onSearch = () => {
   justify-content: center;
   text-align: center;
   flex: 1;
+  position: relative; /* SearchBoxResult와 auth-links의 z-index 기준 */
+}
+
+.search-container {
+  position: relative; /* SearchBoxResult의 절대 위치 기준 */
+  width: 150%;
+}
+
+.search-box-result {
+  margin-top: 10px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  z-index: 10; /* auth-links보다 더 높은 레이어 */
+  position: absolute; /* 겹치기 위해 절대 위치 설정 */
+  top: 80%; /* SearchBox 바로 아래 */
+  left: 0;
 }
 
 .logo {
@@ -89,4 +111,5 @@ const onSearch = () => {
 .auth-links a:hover {
   text-decoration: underline;
 }
+
 </style>
