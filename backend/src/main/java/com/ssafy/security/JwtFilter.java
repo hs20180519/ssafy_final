@@ -12,6 +12,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
+import com.ssafy.token.TokenProvider;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -23,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtFilter extends GenericFilterBean {
 
-	private final JwtTokenProvider jwtTokenProvider;
+	private final TokenProvider jwtTokenProvider;
 	private static final String AUTHORIZATION_HEADER = "Authorization";
 
 	@Override

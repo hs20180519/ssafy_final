@@ -1,111 +1,54 @@
-import { api } from "./axiosInstance";
+import { authApi } from "./Instance/authInstance";
 
-const boardApi = api();
+const boardApi = authApi();
 
-export function createQuestion(body, token, success, fail) {
+export function createQuestion(body, success, fail) {
+  return boardApi.post("/board/questions", body).then(success).catch(fail);
+}
+
+export async function getQuestionDetails(questionId) {
+  return boardApi.get(`/board/questions/${questionId}`).then().catch();
+}
+
+export async function createAnswer(questionId, content, success, fail) {
   return boardApi
-    .post("/board/questions", body, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    .post(`/board/questions/${questionId}/answers`, { content })
     .then(success)
     .catch(fail);
 }
 
-export async function getQuestionDetails(questionId, token) {
-  return boardApi
-    .get(`/board/questions/${questionId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    .then()
-    .catch();
+export async function getAnswers(questionId) {
+  return boardApi.get(`/board/questions/${questionId}/answers`).then().catch();
 }
 
-export async function createAnswer(questionId, content, token, success, fail) {
+export async function getQuestions() {
+  return boardApi.get("/board/questions").then().catch();
+}
+
+export async function updateQuestion(questionId, question, success, fail) {
   return boardApi
-    .post(
-      `/board/questions/${questionId}/answers`,
-      { content },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    )
+    .put(`/board/questions/${questionId}`, question)
     .then(success)
     .catch(fail);
 }
 
-export async function getAnswers(questionId, token) {
+export async function deleteQuestion(questionId, success, fail) {
   return boardApi
-    .get(`/board/questions/${questionId}/answers`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then()
-    .catch();
-}
-
-export async function getQuestions(token) {
-  return boardApi
-    .get("/board/questions", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then()
-    .catch();
-}
-export async function updateQuestion(
-  questionId,
-  question,
-  token,
-  success,
-  fail
-) {
-  return boardApi
-    .put(`/board/questions/${questionId}`, question, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    .delete(`/board/questions/${questionId}`)
     .then(success)
     .catch(fail);
 }
 
-export async function deleteQuestion(questionId, token, success, fail) {
+export async function updateAnswer(answerId, content, success, fail) {
   return boardApi
-    .delete(`/board/questions/${questionId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    .put(`/board/answers/${answerId}`, { content })
     .then(success)
     .catch(fail);
 }
 
-export async function updateAnswer(answerId, content, token, success, fail) {
+export async function deleteAnswer(answerId, success, fail) {
   return boardApi
-    .put(
-      `/board/answers/${answerId}`,
-      { content },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
-    .then(success)
-    .catch(fail);
-}
-
-export async function deleteAnswer(answerId, token, success, fail) {
-  return boardApi
-    .delete(`/board/answers/${answerId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    .delete(`/board/answers/${answerId}`)
     .then(success)
     .catch(fail);
 }

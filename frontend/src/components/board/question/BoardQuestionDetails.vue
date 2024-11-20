@@ -11,12 +11,7 @@
 </template>
 
 <script>
-import {
-  getQuestionDetails,
-  updateQuestion,
-  deleteQuestion,
-} from "@/api/board";
-import {useAuthStore} from "@/stores/authStore";
+import {getQuestionDetails, deleteQuestion} from "@/api/board";
 
 export default {
   name: "QuestionDetails",
@@ -32,10 +27,7 @@ export default {
   methods: {
     async fetchQuestionDetails() {
       try {
-        const authStore = useAuthStore();
-        const token = authStore.getAuthToken;
-
-        const response = await getQuestionDetails(this.questionId, token);
+        const response = await getQuestionDetails(this.questionId);
         this.question = response.data;
       } catch (error) {
         console.error("질문 상세 조회 중 오류 발생:", error);
@@ -49,14 +41,10 @@ export default {
     },
 
     async deleteQuestion() {
-      const token = useAuthStore().getAuthToken;
-
       try {
         await deleteQuestion(
           this.question.id,
-          token,
           (response) => {
-            console.log("삭제 완료:", response);
             this.$router.push({name: "BoardList"}); // Redirect to the board list or a relevant page after deletion
           },
           (error) => {
