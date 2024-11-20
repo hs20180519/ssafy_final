@@ -7,7 +7,6 @@
 
 <script>
 import { createAnswer } from "@/api/board";
-import { useAuthStore } from "@/stores/authStore";
 
 export default {
   name: "AnswerForm",
@@ -22,11 +21,8 @@ export default {
       console.log("submitAnswer 호출됨");
       if (this.newAnswer.trim() === "") return;
 
-      const authStore = useAuthStore();
-      const token = authStore.getAuthToken;
-
       try {
-        await createAnswer(this.questionId, this.newAnswer, token);
+        await createAnswer(this.questionId, this.newAnswer);
         // 새로운 답변이 등록되었으므로 입력창 초기화
         this.newAnswer = "";
         // 부모 컴포넌트에 'answerSubmitted' 이벤트 전달

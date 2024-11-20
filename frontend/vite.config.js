@@ -4,10 +4,6 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
-const AutoImport = require('unplugin-auto-import/vite')
-const components = require('unplugin-vue-components/vite')
-const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
-
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
