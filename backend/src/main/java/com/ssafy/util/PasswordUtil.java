@@ -10,4 +10,9 @@ public class PasswordUtil {
 	public static boolean verifyPassword(String rawPassword, String encodedPassword) {
 		return passwordEncoder.matches(rawPassword, encodedPassword);
 	}
+
+	// 비밀번호 인코딩 메소드
+	public static String encodePassword(String rawPassword) {
+		return passwordEncoder.encode(rawPassword);
+	}
 }

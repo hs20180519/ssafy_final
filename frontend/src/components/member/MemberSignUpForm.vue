@@ -4,28 +4,60 @@
     <form @submit.prevent="handleSignup">
       <div class="input-group">
         <label for="id">아이디</label>
-        <input type="text" id="id" v-model="id" placeholder="아이디를 입력하세요" required/>
+        <input
+          type="text"
+          id="id"
+          v-model="id"
+          placeholder="아이디를 입력하세요"
+          required
+        />
       </div>
 
       <div class="input-group">
         <label for="name">이름</label>
-        <input type="text" id="name" v-model="name" placeholder="이름을 입력하세요" required/>
+        <input
+          type="text"
+          id="name"
+          v-model="name"
+          placeholder="이름을 입력하세요"
+          required
+        />
       </div>
 
       <div class="input-group">
         <label for="email">이메일</label>
-        <input type="email" id="email" v-model="email" placeholder="이메일을 입력하세요" required/>
-        <button type="button" @click="sendVerificationCode">인증번호 전송</button>
+        <input
+          type="email"
+          id="email"
+          v-model="email"
+          placeholder="이메일을 입력하세요"
+          required
+        />
+        <button type="button" @click="sendVerificationCode">
+          인증번호 전송
+        </button>
       </div>
 
       <div class="input-group">
         <label for="password">비밀번호</label>
-        <input type="password" id="password" v-model="password" placeholder="비밀번호를 입력하세요" required/>
+        <input
+          type="password"
+          id="password"
+          v-model="password"
+          placeholder="비밀번호를 입력하세요"
+          required
+        />
       </div>
 
       <div class="input-group">
         <label for="confirmPassword">비밀번호 확인</label>
-        <input type="password" id="confirmPassword" v-model="confirmPassword" placeholder="비밀번호를 다시 입력하세요" required/>
+        <input
+          type="password"
+          id="confirmPassword"
+          v-model="confirmPassword"
+          placeholder="비밀번호를 다시 입력하세요"
+          required
+        />
       </div>
 
       <button type="submit">회원가입</button>
@@ -34,23 +66,23 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
-      id: '',
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
+      id: "",
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     };
   },
   methods: {
     handleSignup() {
       // 비밀번호 확인 로직
       if (this.password !== this.confirmPassword) {
-        alert('비밀번호가 일치하지 않습니다.');
+        alert("비밀번호가 일치하지 않습니다.");
         return;
       }
 
@@ -59,32 +91,34 @@ export default {
         id: this.id,
         name: this.name,
         email: this.email,
-        password: this.password
+        password: this.password,
       };
 
-      axios.post('http://localhost:80/api/auth/signup', memberData)
-        .then(response => {
-          console.log('회원가입 성공:', response.data);
-          alert('회원가입이 완료되었습니다.');
-          this.$router.push('/login');  // 회원가입 후 로그인 페이지로 리다이렉트
+      axios
+        .post("http://localhost:80/api/auth/signup", memberData)
+        .then((response) => {
+          console.log("회원가입 성공:", response.data);
+          alert("회원가입이 완료되었습니다.");
+          this.$router.push("/login"); // 회원가입 후 로그인 페이지로 리다이렉트
         })
-        .catch(error => {
-          console.error('회원가입 오류:', error);
-          alert('회원가입 중 오류가 발생했습니다.');
+        .catch((error) => {
+          console.error("회원가입 오류:", error);
+          alert("회원가입 중 오류가 발생했습니다.");
         });
     },
     sendVerificationCode() {
-      axios.post('http://localhost:80/api/auth/signup-mail', {mail: this.email})
-        .then(response => {
-          console.log('인증번호 전송 성공:', response.data);
-          alert('인증번호가 이메일로 전송되었습니다.');
+      axios
+        .post("http://localhost:80/api/auth/signup-mail", { mail: this.email })
+        .then((response) => {
+          console.log("인증번호 전송 성공:", response.data);
+          alert("인증번호가 이메일로 전송되었습니다.");
         })
-        .catch(error => {
-          console.error('인증번호 전송 오류:', error);
-          alert('인증번호 전송 중 오류가 발생했습니다.');
+        .catch((error) => {
+          console.error("인증번호 전송 오류:", error);
+          alert("인증번호 전송 중 오류가 발생했습니다.");
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

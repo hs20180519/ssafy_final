@@ -2,8 +2,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "@/views/HomePage.vue";
 import HouseDealPage from "@/views/HouseDealPage.vue";
-import MemberLoginPage from "@/views/MemberLoginPage.vue";
-import MemberSignUpPage from "@/views/MemberSignUpPage.vue";
+import MemberLoginPage from "@/views/member/MemberLoginPage.vue";
+import MemberSignUpPage from "@/views/member/MemberSignUpPage.vue";
 
 // board
 import BoardListPage from "@/views/board/BoardListPage.vue";
@@ -12,7 +12,8 @@ import CreateQuestionPage from "@/views/board/CreateQuestionPage.vue";
 import EditQuestionPage from "@/views/board/EditQuestionPage.vue";
 
 // member
-import VerifyPasswordPage from "@/views/MemberVerifyPasswordPage.vue";
+import VerifyPasswordPage from "@/views/member/MemberVerifyPasswordPage.vue";
+import MemberEditProfilePage from "@/views/member/MemberEditProfilePage.vue";
 
 const routes = [
   {
@@ -62,6 +63,11 @@ const routes = [
     path: "/member/verify-password",
     name: "VerifyPassword",
     component: VerifyPasswordPage,
+  },
+  {
+    path: "/member/edit-profile",
+    name: "EditProfile",
+    component: MemberEditProfilePage,
   },
 ];
 
