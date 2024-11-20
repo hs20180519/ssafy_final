@@ -1,8 +1,12 @@
 <script setup>
 // import { TabsPaneContext } from 'element-plus';
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const activeName = ref("findId")
+onMounted(() => {
+    console.log("dd");
+    console.log(activeName.value)
+})
 </script>
 
 <template>

@@ -42,13 +42,6 @@
     	WHERE id = #{id}
     </update>
 
-    <!-- 조회수 증가 -->
-    <update id="updateViewCount" parameterType="int">
-    	UPDATE board_question
-    	SET view_count = view_count+1
-    	WHERE id = #{id}
-    </update>
-
     <!-- 질문 등록 -->
     <insert id="createQuestion" parameterType="BoardQuestionDto">
         INSERT INTO board_question (title, content, author, created_at, updated_at, view_count)

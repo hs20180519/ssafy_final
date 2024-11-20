@@ -10,6 +10,7 @@ import BoardListPage from "@/views/board/BoardListPage.vue";
 import BoardQuestionDetailsPage from "@/views/board/BoardQuestionDetailsPage.vue";
 import CreateQuestionPage from "@/views/board/CreateQuestionPage.vue";
 import EditQuestionPage from "@/views/board/EditQuestionPage.vue";
+import MemberFindPage from "@/views/member/MemberFindPage.vue";
 
 const routes = [
   {
@@ -55,6 +56,11 @@ const routes = [
     name: "CreateQuestion",
     component: CreateQuestionPage,
   },
+  {
+    path: "/forgot-password-id",
+    name: "MemberFind",
+    component: MemberFindPage
+  }
 ];
 
 const router = createRouter({
