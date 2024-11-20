@@ -15,10 +15,15 @@ public interface BoardMapper {
 	BoardQuestionDto getQuestionById(int id);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	void updateViewCount(int id);
 
 =======
 >>>>>>> f76ab5d (:sparkles: Feat: 질문/답변 CRUD)
+=======
+	void updateViewCount(int id);
+
+>>>>>>> 6745995 (:sparkles: Feat: 조회수 증가)
 	void createQuestion(BoardQuestionDto question);
 
 	void updateQuestion(BoardQuestionDto question);

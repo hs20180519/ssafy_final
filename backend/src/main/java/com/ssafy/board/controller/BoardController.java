@@ -101,10 +101,6 @@ public class BoardController {
 				&& !authentication.getAuthorities().contains("ROLE_admin")) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("작성자가 아니므로 수정할 수 없습니다.");
 			}
-<<<<<<< HEAD
-=======
-
->>>>>>> 64013a8 (:zap: Fix: 질문 삭제시시 작성자와 현재 로그인된 사용자 비교)
 			boardService.deleteQuestion(id);
 			return ResponseEntity.ok("질문이 삭제되었습니다.");
 		} catch (Exception e) {
