@@ -9,13 +9,10 @@ export async function checkPassword(body, success, fail) {
     .catch(fail);
 }
 
-//   export async function getQuestionDetails(questionId) {
-//     return boardApi.get(`/board/questions/${questionId}`).then().catch();
-//   }
+export async function getMemberInfo() {
+  return memberApi.get("/member");
+}
 
-//   export async function createAnswer(questionId, content, success, fail) {
-//     return boardApi
-//       .post(`/board/questions/${questionId}/answers`, { content })
-//       .then(success)
-//       .catch(fail);
-//   }
+export async function updateMemberInfo(body) {
+  return memberApi.put("/member", body);
+}

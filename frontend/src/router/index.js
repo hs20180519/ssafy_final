@@ -13,8 +13,9 @@ import EditQuestionPage from "@/views/board/EditQuestionPage.vue";
 import MemberFindPage from "@/views/member/MemberFindPage.vue";
 
 // member
-import VerifyPasswordPage from "@/views/MemberVerifyPasswordPage.vue";
 import MemberPasswordResetPage from "@/views/member/MemberPasswordResetPage.vue";
+import VerifyPasswordPage from "@/views/member/MemberVerifyPasswordPage.vue";
+import MemberEditProfilePage from "@/views/member/MemberEditProfilePage.vue";
 
 const routes = [
   {
@@ -75,7 +76,12 @@ const routes = [
     name: "PasswordReset",
     component: MemberPasswordResetPage,
     props: true
-  }
+  },
+  {
+    path: "/member/edit-profile",
+    name: "EditProfile",
+    component: MemberEditProfilePage,
+  },
 ];
 
 const router = createRouter({

@@ -3,7 +3,6 @@ package com.ssafy.member.model.service;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.member.model.MemberDto;
@@ -17,10 +16,11 @@ import lombok.AllArgsConstructor;
 public class MemberServiceImpl implements MemberService {
 
 	private final MemberMapper memberMapper;
-	private final BCryptPasswordEncoder passwordEncoder; // 비밀번호 해시
 
 	@Override
 	public void updateMember(MemberDto memberDto) throws SQLException {
+		String password = memberDto.getPassword();
+		memberDto.setPassword(PasswordUtil.encodePassword(password));
 		memberMapper.updateMember(memberDto);
 	}
 

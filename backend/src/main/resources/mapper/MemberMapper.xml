@@ -10,10 +10,6 @@
 		<result column="name" property="name" />
 		<result column="email" property="email" />
 	</resultMap> -->
-	
-	<select id="getPasswordByMemberId" parameterType="String">
-	</select>
-
 	<select id="getMemberByNameAndEmail" parameterType="map"
 			resultType="memberDto">
 		select *
@@ -28,8 +24,7 @@
 
 	<update id="updateMember" parameterType="memberDto">
 		update members
-		set email
-		= #{email}, name = #{name}
+		set name = #{name}, password=#{password}
 		where id = #{id};
 	</update>
 
