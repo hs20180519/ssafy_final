@@ -1,8 +1,7 @@
 <template>
   <div v-if="isLoggedIn && showDropdown" class="dropdown">
     <!-- 환영 메시지 -->
-    <p class="welcome-message">
-      {{ member }}님</p>
+    <p class="welcome-message">{{ member }}님</p>
     <!-- 마이페이지와 로그아웃은 클릭 가능 -->
     <p @click="goToMyPage">마이페이지</p>
     <p @click="logout">로그아웃</p>
@@ -10,8 +9,8 @@
 </template>
 
 <script>
-import {useAuthStore} from '@/stores/authStore';
-import {logout} from "@/api/member.js";
+import { useAuthStore } from "@/stores/authStore";
+import { logout } from "@/api/auth.js";
 
 export default {
   props: {
@@ -27,12 +26,12 @@ export default {
     },
     member() {
       const authStore = useAuthStore();
-      return authStore.memberName || '회원'; // 기본값 '회원'
+      return authStore.memberName || "회원"; // 기본값 '회원'
     },
   },
   methods: {
     goToMyPage() {
-      this.$router.push('/my-page');
+      this.$router.push({ name: "VerifyPassword" });
     },
     async logout() {
       // 로그아웃 API 호출
@@ -42,8 +41,8 @@ export default {
       const authStore = useAuthStore();
       authStore.logout();
 
-      alert("로그아웃 되었습니다.")
-      this.$router.push('/'); // 메인 페이지로 이동
+      alert("로그아웃 되었습니다.");
+      this.$router.push("/"); // 메인 페이지로 이동
     },
   },
 };
@@ -79,7 +78,7 @@ export default {
 
 /* 기본 p 태그에 hover 스타일이 적용되지 않도록 설정 */
 .welcome-message:hover {
-  background-color: #d87070 !important;; /* 기존 배경색 그대로 유지 */
+  background-color: #d87070 !important; /* 기존 배경색 그대로 유지 */
 }
 
 /* 나머지 메뉴 항목에는 hover 효과가 적용됨 */
