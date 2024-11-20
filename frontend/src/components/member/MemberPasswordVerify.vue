@@ -14,10 +14,6 @@
       </div>
       <button type="submit">확인</button>
     </form>
-
-    <div class="auth-links">
-      <router-link to="/forgot-password-id">비밀번호를 잊으셨나요?</router-link>
-    </div>
   </div>
 </template>
 
@@ -34,9 +30,9 @@ export default {
   methods: {
     async handleSubmit() {
       try {
-        // 비밀번호 확인 API 호출
-        console.log(this.password);
-        const isPasswordCorrect = await checkPassword(this.password);
+        const isPasswordCorrect = await checkPassword({
+          password: this.password,
+        });
 
         if (isPasswordCorrect) {
           this.$router.push({ name: "EditProfile" }); // 회원정보 수정 페이지로 이동
@@ -86,21 +82,5 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
   background-color: #b85b5b;
-}
-
-.auth-links {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-  font-size: 0.9em;
-}
-
-.auth-links a {
-  color: #d87070;
-  text-decoration: none;
-}
-
-.auth-links a:hover {
-  text-decoration: underline;
 }
 </style>

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.member.model.MemberDto;
+import com.ssafy.member.model.request.PasswordRequest;
 import com.ssafy.member.model.service.MemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,11 +40,10 @@ public class MemberController {
 	})
 	@PostMapping("/verify-password")
 	public ResponseEntity<String> verifyPassword(@RequestBody
-	String password, Authentication authentication) {
+	PasswordRequest passwordRequest, Authentication authentication) {
 		try {
 			// 현재 로그인된 사용자 ID 가져오기
 			String memberId = (String)authentication.getPrincipal();
-
 			// 사용자 정보 조회
 			MemberDto memberDto = memberService.findMemberByMemberId(memberId);
 
@@ -51,6 +51,7 @@ public class MemberController {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
 			}
 
+			String password = passwordRequest.getPassword();
 			// 비밀번호 검증
 			if (memberService.verifyPassword(password, memberDto.getPassword())) {
 				return ResponseEntity.ok("비밀번호 확인 성공");
@@ -66,11 +67,19 @@ public class MemberController {
 	@Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다.")
 	@ApiResponses({@ApiResponse(responseCode = "200", description = "회원 정보 수정 성공"),
 		@ApiResponse(responseCode = "500", description = "서버 오류 - 회원 정보 수정 중 오류 발생")})
-	@PutMapping("/{memberId}")
-	public ResponseEntity<MemberDto> updateMember(@PathVariable
-	String memberId, @RequestBody
-	MemberDto memberDto) {
+	@PutMapping()
+	public ResponseEntity<MemberDto> updateMember(@RequestBody
+	MemberDto memberDto, Authentication authentication) {
 		try {
+			String role = authentication.getAuthorities().stream()
+				.map(authority -> authority.getAuthority())
+				.findFirst()
+				.map(r -> r.replace("ROLE_", "")) // ROLE_ 제거
+				.orElse("No Authority");
+
+			memberDto.setId((String)authentication.getPrincipal());
+			memberDto.setRole(role);
+
 			memberService.updateMember(memberDto);
 			return ResponseEntity.ok(memberDto);
 		} catch (Exception e) {
@@ -81,11 +90,12 @@ public class MemberController {
 	@Operation(summary = "회원 정보 조회", description = "회원 ID로 회원 정보를 조회합니다.")
 	@ApiResponses({@ApiResponse(responseCode = "200", description = "회원 정보 조회 성공"),
 		@ApiResponse(responseCode = "500", description = "서버 오류 - 회원 정보 조회 중 오류 발생")})
-	@GetMapping("/{memberId}")
-	public ResponseEntity<MemberDto> findMember(@PathVariable
-	String memberId) {
+	@GetMapping()
+	public ResponseEntity<MemberDto> findMember(Authentication authentication) {
 		try {
+			String memberId = (String)authentication.getPrincipal();
 			MemberDto memberDto = memberService.findMemberByMemberId(memberId);
+			//			memberDto.setPassword(null); TODO : 비밀번호는 공개 X
 			return ResponseEntity.ok(memberDto);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
