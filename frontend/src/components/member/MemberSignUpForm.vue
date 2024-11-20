@@ -24,6 +24,20 @@
         />
       </div>
 
+      <!-- 주소 검색 컴포넌트 -->
+      <AddressSearch v-model="address"/>
+
+      <div class="input-group">
+        <label for="detailAddress">상세주소</label>
+        <input
+          type="text"
+          id="detailAddress"
+          v-model="detailAddress"
+          placeholder="상세주소를 입력하세요"
+          required
+        />
+      </div>
+
       <div class="input-group">
         <label for="email">이메일</label>
         <input
@@ -67,12 +81,16 @@
 
 <script>
 import {signup} from "@/api/auth.js";
+import AddressSearch from "@/components/AddressSearch.vue";
 
 export default {
+  components: {AddressSearch},
   data() {
     return {
       id: "",
       name: "",
+      address: {address: ""},  // 주소 객체
+      detailAddress: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -86,28 +104,29 @@ export default {
       }
 
       try {
-        // 회원가입 정보 전송
+        // 회원가입 데이터 객체 생성
         const memberData = {
           id: this.id,
           name: this.name,
           email: this.email,
           password: this.password,
+          address: this.address.address,  // 주소
+          detailAddress: this.detailAddress,  // 상세 주소
         };
 
+        // 회원가입 요청
         const response = await signup(memberData);
         if (response.status === 201) {
-
           alert("회원가입이 완료되었습니다.");
-          this.$router.push({name: "Login"});
+          this.$router.push({name: "Login"});  // 회원가입 후 로그인 페이지로 리다이렉트
         }
       } catch (error) {
         alert("회원가입 중 오류가 발생했습니다.");
-        // this.$router.push({name: "Home"});
       }
     },
-    // 인증번호 전송 TODO : 수정
+    // 인증번호 전송 (추후 수정 필요)
     sendVerificationCode() {
-      console.log("이메일 인증번호 전송")
+      console.log("이메일 인증번호 전송");
     }
   }
 };
