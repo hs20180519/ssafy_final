@@ -12,8 +12,7 @@ const route = useRoute();
 const type = route.query.type;
 const keyword = route.query.keyword;
 
-const lat = ref();
-const lng = ref();
+const clickedItem = ref({});
 
 
 const result = ref([]);
@@ -47,9 +46,8 @@ const getResultList = (type, keyword) => {
     )
 }
 
-const onItemClick = (latitude, longitude) => {
-    lat.value = latitude;
-    lng.value = longitude;
+const onItemClick = (item) => {
+    clickedItem.value = item
 }
 
 </script>
@@ -62,7 +60,7 @@ const onItemClick = (latitude, longitude) => {
         </div>
 
         <div class="map-container">
-        <MapResult :lat="lat" :lng="lng" />
+        <MapResult :clickedItem="clickedItem" />
         </div>
     </div>
 </template>
