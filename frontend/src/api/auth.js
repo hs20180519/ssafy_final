@@ -23,4 +23,14 @@ function findId(param, success, fail) {
   .catch(fail);
 }
 
-export {findId}
+function sendPasswordResetEmail(param, success, fail) {
+  noAuth.post('/auth/password-reset-email', null, {
+    params: {
+      email: param.email
+    }
+  })
+  .then(success)
+  .catch(fail)
+}
+
+export {findId, sendPasswordResetEmail}

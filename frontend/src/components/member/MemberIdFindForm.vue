@@ -15,8 +15,6 @@ const handleSubmit = () => {
             email: email.value
         },
         ({ data }) => {
-            
-            console.log(data);
             emit('onFindId', data);
         },
         (error) => {

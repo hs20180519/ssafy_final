@@ -1,7 +1,22 @@
 <script setup>
+import { ref } from 'vue';
+import { sendPasswordResetEmail } from "@/api/auth";
+
+const userId = ref("");
+const email = ref("");
 
 const handleSubmit = () => {
-    
+    sendPasswordResetEmail(
+        {
+            email: email.value
+        },
+        ({ data }) => {
+            console.log(data);
+        },
+        (error) => {
+            console.log(error);
+        }
+    )
 }
 </script>
 
