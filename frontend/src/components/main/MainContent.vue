@@ -3,11 +3,15 @@
     <div class="logo">The Next Home</div>
     <h1>당신의 다음 집을 검색해보세요</h1>
     <!--    <p>FIND YOUR NEXT HOME</p>-->
-    <div class='search-container'>
-      <SearchBox @onSearch='onSearch'/>
-      <SearchBoxResult v-if="isLoaded" :result="result" class='search-box-result'/>
+    <div class="search-container">
+      <SearchBox @onSearch="onSearch" />
+      <SearchBoxResult
+        v-if="isLoaded"
+        :result="result"
+        class="search-box-result"
+      />
     </div>
-    <div class="auth-links">
+    <div class="auth-links" v-if="!authStore.isLoggedIn">
       <router-link to="/login">로그인</router-link>
       /
       <router-link to="/signup">회원가입</router-link>
@@ -47,19 +51,17 @@ onMounted(() => {
 });
 
 const onSearch = () => {
-    searchKeyword(
-      houseDealStore.keyword,
-        ({ data }) => {
-            result.value = data;
-            isLoaded.value = true;
-        },
-        (error) => {
-            console.log(error);
-        }
-    )
-}
-
-
+  searchKeyword(
+    houseDealStore.keyword,
+    ({ data }) => {
+      result.value = data;
+      isLoaded.value = true;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
 </script>
 
 <style scoped>
@@ -98,5 +100,4 @@ const onSearch = () => {
 .auth-links a:hover {
   text-decoration: underline;
 }
-
 </style>

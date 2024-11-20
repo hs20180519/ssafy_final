@@ -47,33 +47,40 @@ public class AuthController {
 	public ResponseEntity<?> login(@RequestBody
 	LoginRequest request, HttpServletResponse response) {
 		try {
+			// 로그인 처리
 			MemberDto memberDto = authService.login(request);
-			if (memberDto != null) {
-				// Access Token 생성
-				String accessToken = tokenProvider.generateAccessToken(memberDto.getId(), memberDto.getRole());
 
-				// Refresh Token 생성 및 Redis 저장
-				String refreshToken = tokenProvider.generateRefreshToken(memberDto.getId());
-				tokenService.storeRefreshToken(memberDto.getId(), refreshToken);
+			// Access Token 생성
+			String accessToken = tokenProvider.generateAccessToken(memberDto.getId(), memberDto.getRole());
 
-				// 새 Refresh Token을 HTTP-Only 쿠키로 생성
-				Cookie cookie = new Cookie("refreshToken", refreshToken);
-				cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
-				cookie.setPath("/"); // 모든 경로에 대해 유효
-				cookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유효
+			// Refresh Token 생성 및 저장
+			String refreshToken = tokenProvider.generateRefreshToken(memberDto.getId());
+			tokenService.storeRefreshToken(memberDto.getId(), refreshToken);
 
-				response.addCookie(cookie); // 응답에 쿠키 추가
-				// 응답 헤더에 Access Token 포함, Refresh Token은 Body에 포함
-				HttpHeaders headers = new HttpHeaders();
-				headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+			// 새 Refresh Token을 HTTP-Only 쿠키로 생성
+			Cookie cookie = new Cookie("refreshToken", refreshToken);
+			cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
+			cookie.setPath("/"); // 모든 경로에 대해 유효
+			cookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유효
 
-				return ResponseEntity.ok().headers(headers)
-					.body(Map.of("name", memberDto.getName(), "refreshToken", refreshToken));
-			} else {
-				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
-			}
+			response.addCookie(cookie); // 응답에 쿠키 추가
+
+			// 응답 헤더에 Access Token 포함
+			HttpHeaders headers = new HttpHeaders();
+			headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+
+			Map<String, Object> responseBody = Map.of(
+				"name", memberDto.getName(),
+				"refreshToken", refreshToken);
+
+			return ResponseEntity.ok().headers(headers).body(responseBody);
+
+		} catch (IllegalArgumentException e) {
+			// 로그인 실패 (예: 사용자 없음, 비밀번호 불일치)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패: " + e.getMessage());
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+			// 서버 오류
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류: " + e.getMessage());
 		}
 	}
 
@@ -122,10 +129,18 @@ public class AuthController {
 		@ApiResponse(responseCode = "500", description = "서버 오류")
 	})
 	@PostMapping("/logout")
-	public ResponseEntity<?> logout(Authentication authentication) {
+	public ResponseEntity<?> logout(HttpServletResponse response, Authentication authentication) {
 		try {
 			String memberId = (String)authentication.getPrincipal();
 			tokenService.deleteRefreshToken(memberId); // 리프레시 토큰 삭제
+
+			// 쿠키 삭제 (Refresh Token 쿠키)
+			Cookie cookie = new Cookie("refreshToken", null);
+			cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
+			cookie.setPath("/"); // 모든 경로에서 유효
+			cookie.setMaxAge(0); // 쿠키 만료 시간을 0으로 설정하여 삭제
+			response.addCookie(cookie); // 응답에 쿠키 추가
+
 			return ResponseEntity.ok().body("로그아웃 성공");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");

@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import {login} from "@/api/member";
-import {useAuthStore} from "@/stores/authStore";
+import { login } from "@/api/auth";
+import { useAuthStore } from "@/stores/authStore";
 
 export default {
   data() {
@@ -64,7 +64,7 @@ export default {
           authStore.login(accessToken, memberName);
           document.cookie = `refreshToken=${refreshToken}; path=/; HttpOnly`;
           alert("로그인 성공");
-          this.$router.push({name: "Home"}); // 로그인 후 리디렉션
+          this.$router.push({ name: "Home" }); // 로그인 후 리디렉션
         }
       } catch (error) {
         // 로그인 실패 시 처리

@@ -1,13 +1,21 @@
-import {api} from "./Instance/axiosInstance";
-import {authApi} from "@/api/Instance/authInstance.js";
+import { authApi } from "./Instance/authInstance";
 
-const memberApi = api();
-const boardApi = authApi();
+const memberApi = authApi();
 
-export function login(body) {
-  return memberApi.post("/auth/login", body);
+export async function checkPassword(body, success, fail) {
+  return memberApi
+    .post("/member/verify-password", body)
+    .then(success)
+    .catch(fail);
 }
 
-export async function logout() {
-  return boardApi.post("/auth/logout")
-}
+//   export async function getQuestionDetails(questionId) {
+//     return boardApi.get(`/board/questions/${questionId}`).then().catch();
+//   }
+
+//   export async function createAnswer(questionId, content, success, fail) {
+//     return boardApi
+//       .post(`/board/questions/${questionId}/answers`, { content })
+//       .then(success)
+//       .catch(fail);
+//   }
