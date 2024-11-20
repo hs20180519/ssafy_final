@@ -65,7 +65,7 @@ const routes = [
     component: VerifyPasswordPage,
   },
   {
-    path: "/member/:id",
+    path: "/member/edit-profile",
     name: "EditProfile",
     component: MemberEditProfilePage,
   },

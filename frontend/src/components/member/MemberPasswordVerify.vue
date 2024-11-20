@@ -30,15 +30,11 @@ export default {
   methods: {
     async handleSubmit() {
       try {
-        // 비밀번호 확인 API 호출
-        console.log(this.password);
         const isPasswordCorrect = await checkPassword({
           password: this.password,
         });
 
-        console.log(isPasswordCorrect);
         if (isPasswordCorrect) {
-          console.log("여기요");
           this.$router.push({ name: "EditProfile" }); // 회원정보 수정 페이지로 이동
         } else {
           this.errorMessage = "비밀번호가 틀렸습니다.";

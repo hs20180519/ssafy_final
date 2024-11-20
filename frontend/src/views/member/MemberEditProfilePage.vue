@@ -21,6 +21,6 @@ export default {
   flex-direction: column;
   align-items: center;
   /* //padding: 20px; */
-  padding-top: 300px;
+  padding-top: 100px;
 }
 </style>
