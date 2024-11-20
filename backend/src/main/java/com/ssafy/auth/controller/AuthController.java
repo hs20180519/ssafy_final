@@ -129,10 +129,18 @@ public class AuthController {
 		@ApiResponse(responseCode = "500", description = "서버 오류")
 	})
 	@PostMapping("/logout")
-	public ResponseEntity<?> logout(Authentication authentication) {
+	public ResponseEntity<?> logout(HttpServletResponse response, Authentication authentication) {
 		try {
 			String memberId = (String)authentication.getPrincipal();
 			tokenService.deleteRefreshToken(memberId); // 리프레시 토큰 삭제
+
+			// 쿠키 삭제 (Refresh Token 쿠키)
+			Cookie cookie = new Cookie("refreshToken", null);
+			cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
+			cookie.setPath("/"); // 모든 경로에서 유효
+			cookie.setMaxAge(0); // 쿠키 만료 시간을 0으로 설정하여 삭제
+			response.addCookie(cookie); // 응답에 쿠키 추가
+
 			return ResponseEntity.ok().body("로그아웃 성공");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
