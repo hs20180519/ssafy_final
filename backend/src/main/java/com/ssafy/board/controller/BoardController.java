@@ -56,9 +56,7 @@ public class BoardController {
 	public ResponseEntity<String> createQuestion(@RequestBody
 	BoardQuestionDto question, Authentication authentication) {
 		try {
-			System.out.println(authentication.getPrincipal());
 			question.setAuthor((String)authentication.getPrincipal());
-			System.out.println(question);
 			boardService.createQuestion(question);
 			return ResponseEntity.status(HttpStatus.CREATED).body("질문이 등록되었습니다.");
 		} catch (Exception e) {

@@ -106,8 +106,6 @@ export default {
       }
 
       try {
-        // 비밀번호가 비어있지 않으면 함께 전송
-        console.log(this.form);
         // confirmPassword를 제외한 새로운 객체 생성
         const { confirmPassword, email, id, ...dataToSend } = this.form;
 

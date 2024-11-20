@@ -52,7 +52,6 @@ public class MemberController {
 			}
 
 			String password = passwordRequest.getPassword();
-			System.out.println(password + " " + memberDto.getPassword());
 			// 비밀번호 검증
 			if (memberService.verifyPassword(password, memberDto.getPassword())) {
 				return ResponseEntity.ok("비밀번호 확인 성공");
@@ -81,7 +80,6 @@ public class MemberController {
 			memberDto.setId((String)authentication.getPrincipal());
 			memberDto.setRole(role);
 
-			System.out.println(memberDto);
 			memberService.updateMember(memberDto);
 			return ResponseEntity.ok(memberDto);
 		} catch (Exception e) {
