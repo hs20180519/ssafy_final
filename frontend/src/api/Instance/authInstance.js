@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const {VITE_VUE_API_URL} = import.meta.env;
-import {useAuthStore} from "@/stores/authStore";
+const { VITE_VUE_API_URL } = import.meta.env;
+import { useAuthStore } from "@/stores/authStore";
 
 export const authApi = () => {
   const instance = axios.create({
@@ -17,6 +17,8 @@ export const authApi = () => {
     (config) => {
       const authStore = useAuthStore();
       const token = authStore.getAuthToken;
+
+      console.log(token);
       if (token) {
         config.headers["Authorization"] = `Bearer ${token}`;
       }
@@ -43,9 +45,10 @@ export const authApi = () => {
           const response = await axios.post(
             `${VITE_VUE_API_URL}/auth/refresh`, // 서버의 토큰 재발급 API
             {},
-            {withCredentials: true} // 쿠키 포함 설정
+            { withCredentials: true } // 쿠키 포함 설정
           );
 
+          console.log("새로 발급받다");
           // 새로 발급받은 Access Token
           const newAccessToken = response.headers["authorization"].replace(
             "Bearer ",
@@ -60,8 +63,9 @@ export const authApi = () => {
 
           return axios(originalRequest);
         } catch (refreshError) {
+          const authStore = useAuthStore();
           console.error("토큰 갱신 실패", refreshError);
-
+          authStore.logout();
         }
       }
 

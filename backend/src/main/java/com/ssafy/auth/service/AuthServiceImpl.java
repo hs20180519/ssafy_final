@@ -10,6 +10,7 @@ import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.member.model.mapper.MemberMapper;
 import com.ssafy.util.MailSenderUtil;
+import com.ssafy.util.PasswordUtil;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
@@ -33,12 +34,11 @@ public class AuthServiceImpl implements AuthService {
 		if (member == null) {
 			throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
 		}
-
 		// 비밀번호 검증
-		if (!passwordEncoder.matches(loginInfo.getPassword(), member.getPassword())) {
+
+		if (!PasswordUtil.verifyPassword(loginInfo.getPassword(), member.getPassword())) {
 			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
 		}
-
 		return member;
 	}
 

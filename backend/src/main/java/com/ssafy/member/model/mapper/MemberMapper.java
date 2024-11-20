@@ -10,8 +10,6 @@ import com.ssafy.member.model.MemberDto;
 
 @Mapper
 public interface MemberMapper {
-	//	MemberDto getMember(LoginRequest loginInfo) throws SQLException;
-
 	MemberDto getMemberByNameAndEmail(@Param("name")
 	String name, @Param("email")
 	String email);

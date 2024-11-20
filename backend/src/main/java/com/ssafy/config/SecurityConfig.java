@@ -1,7 +1,5 @@
 package com.ssafy.config;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
@@ -38,10 +36,10 @@ public class SecurityConfig {
 			.cors(corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource()))
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-				.requestMatchers("/api/auth/**", "/api/auth/signup", "/swagger-ui/**").permitAll()
+				.requestMatchers("/api/auth/**", "/api/auth/signup", "/swagger-ui/**", "/api/dong-code/**").permitAll()
 				.anyRequest().authenticated())
 			.formLogin(AbstractHttpConfigurer::disable)
-			.httpBasic(withDefaults())
+			.httpBasic(AbstractHttpConfigurer::disable)
 			.logout(logout -> logout
 				.logoutUrl("/api/member/logout")
 				.logoutSuccessUrl("/api/member/login?logout=true"))
@@ -56,7 +54,7 @@ public class SecurityConfig {
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
 		config.setAllowedOrigins(List.of("http://localhost:8080")); // Vue 프론트엔드 주소
-		config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
+		config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With, Set-c"));
 		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		config.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
 		source.registerCorsConfiguration("/**", config);
