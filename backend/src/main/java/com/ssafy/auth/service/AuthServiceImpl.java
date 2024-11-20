@@ -88,7 +88,10 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public String findId(String name, String email) {
 		MemberDto member = memberMapper.getMemberByNameAndEmail(name, email);
-		return member.getId();
+		if(member != null) {
+			return member.getId();
+		}
+		return "";
 	}
 
 	@Override
