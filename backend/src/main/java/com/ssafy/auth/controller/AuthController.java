@@ -154,6 +154,7 @@ public class AuthController {
 	public ResponseEntity<String> signup(@RequestBody
 	MemberDto memberDto) {
 		try {
+			System.out.println(memberDto);
 			authService.signUp(memberDto);
 			return ResponseEntity.status(HttpStatus.CREATED).body("회원 가입이 완료되었습니다. 로그인 해주세요.");
 		} catch (Exception e) {

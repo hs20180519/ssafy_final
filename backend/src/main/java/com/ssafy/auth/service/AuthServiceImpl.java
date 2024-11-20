@@ -51,7 +51,6 @@ public class AuthServiceImpl implements AuthService {
 		if (memberDto.getRole() == null || memberDto.getRole().isEmpty()) {
 			memberDto.setRole("USER"); // 기본값으로 "USER" 설정
 		}
-
 		memberMapper.insertMember(memberDto);
 	}
 
