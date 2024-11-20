@@ -6,7 +6,6 @@ import MemberLoginPage from "@/views/MemberLoginPage.vue";
 import MemberSignUpPage from "@/views/MemberSignUpPage.vue";
 
 // board
-import BoardAnswersPage from "@/views/board/BoardAnswersPage.vue";
 import BoardListPage from "@/views/board/BoardListPage.vue";
 import BoardQuestionDetailsPage from "@/views/board/BoardQuestionDetailsPage.vue";
 import CreateQuestionPage from "@/views/board/CreateQuestionPage.vue";
@@ -49,12 +48,6 @@ const routes = [
     path: '/board/create',
     name: 'CreateQuestion',
     component: CreateQuestionPage,
-  },
-  {
-    path: '/board/questions/:questionId/answers',
-    name: 'BoardAnswers',
-    component: BoardAnswersPage,
-    props: true, // URL 경로 파라미터를 props로 전달
   },
 ];
 

@@ -20,7 +20,7 @@
   
   <style scoped>
   .board-list-page {
-    padding: 20px;
+    padding: 120px;
   }
   </style>
   

@@ -18,8 +18,9 @@
   </template>
   
   <script>
-  import axios from 'axios';
-  import BoardListItem from '@/components/board/item/BoardListItem.vue';
+  import BoardListItem from '@/components/board/BoardListItem.vue';
+  import { useAuthStore } from '@/stores/authStore';
+  import { getQuestions } from "@/api/board";
   
   export default {
     name: 'BoardList',
@@ -37,7 +38,9 @@
     methods: {
       async fetchQuestions() {
         try {
-          const response = await axios.get('http://localhost:80/api/board/questions');
+          const authStore = useAuthStore();
+          const token = authStore.getAuthToken;
+          const response = await getQuestions(token);
           this.questions = response.data;
         } catch (error) {
           console.error('질문 목록을 가져오는 중 오류 발생:', error);

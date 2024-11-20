@@ -96,9 +96,13 @@ public class BoardController {
 			// 질문을 조회하여 작성자 정보 가져오기
 			BoardQuestionDto existingQuestion = boardService.getQuestionById(id);
 
+			String role = (authentication.getAuthorities().stream()
+				.map(authority -> authority.getAuthority())
+				.findFirst()
+				.orElse("No Authority"));
 			// 작성자와 현재 로그인된 사용자 비교
 			if (!existingQuestion.getAuthor().equals(authentication.getPrincipal())
-				&& !authentication.getAuthorities().contains("ROLE_admin")) {
+				&& !role.contains("ROLE_admin")) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("작성자가 아니므로 수정할 수 없습니다.");
 			}
 			boardService.deleteQuestion(id);
