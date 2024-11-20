@@ -21,7 +21,6 @@ import 'element-plus/dist/index.css'
 
 library.add(faHouse, faUser, faCircleInfo, faStar, faMagnifyingGlass);
 
-<<<<<<< HEAD
 useKakao(import.meta.env.VITE_KAKAO_APP_KEY)
 
 const app = createApp(App)
@@ -31,11 +30,3 @@ app.use(router)
 
 
 app.mount('#app')
-=======
-const app = createApp(App);
-app.component("font-awesome-icon", FontAwesomeIcon);
-app.use(createPinia());
-app.use(router);
-
-app.mount("#app");
->>>>>>> fe24f83 (:sparkles: Feat: 질문 게시글 조회/작성, 답변 조회/작성)

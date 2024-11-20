@@ -1,5 +1,5 @@
 <script setup>
-import { TabsPaneContext } from 'element-plus';
+// import { TabsPaneContext } from 'element-plus';
 import { ref } from 'vue'
 
 const activeName = ref("findId")
@@ -7,11 +7,11 @@ const activeName = ref("findId")
 
 <template>
     <div>
-        <!-- {{ activeName }} -->
-        <el-tabs v-model="activeName">
+        {{ activeName }}
+        <!-- <el-tabs v-model="activeName">
             <el-tab-pane label="findId" name="findId">아이디 찾기</el-tab-pane>
             <el-tab-pane label="findPassword" name="findPassword">비밀번호 찾기</el-tab-pane>
-        </el-tabs>
+        </el-tabs> -->
     </div>
 </template>
 
