@@ -15,7 +15,8 @@ import MemberFindPage from "@/views/member/MemberFindPage.vue";
 // member
 import MemberPasswordResetPage from "@/views/member/MemberPasswordResetPage.vue";
 import VerifyPasswordPage from "@/views/member/MemberVerifyPasswordPage.vue";
-import MemberEditProfilePage from "@/views/member/MemberEditProfilePage.vue";
+// import MemberEditProfilePage from "@/views/member/MemberEditProfilePage.vue";
+import MyPage from "@/views/member/MyPage.vue";
 
 const routes = [
   {
@@ -64,7 +65,7 @@ const routes = [
   {
     path: "/forgot-password-id",
     name: "MemberFind",
-    component: MemberFindPage
+    component: MemberFindPage,
   },
   {
     path: "/member/verify-password",
@@ -72,15 +73,20 @@ const routes = [
     component: VerifyPasswordPage,
   },
   {
-    path:"/auth/password-reset-verification",
+    path: "/auth/password-reset-verification",
     name: "PasswordReset",
     component: MemberPasswordResetPage,
-    props: true
+    props: true,
   },
+  // {
+  //   path: "/member/edit-profile",
+  //   name: "EditProfile",
+  //   component: MemberEditProfilePage,
+  // },
   {
     path: "/member/edit-profile",
     name: "EditProfile",
-    component: MemberEditProfilePage,
+    component: MyPage,
   },
 ];
 

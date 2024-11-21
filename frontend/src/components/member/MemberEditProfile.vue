@@ -1,6 +1,5 @@
 <template>
   <div class="edit-profile-page">
-    <h1>회원 정보 수정</h1>
     <form @submit.prevent="handleSubmit">
       <!-- 아이디 -->
       <div class="input-group">
@@ -131,8 +130,6 @@ export default {
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
   border-radius: 8px;
 }
 
