@@ -1,6 +1,5 @@
 package com.ssafy.auth.controller;
 
-
 import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
@@ -8,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CookieValue;
-//import org.springframework.security.core.token.TokenService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.auth.model.request.LoginRequest;
 import com.ssafy.auth.model.request.ResetPasswordRequest;
+import com.ssafy.auth.model.request.SignUpRequest;
 import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.auth.service.AuthService;
@@ -31,7 +30,6 @@ import com.ssafy.token.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -159,9 +157,9 @@ public class AuthController {
 		@ApiResponse(responseCode = "500", description = "서버 오류 - 회원 가입 중 오류 발생")})
 	@PostMapping("/signup")
 	public ResponseEntity<String> signup(@RequestBody
-	MemberDto memberDto) {
+	SignUpRequest signUpRequest) {
 		try {
-			authService.signUp(memberDto);
+			authService.signUp(signUpRequest);
 			return ResponseEntity.status(HttpStatus.CREATED).body("회원 가입이 완료되었습니다. 로그인 해주세요.");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 가입 중 오류가 발생했습니다.");
@@ -169,7 +167,8 @@ public class AuthController {
 	}
 
 	@PostMapping("/signup-email")
-	public ResponseEntity<String> sendSignUpMail(@RequestParam String email) throws MessagingException {
+	public ResponseEntity<String> sendSignUpMail(@RequestParam
+	String email) throws MessagingException {
 		return ResponseEntity.ok(authService.sendSignUpMail(email));
 	}
 
@@ -201,7 +200,8 @@ public class AuthController {
 	}
 
 	@PutMapping("/password")
-	public ResponseEntity<Void> rupdatePassword(@RequestBody ResetPasswordRequest request) {
+	public ResponseEntity<Void> updatePassword(@RequestBody
+	ResetPasswordRequest request) {
 		authService.updatePassword(request);
 		return ResponseEntity.ok().build();
 	}

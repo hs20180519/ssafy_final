@@ -42,7 +42,7 @@ export default {
       authStore.logout();
 
       alert("로그아웃 되었습니다.");
-      this.$router.push("/"); // 메인 페이지로 이동
+      this.$router.push({ name: "Home" }); // 메인 페이지로 이동
     },
   },
 };
