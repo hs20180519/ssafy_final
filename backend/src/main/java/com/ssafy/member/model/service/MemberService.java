@@ -6,7 +6,6 @@ import java.util.List;
 import com.ssafy.member.model.MemberDto;
 
 public interface MemberService {
-
 	void updateMember(MemberDto memberDto) throws SQLException;
 
 	MemberDto findMemberByMemberId(String memberId) throws SQLException;
@@ -18,4 +17,6 @@ public interface MemberService {
 	List<MemberDto> getAllMembers() throws SQLException;
 
 	List<MemberDto> searchMembers(String memberId) throws SQLException;
+	
+	boolean existsByEmailAndId(String email, String id);
 }

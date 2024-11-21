@@ -10,8 +10,10 @@ import BoardListPage from "@/views/board/BoardListPage.vue";
 import BoardQuestionDetailsPage from "@/views/board/BoardQuestionDetailsPage.vue";
 import CreateQuestionPage from "@/views/board/CreateQuestionPage.vue";
 import EditQuestionPage from "@/views/board/EditQuestionPage.vue";
+import MemberFindPage from "@/views/member/MemberFindPage.vue";
 
 // member
+import MemberPasswordResetPage from "@/views/member/MemberPasswordResetPage.vue";
 import VerifyPasswordPage from "@/views/member/MemberVerifyPasswordPage.vue";
 import MemberEditProfilePage from "@/views/member/MemberEditProfilePage.vue";
 
@@ -60,9 +62,20 @@ const routes = [
     component: CreateQuestionPage,
   },
   {
+    path: "/forgot-password-id",
+    name: "MemberFind",
+    component: MemberFindPage
+  },
+  {
     path: "/member/verify-password",
     name: "VerifyPassword",
     component: VerifyPasswordPage,
+  },
+  {
+    path:"/auth/password-reset-verification",
+    name: "PasswordReset",
+    component: MemberPasswordResetPage,
+    props: true
   },
   {
     path: "/member/edit-profile",

@@ -115,7 +115,6 @@ public class BoardController {
 				&& !role.contains("ROLE_admin")) {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("작성자가 아니므로 수정할 수 없습니다.");
 			}
-
 			boardService.deleteQuestion(id);
 			return ResponseEntity.ok("질문이 삭제되었습니다.");
 		} catch (Exception e) {

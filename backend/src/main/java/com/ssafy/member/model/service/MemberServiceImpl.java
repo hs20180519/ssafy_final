@@ -53,4 +53,12 @@ public class MemberServiceImpl implements MemberService {
 		return memberMapper.searchMembers(memberId);
 	}
 
+	@Override
+	public boolean existsByEmailAndId(String email, String id) {
+		if(memberMapper.getMemberCountByEmailAndId(email, id) == 0) {
+			return false;
+		}
+		return true;
+	}
+
 }
