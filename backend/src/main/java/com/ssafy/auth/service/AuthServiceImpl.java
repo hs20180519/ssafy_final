@@ -3,17 +3,19 @@ package com.ssafy.auth.service;
 import java.sql.SQLException;
 import java.time.Duration;
 
-import com.ssafy.auth.model.request.ResetPasswordRequest;
-import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.auth.model.request.LoginRequest;
+import com.ssafy.auth.model.request.ResetPasswordRequest;
+import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.email.service.PasswordResetEmailService;
 import com.ssafy.email.service.SignUpEmailService;
+import com.ssafy.exception.ApiException;
+import com.ssafy.exception.ErrorCode;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.member.model.mapper.MemberMapper;
 import com.ssafy.member.model.service.MemberService;
@@ -98,8 +100,7 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public String sendResetPasswordEmail(SendResetPasswordEmailRequest request) throws MessagingException {
 		if(!memberService.existsByEmailAndId(request.getEmail(), request.getId())) {
-			// TODO: exception 처리
-			return null;
+			throw new ApiException(ErrorCode.MEMBER_NOT_FOUND);
 		}
 
 		String uuid = passwordResetEmailService.send(request.getEmail());
