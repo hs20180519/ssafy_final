@@ -1,6 +1,7 @@
 package com.ssafy.auth.service;
 
 import java.sql.SQLException;
+import java.time.Duration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -12,9 +13,8 @@ import com.ssafy.address.model.AddressDto;
 import com.ssafy.address.model.mapper.AddressMapper;
 import com.ssafy.auth.model.request.LoginRequest;
 import com.ssafy.auth.model.request.ResetPasswordRequest;
-import com.ssafy.auth.model.request.SignUpRequest;
-import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
+import com.ssafy.auth.model.request.SignUpRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.email.service.PasswordResetEmailService;
 import com.ssafy.email.service.SignUpEmailService;
@@ -22,8 +22,10 @@ import com.ssafy.exception.ApiException;
 import com.ssafy.exception.ErrorCode;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.member.model.mapper.MemberMapper;
+import com.ssafy.member.model.service.MemberService;
 import com.ssafy.util.PasswordUtil;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -31,11 +33,21 @@ import lombok.RequiredArgsConstructor;
 public class AuthServiceImpl implements AuthService {
 
 	//	MailSenderUtil mailSenderUtil;
+	private final SignUpEmailService signUpEmailService;
+	private final PasswordResetEmailService passwordResetEmailService;
 	private final AddressMapper addressMapper;
+	private final MemberService memberService;
 	private final MemberMapper memberMapper;
+	private final StringRedisTemplate redisTemplate;
+	private final BCryptPasswordEncoder passwordEncoder;
 
-	private final String VERIFICATION_SIGNUP_CODE = "verificationSignUpCode";
-	private final String VERIFICATION_SIGNUP_EMAIL = "verificationSignUpEmail";
+	private final String VERIFICATION_SIGNUP = "signup: ";
+	private final String VERIFICATION_PASSWORD_RESET = "passwordReset: ";
+
+	@Value("${smtp.reset_password.expiration_time}")
+	private long resetPasswordExpirationTime;
+	@Value("${smtp.signup.expiration_time}")
+	private long signUpExpirationTime;
 
 	@Override
 	public MemberDto login(LoginRequest loginInfo) throws SQLException {
@@ -83,22 +95,18 @@ public class AuthServiceImpl implements AuthService {
 
 	}
 
-	public int sendSignUpMail(String mail, HttpSession session) throws MessagingException {
-		int code = mailSenderUtil.sendMail(mail);
-		session.setAttribute(VERIFICATION_SIGNUP_CODE, code);
-		session.setAttribute(VERIFICATION_SIGNUP_EMAIL, mail);
+	@Override
+	public String sendSignUpMail(String email) throws MessagingException {
+		String code = signUpEmailService.send(email);
+
+		redisTemplate.opsForValue().set(VERIFICATION_SIGNUP + code, email);
 		return code;
 	}
 
 	@Override
-	public boolean verifySignUpCode(SignUpVerificationRequest request, HttpSession session) {
-		String stored = session.getAttribute(VERIFICATION_SIGNUP_CODE).toString();
-		String email = (String)session.getAttribute(VERIFICATION_SIGNUP_EMAIL);
-
-		if ((stored != null && stored.equals(request.getCode())) &&
-			(email != null && email.equals(request.getEmail()))) {
-			session.removeAttribute(VERIFICATION_SIGNUP_CODE);
-			session.removeAttribute(VERIFICATION_SIGNUP_EMAIL);
+	public boolean verifySignUpCode(SignUpVerificationRequest request) {
+		String email = redisTemplate.opsForValue().get(VERIFICATION_SIGNUP + request.getCode());
+		if (email != null && email.equals(request.getEmail())) {
 			return true;
 		}
 		return false;
@@ -107,19 +115,22 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public String findId(String name, String email) {
 		MemberDto member = memberMapper.getMemberByNameAndEmail(name, email);
-		return member.getId();
+		if (member != null) {
+			return member.getId();
+		}
+		return "";
 	}
 
 	@Override
 	public String sendResetPasswordEmail(SendResetPasswordEmailRequest request) throws MessagingException {
-		if(!memberService.existsByEmailAndId(request.getEmail(), request.getId())) {
+		if (!memberService.existsByEmailAndId(request.getEmail(), request.getId())) {
 			throw new ApiException(ErrorCode.MEMBER_NOT_FOUND);
 		}
 
 		String uuid = passwordResetEmailService.send(request.getEmail());
 
 		redisTemplate.opsForValue().set(VERIFICATION_PASSWORD_RESET + uuid, request.getEmail(),
-				Duration.ofMillis(resetPasswordExpirationTime));
+			Duration.ofMillis(resetPasswordExpirationTime));
 
 		return uuid;
 	}
@@ -127,7 +138,7 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public boolean verifyResetPasswordCode(String uuid) {
 		String email = redisTemplate.opsForValue().get(VERIFICATION_PASSWORD_RESET + uuid);
-		if(email == null) {
+		if (email == null) {
 			return false;
 		}
 
@@ -135,11 +146,11 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-    public void updatePassword(ResetPasswordRequest request) {
-        if(request.getConfirmNewPassword().equals(request.getNewPassword())) {
-            memberMapper.updatePassword(request.getEmail(), passwordEncoder.encode(request.getNewPassword()));
-            redisTemplate.delete(VERIFICATION_PASSWORD_RESET + request.getUuid());
-        }
-    }
+	public void updatePassword(ResetPasswordRequest request) {
+		if (request.getConfirmNewPassword().equals(request.getNewPassword())) {
+			memberMapper.updatePassword(request.getEmail(), passwordEncoder.encode(request.getNewPassword()));
+			redisTemplate.delete(VERIFICATION_PASSWORD_RESET + request.getUuid());
+		}
+	}
 
 }

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.auth.model.request.LoginRequest;
 import com.ssafy.auth.model.request.ResetPasswordRequest;
-import com.ssafy.auth.model.request.SignUpRequest;
 import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
+import com.ssafy.auth.model.request.SignUpRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.auth.service.AuthService;
 import com.ssafy.exception.ApiException;
@@ -30,6 +30,7 @@ import com.ssafy.token.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -184,9 +185,10 @@ public class AuthController {
 	String email) {
 		return ResponseEntity.ok(authService.findId(name, email));
 	}
-	
+
 	@PostMapping("/password-reset-email")
-	public ResponseEntity<String> sendResetPasswordEmail(@RequestBody SendResetPasswordEmailRequest request) {
+	public ResponseEntity<String> sendResetPasswordEmail(@RequestBody
+	SendResetPasswordEmailRequest request) {
 		try {
 			return ResponseEntity.ok(authService.sendResetPasswordEmail(request));
 		} catch (MessagingException e) {
@@ -195,14 +197,16 @@ public class AuthController {
 	}
 
 	@PostMapping("/password-reset-verification")
-	public ResponseEntity<Boolean> verifyResetPasswordCode(@RequestParam("uuid") String uuid) {
+	public ResponseEntity<Boolean> verifyResetPasswordCode(@RequestParam("uuid")
+	String uuid) {
 		return ResponseEntity.ok(authService.verifyResetPasswordCode(uuid));
 	}
 
 	@PutMapping("/password")
-	public ResponseEntity<Void> updatePassword(@RequestBody
+	public ResponseEntity<Void> rupdatePassword(@RequestBody
 	ResetPasswordRequest request) {
 		authService.updatePassword(request);
 		return ResponseEntity.ok().build();
 	}
+
 }
