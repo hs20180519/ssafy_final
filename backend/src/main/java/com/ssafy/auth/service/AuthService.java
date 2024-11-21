@@ -27,5 +27,5 @@ public interface AuthService {
 
 	public boolean verifyResetPasswordCode(String uuid);
 
-	public void resetPassword(ResetPasswordRequest request);
+	public void updatePassword(ResetPasswordRequest request);
 }

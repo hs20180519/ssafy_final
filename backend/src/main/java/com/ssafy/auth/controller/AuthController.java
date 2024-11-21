@@ -197,8 +197,8 @@ public class AuthController {
 	}
 
 	@PutMapping("/password")
-	public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordRequest request) {
-		authService.resetPassword(request);
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<Void> rupdatePassword(@RequestBody ResetPasswordRequest request) {
+		authService.updatePassword(request);
+		return ResponseEntity.ok().build();
 	}
 }

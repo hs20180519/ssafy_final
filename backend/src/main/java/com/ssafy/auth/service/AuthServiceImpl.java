@@ -121,9 +121,9 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public void resetPassword(ResetPasswordRequest request) {
+	public void updatePassword(ResetPasswordRequest request) {
 		if(request.getConfirmNewPassword().equals(request.getNewPassword())) {
-			memberMapper.updatePassword(request.getEmail(), request.getNewPassword());
+			memberMapper.updatePassword(request.getEmail(), passwordEncoder.encode(request.getNewPassword()));
 			redisTemplate.delete(VERIFICATION_PASSWORD_RESET + request.getUuid());
 		}
 	}
