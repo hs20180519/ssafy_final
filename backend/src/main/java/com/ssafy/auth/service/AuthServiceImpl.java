@@ -1,45 +1,32 @@
 package com.ssafy.auth.service;
 
 import java.sql.SQLException;
-import java.time.Duration;
 
-import com.ssafy.auth.model.request.ResetPasswordRequest;
-import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.address.model.AddressDto;
+import com.ssafy.address.model.mapper.AddressMapper;
 import com.ssafy.auth.model.request.LoginRequest;
+import com.ssafy.auth.model.request.ResetPasswordRequest;
+import com.ssafy.auth.model.request.SignUpRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
-import com.ssafy.email.service.PasswordResetEmailService;
-import com.ssafy.email.service.SignUpEmailService;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.member.model.mapper.MemberMapper;
-import com.ssafy.member.model.service.MemberService;
 import com.ssafy.util.PasswordUtil;
 
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-	private final SignUpEmailService signUpEmailService;
-	private final PasswordResetEmailService passwordResetEmailService;
-	private final MemberService memberService;
+	//	MailSenderUtil mailSenderUtil;
+	private final AddressMapper addressMapper;
 	private final MemberMapper memberMapper;
-	private final StringRedisTemplate redisTemplate;
-	private final BCryptPasswordEncoder passwordEncoder; // 비밀번호 해시
 
-	private final String VERIFICATION_SIGNUP = "signup: ";
-	private final String VERIFICATION_PASSWORD_RESET = "passwordReset: ";
-
-	@Value("${smtp.reset_password.expiration_time}")
-	private long resetPasswordExpirationTime;
-	@Value("${smtp.signup.expiration_time}")
-	private long signUpExpirationTime;
+	private final String VERIFICATION_SIGNUP_CODE = "verificationSignUpCode";
+	private final String VERIFICATION_SIGNUP_EMAIL = "verificationSignUpEmail";
 
 	@Override
 	public MemberDto login(LoginRequest loginInfo) throws SQLException {
@@ -56,76 +43,69 @@ public class AuthServiceImpl implements AuthService {
 		return member;
 	}
 
+	@Transactional
 	@Override
-	public void signUp(MemberDto memberDto) throws SQLException {
-		String hashedPassword = passwordEncoder.encode(memberDto.getPassword());
-		memberDto.setPassword(hashedPassword);
-
+	public void signUp(SignUpRequest signUpRequest) throws SQLException {
 		// 기본 역할 설정
-		if (memberDto.getRole() == null || memberDto.getRole().isEmpty()) {
-			memberDto.setRole("USER"); // 기본값으로 "USER" 설정
-		}
+		MemberDto memberDto = new MemberDto();
+		memberDto.setId(signUpRequest.getId());
+		memberDto.setEmail(signUpRequest.getEmail());
+		memberDto.setName(signUpRequest.getName());
+		String hashedPassword = PasswordUtil.encodePassword(signUpRequest.getPassword());
+		memberDto.setPassword(hashedPassword);
+		memberDto.setRole("USER"); // 기본값으로 "USER" 설정
+
 		memberMapper.insertMember(memberDto);
-	}
 
-	@Override
-	public String sendSignUpMail(String email) throws MessagingException {
-		String code = signUpEmailService.send(email);
+		// 기본 주소 저장
+		if (signUpRequest.getAddress() != null) {
+			AddressDto addressDto = new AddressDto();
+			addressDto.setMemberId(memberDto.getId());
+			addressDto.setName("기본 주소");
+			addressDto.setRoadNameAddress(signUpRequest.getAddress());
 
-		redisTemplate.opsForValue().set(VERIFICATION_SIGNUP + code, email);
-		return code;
-	}
-
-	@Override
-	public boolean verifySignUpCode(SignUpVerificationRequest request) {
-		String email = redisTemplate.opsForValue().get(VERIFICATION_SIGNUP + request.getCode());
-		if(email != null && email.equals(request.getEmail())) {
-			return true;
+			addressMapper.insertAddress(addressDto);
 		}
-		return false;
+
 	}
+	//
+	//	public int sendSignUpMail(String mail, HttpSession session) throws MessagingException {
+	//		int code = mailSenderUtil.sendMail(mail);
+	//		session.setAttribute(VERIFICATION_SIGNUP_CODE, code);
+	//		session.setAttribute(VERIFICATION_SIGNUP_EMAIL, mail);
+	//		return code;
+	//	}
+	//
+	//	@Override
+	//	public boolean verifySignUpCode(SignUpVerificationRequest request, HttpSession session) {
+	//		String stored = session.getAttribute(VERIFICATION_SIGNUP_CODE).toString();
+	//		String email = (String)session.getAttribute(VERIFICATION_SIGNUP_EMAIL);
+	//
+	//		if ((stored != null && stored.equals(request.getCode())) &&
+	//			(email != null && email.equals(request.getEmail()))) {
+	//			session.removeAttribute(VERIFICATION_SIGNUP_CODE);
+	//			session.removeAttribute(VERIFICATION_SIGNUP_EMAIL);
+	//			return true;
+	//		}
+	//		return false;
+	//	}
 
 	@Override
 	public String findId(String name, String email) {
 		MemberDto member = memberMapper.getMemberByNameAndEmail(name, email);
-		if(member != null) {
-			return member.getId();
-		}
-		return "";
+		return member.getId();
 	}
 
 	@Override
-	public String sendResetPasswordEmail(SendResetPasswordEmailRequest request) throws MessagingException {
-		if(!memberService.existsByEmailAndId(request.getEmail(), request.getId())) {
-			// TODO: exception 처리
-			return null;
-		}
-
-		String uuid = passwordResetEmailService.send(request.getEmail());
-
-		redisTemplate.opsForValue().set(VERIFICATION_PASSWORD_RESET + uuid, request.getEmail(),
-				Duration.ofMillis(resetPasswordExpirationTime));
-
-		return uuid;
-	}
-
-	@Override
-	public boolean verifyResetPasswordCode(String uuid) {
-		String email = redisTemplate.opsForValue().get(VERIFICATION_PASSWORD_RESET + uuid);
-		if(email == null) {
-			return false;
-		}
-
-		return true;
+	public boolean verifySignUpCode(SignUpVerificationRequest request) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
 	public void updatePassword(ResetPasswordRequest request) {
-		if(request.getConfirmNewPassword().equals(request.getNewPassword())) {
-			memberMapper.updatePassword(request.getEmail(), passwordEncoder.encode(request.getNewPassword()));
-			redisTemplate.delete(VERIFICATION_PASSWORD_RESET + request.getUuid());
-		}
-	}
+		// TODO Auto-generated method stub
 
+	}
 
 }

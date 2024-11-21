@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.address.model.mapper.AddressMapper">
+
+	<insert id="insertAddress" parameterType="AddressDto">
+	    INSERT INTO addresses (memberId, name, roadNameAddress)
+	    VALUES (#{memberId}, #{name}, #{roadNameAddress})
+	</insert>
+
+	<select id="selectAddressesByMemberId" parameterType="String" resultType="AddressDto">
+	    SELECT * FROM addresses WHERE memberId = #{memberId}
+	</select>
+</mapper>

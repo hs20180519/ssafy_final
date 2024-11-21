@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.auth.model.request.LoginRequest;
 import com.ssafy.auth.model.request.ResetPasswordRequest;
-import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
 import com.ssafy.auth.model.request.SignUpRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.auth.service.AuthService;
@@ -29,7 +28,6 @@ import com.ssafy.token.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -165,11 +163,11 @@ public class AuthController {
 		}
 	}
 
-	@PostMapping("/signup-email")
-	public ResponseEntity<String> sendSignUpMail(@RequestParam
-	String email) throws MessagingException {
-		return ResponseEntity.ok(authService.sendSignUpMail(email));
-	}
+	//	@PostMapping("/signup-email")
+	//	public ResponseEntity<String> sendSignUpMail(@RequestParam
+	//	String email) throws MessagingException {
+	//		return ResponseEntity.ok(authService.sendSignUpMail(email));
+	//	}
 
 	@PostMapping("/signup-verification")
 	public ResponseEntity<Boolean> verifySignUpCode(@RequestBody
@@ -183,22 +181,22 @@ public class AuthController {
 	String email) {
 		return ResponseEntity.ok(authService.findId(name, email));
 	}
-
-	@PostMapping("/password-reset-email")
-	public ResponseEntity<String> sendResetPasswordEmail(@RequestBody
-	SendResetPasswordEmailRequest request) {
-		try {
-			return ResponseEntity.ok(authService.sendResetPasswordEmail(request));
-		} catch (MessagingException e) {
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("서버 오류");
-		}
-	}
-
-	@PostMapping("/password-reset-verification")
-	public ResponseEntity<Boolean> verifyResetPasswordCode(@RequestParam("uuid")
-	String uuid) {
-		return ResponseEntity.ok(authService.verifyResetPasswordCode(uuid));
-	}
+	//
+	//	@PostMapping("/password-reset-email")
+	//	public ResponseEntity<String> sendResetPasswordEmail(@RequestBody
+	//	SendResetPasswordEmailRequest request) {
+	//		try {
+	//			return ResponseEntity.ok(authService.sendResetPasswordEmail(request));
+	//		} catch (MessagingException e) {
+	//			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("서버 오류");
+	//		}
+	//	}
+	//
+	//	@PostMapping("/password-reset-verification")
+	//	public ResponseEntity<Boolean> verifyResetPasswordCode(@RequestParam("uuid")
+	//	String uuid) {
+	//		return ResponseEntity.ok(authService.verifyResetPasswordCode(uuid));
+	//	}
 
 	@PutMapping("/password")
 	public ResponseEntity<Void> rupdatePassword(@RequestBody
