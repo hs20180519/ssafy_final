@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.houseDeal.model.HouseDealDto;
+import com.ssafy.houseDeal.model.request.GetHouseDealRequest;
 import com.ssafy.houseDeal.model.service.HouseDealService;
-import com.ssafy.houseDeal.request.GetHouseDealRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -44,15 +44,19 @@ public class HouseDealController {
     		@RequestParam("sidoCode") String sidoCode,
     		@RequestParam("gugunCode") String gugunCode,
     		@RequestParam("dongCode") String dongCode,
-    		@RequestParam("keyword") String keyword) {
+    		@RequestParam("keyword") String keyword
+//    		@RequestParam("pgSize") int pgSize,
+//    		@RequestParam(name = "pgno", defaultValue = "1") int pgno
+    		) {
     	GetHouseDealRequest request = GetHouseDealRequest.builder()
     			.dongCode(dongCode)
     			.gugunCode(gugunCode)
     			.dongCode(dongCode)
     			.keyword(keyword)
+//    			.pgSize(pgSize)
+//    			.pgno(pgno)
     			.build();
     	
-    	// 파라미터 타입 바꾸기
         List<HouseDealDto> houseDeals = houseDealService.getHouseDeals(request);
         return ResponseEntity.ok(houseDeals);
     }

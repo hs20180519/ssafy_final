@@ -52,7 +52,12 @@ onMounted(() => {
 
 const onSearch = () => {
   searchKeyword(
-    houseDealStore.keyword,
+    {
+      sidoCode: "",
+      gugunCode: "",
+      dongCode: "",
+      keyword: houseDealStore.keyword
+    },
     ({ data }) => {
       result.value = data;
       isLoaded.value = true;

@@ -24,6 +24,7 @@
         <result column="build_year" property="buildYear" />
     </resultMap>
 
+<!-- 
     <select id="getHouseDeals" parameterType="map" resultMap="houseDeal">
 		SELECT dc.sido_name, dc.gugun_name, dc.dong_name, d.apt_seq, i.apt_nm
         FROM house_deals d
@@ -43,9 +44,9 @@
 	            AND i.apt_nm LIKE concat("%", #{keyword}, "%")
             </if>
         </where>
-        GROUP BY dc.sido_name, dc.gugun_name, dc.dong_name, d.apt_seq, i.apt_nm
-        limit 20;
+        LIMIT 20
     </select>
+ -->
     
     <select id="getHouseDealsWithKeyword" parameterType="map" resultMap="houseDeal">
     	SELECT d.no, d.apt_seq, apt_dong, floor, deal_year, deal_month, deal_day,
@@ -62,6 +63,6 @@
 				AND i.umd_cd = SUBSTRING(#{code}, 6, 10)
 			</if>
 		</where>
-		limit 20;
+		LIMIT 20;
     </select>
 </mapper>

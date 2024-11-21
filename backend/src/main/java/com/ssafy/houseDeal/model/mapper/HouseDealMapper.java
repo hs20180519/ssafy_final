@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.ssafy.houseDeal.model.HouseDealDto;
-import com.ssafy.houseDeal.request.GetHouseDealRequest;
+import com.ssafy.houseDeal.model.request.GetHouseDealRequest;
 
 @Mapper
 public interface HouseDealMapper {

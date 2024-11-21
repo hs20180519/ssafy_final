@@ -2,8 +2,7 @@
 import { onMounted, ref } from 'vue'
 import SearchBox from "@/components/common/SearchBox.vue";
 import VSelect from "@/components/common/VSelect.vue";
-import { getFilter } from "@/api/search"
-import { getHouseDeal } from "@/api/houseDeal";
+import { getFilter, searchKeyword } from "@/api/search";
 import { useHouseDealStore } from '@/stores/houseDealStore';
 import SearchBoxResult from '../common/SearchBoxResult.vue';
 
@@ -45,7 +44,7 @@ onMounted(() => {
 
 const onSearch = () => {
     console.log("onSearch")
-    getHouseDeal(
+    searchKeyword(
         {
             sidoCode: selectedSido.value.slice(0,2),
             gugunCode: selectedGugun.value.slice(0,5),
@@ -54,10 +53,10 @@ const onSearch = () => {
         },
         ({ data }) => {
             result.value = {
-                houses: data
+                houses: data.houses,
+                regions: data.regions
             };
             isLoaded.value = true;
-            console.log(result.value)
         },
         (error) => {
             console.log(error)

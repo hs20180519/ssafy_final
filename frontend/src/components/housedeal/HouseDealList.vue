@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import HouseDealItem from "./item/HouseDealItem.vue";
 import { defineProps, watch, defineEmits } from "vue";
+import PageNavigation from "../common/PageNavigation.vue";
 
 const props = defineProps({
     list : Array
@@ -22,12 +23,12 @@ const onClick = (item) => {
     emit('onItemClick', item);
 }
 
-
 </script>
 
 <template>
     <div class='housedeal-list'>
         <HouseDealItem @click="onClick(item)" v-for='item in result' :key='item.no' :item='item'/>
+        <PageNavigation />
     </div>
 </template>
 
