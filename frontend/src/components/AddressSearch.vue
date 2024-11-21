@@ -9,11 +9,8 @@
         placeholder="주소를 검색하세요"
         readonly
       />
-      <button type="button" @click="openAddressSearch">
-        주소 검색
-      </button>
+      <button type="button" @click="openAddressSearch">주소 검색</button>
     </div>
-
   </div>
 </template>
 
@@ -25,14 +22,10 @@ export default {
   data() {
     return {
       selectedAddress: this.modelValue?.address || "",
-      detailAddress: this.modelValue?.detailAddress || "",
     };
   },
   watch: {
     selectedAddress(newValue) {
-      this.updateAddress();
-    },
-    detailAddress(newValue) {
       this.updateAddress();
     },
   },
@@ -44,7 +37,6 @@ export default {
           this.selectedAddress = data.address; // 기본 주소값
           this.$emit("update:modelValue", {
             address: this.selectedAddress,
-            detailAddress: this.detailAddress,
           });
         },
       }).open();

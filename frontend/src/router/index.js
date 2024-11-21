@@ -78,14 +78,9 @@ const routes = [
     component: MemberPasswordResetPage,
     props: true,
   },
-  // {
-  //   path: "/member/edit-profile",
-  //   name: "EditProfile",
-  //   component: MemberEditProfilePage,
-  // },
   {
     path: "/member/edit-profile",
-    name: "EditProfile",
+    name: "MyPage",
     component: MyPage,
   },
 ];

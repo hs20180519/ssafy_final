@@ -1,32 +1,9 @@
 <script setup>
-// import { TabsPaneContext } from 'element-plus';
-import MemberEditProfile from "@/components/member/MemberEditProfile.vue";
-import MemberIdFindForm from "@/components/member/MemberIdFindForm.vue";
-import MemberIdFindResult from "@/components/member/MemberIdFindResult.vue";
-import MemberPasswordResetReqForm from "@/components/member/MemberPasswordResetReqForm.vue";
+import MemberEditProfile from "@/components/mypage/MemberEditProfile.vue";
+import MemberAddress from "@/components/mypage/MemberAddress.vue";
 import { ref } from "vue";
 
 const activeName = ref("findId");
-
-const isIdFormLoaded = ref(true);
-const isPasswordFormLoaded = ref(true);
-
-const foundId = ref("");
-
-const onFindId = (data) => {
-  console.log("onFineId", data);
-  isIdFormLoaded.value = false;
-  foundId.value = data;
-};
-
-const maskId = (id) => {
-  const length = id.length;
-  const halfLength = Math.ceil(length / 2);
-  const visiblePart = id.slice(0, halfLength);
-  const maskedPart = "*".repeat(length - halfLength);
-
-  return visiblePart + maskedPart;
-};
 </script>
 
 <template>
@@ -35,8 +12,8 @@ const maskId = (id) => {
       <el-tab-pane label="회원정보 수정" name="findId">
         <MemberEditProfile />
       </el-tab-pane>
-      <el-tab-pane label="주소지 수정" name="findPassword">
-        <MemberPasswordResetReqForm v-if="isPasswordFormLoaded" />
+      <el-tab-pane label="주소지 관리" name="findPassword">
+        <MemberAddress />
       </el-tab-pane>
     </el-tabs>
   </div>

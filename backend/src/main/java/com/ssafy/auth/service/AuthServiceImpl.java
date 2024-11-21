@@ -53,12 +53,17 @@ public class AuthServiceImpl implements AuthService {
 		memberDto.setName(signUpRequest.getName());
 		String hashedPassword = PasswordUtil.encodePassword(signUpRequest.getPassword());
 		memberDto.setPassword(hashedPassword);
-		memberDto.setRole("USER"); // 기본값으로 "USER" 설정
+
+		if (signUpRequest.getRole() == "" || signUpRequest.getRole() == "null") {
+			memberDto.setRole("USER"); // 기본값으로 "USER" 설정
+		} else {
+			memberDto.setRole(signUpRequest.getRole());
+		}
 
 		memberMapper.insertMember(memberDto);
 
 		// 기본 주소 저장
-		if (signUpRequest.getAddress() != null) {
+		if (signUpRequest.getAddress() != null && signUpRequest.getAddress() != "") {
 			AddressDto addressDto = new AddressDto();
 			addressDto.setMemberId(memberDto.getId());
 			addressDto.setName("기본 주소");
