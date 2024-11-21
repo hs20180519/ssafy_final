@@ -5,7 +5,7 @@
       <p @click="goToHome">
         <font-awesome-icon :icon="['fas', 'house']"/>
       </p>
-      <p>
+      <p @click="goToFavoriteProperty">
         <font-awesome-icon :icon="['fas', 'bookmark']"/>
       </p>
     </div>
@@ -59,6 +59,9 @@ export default {
     },
     goToBoard() {
       this.$router.push('/board')
+    },
+    goToFavoriteProperty() {
+      this.$router.push({name: "FavoritePropertyPage"})
     }
   },
 };
