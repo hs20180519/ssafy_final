@@ -3,7 +3,6 @@ package com.ssafy.auth.controller;
 
 import java.util.Map;
 
-import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.auth.model.request.LoginRequest;
 import com.ssafy.auth.model.request.ResetPasswordRequest;
+import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.auth.service.AuthService;
+import com.ssafy.exception.ApiException;
+import com.ssafy.exception.ErrorCode;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.token.TokenProvider;
 import com.ssafy.token.TokenService;
@@ -33,10 +35,12 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
+@Slf4j
 public class AuthController {
 	private final AuthService authService;
 	private final TokenProvider tokenProvider;
@@ -186,8 +190,8 @@ public class AuthController {
 	public ResponseEntity<String> sendResetPasswordEmail(@RequestBody SendResetPasswordEmailRequest request) {
 		try {
 			return ResponseEntity.ok(authService.sendResetPasswordEmail(request));
-		} catch(MessagingException e) {
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("서버 오류");
+		} catch (MessagingException e) {
+			throw new ApiException(ErrorCode.FAILED_SEND_EMAIL);
 		}
 	}
 
