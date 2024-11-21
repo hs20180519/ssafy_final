@@ -23,7 +23,6 @@
 import { ref } from "vue";
 import SearchBox from "@/components/common/SearchBox.vue";
 import SearchBoxResult from "@/components/common/SearchBoxResult.vue";
-import { useAuthStore } from "@/stores/authStore";
 
 export default {
   name: "MainContent",
@@ -37,6 +36,7 @@ export default {
 import { defineEmits, onMounted } from "vue";
 import { searchKeyword } from "@/api/search";
 import { useHouseDealStore } from "@/stores/houseDealStore";
+import { useAuthStore } from "@/stores/authStore";
 
 defineEmits(["onSearch"]);
 

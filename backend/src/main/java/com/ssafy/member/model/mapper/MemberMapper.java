@@ -25,4 +25,8 @@ public interface MemberMapper {
 	List<MemberDto> getAllMembers() throws SQLException;
 
 	List<MemberDto> searchMembers(String memberId) throws SQLException;
+	
+	int getMemberCountByEmailAndId(@Param("email") String email, @Param("id") String id);
+
+	void updatePassword(@Param("email") String email, @Param("password") String password);
 }
