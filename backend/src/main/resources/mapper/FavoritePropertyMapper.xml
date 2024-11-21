@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.favoriteProperty.model.mapper.FavoritePropertyMapper">
+
+    <!-- 관심 매물 추가 -->
+    <insert id="insertFavoriteProperty">
+        INSERT INTO favorite_properties (id, member_id, apt_seq)
+        VALUES (#{id}, #{memberId}, #{aptSeq});
+    </insert>
+
+    <!-- 특정 사용자의 관심 매물 조회 -->
+    <select id="selectFavoritePropertiesByMemberId" resultType="FavoritePropertyDto">
+        SELECT id, member_id AS memberId, apt_seq AS aptSeq
+        FROM favorite_properties
+        WHERE member_id = #{memberId};
+    </select>
+
+    <!-- 관심 매물 삭제 -->
+    <delete id="deleteFavoriteProperty">
+        DELETE
+        FROM favorite_properties
+        WHERE id = #{id}
+    </delete>
+
+</mapper>
