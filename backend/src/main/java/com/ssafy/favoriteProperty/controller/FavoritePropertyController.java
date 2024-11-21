@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.favoriteProperty.model.FavoritePropertyDetailsDto;
 import com.ssafy.favoriteProperty.model.FavoritePropertyDto;
 import com.ssafy.favoriteProperty.model.service.FavoritePropertyService;
 
@@ -33,9 +34,9 @@ public class FavoritePropertyController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<FavoritePropertyDto>> getFavoriteProperties(@AuthenticationPrincipal
+	public ResponseEntity<List<FavoritePropertyDetailsDto>> getFavoriteProperties(@AuthenticationPrincipal
 	String memberId) {
-		List<FavoritePropertyDto> properties = favoritePropertyService.getFavoriteProperties(memberId);
+		List<FavoritePropertyDetailsDto> properties = favoritePropertyService.getFavoriteProperties(memberId);
 		return ResponseEntity.ok(properties);
 	}
 

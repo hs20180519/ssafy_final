@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.favoriteProperty.model.FavoritePropertyDetailsDto;
 import com.ssafy.favoriteProperty.model.FavoritePropertyDto;
 import com.ssafy.favoriteProperty.model.mapper.FavoritePropertyMapper;
 
@@ -21,7 +22,7 @@ public class FavoritePropertyServiceImpl implements FavoritePropertyService {
 	}
 
 	@Override
-	public List<FavoritePropertyDto> getFavoriteProperties(String memberId) {
+	public List<FavoritePropertyDetailsDto> getFavoriteProperties(String memberId) {
 		return favoritePropertyMapper.selectFavoritePropertiesByMemberId(memberId);
 	}
 

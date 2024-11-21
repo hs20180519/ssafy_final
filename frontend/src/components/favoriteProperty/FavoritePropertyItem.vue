@@ -1,10 +1,12 @@
 <template>
   <div class="favorite-property-card">
-    <img :src="property.image" alt="Property Image" class="property-image"/>
+    <!-- 이미지가 없는 경우를 대비한 기본 이미지 설정 -->
+    <img :src="property.image || '/images/default-property-image.jpg'" alt="Property Image" class="property-image"/>
     <div class="property-details">
-      <h3>{{ property.name }}</h3>
-      <p>{{ property.location }}</p>
-      <p>{{ property.price | currency }}</p>
+      <h3>{{ property.aptNm }}</h3>
+      <p>{{ property.roadAddress }}</p>
+      <p>최근 거래 금액 : {{ property.dealAmount }} (만원)</p>
+      <p>최근 거래일 : {{ property.dealYear }}년 {{ property.dealMonth }}월 {{ property.dealDay }}일</p>
       <button @click="removeFavorite">Remove</button>
     </div>
   </div>
@@ -16,13 +18,14 @@ import {deleteFavoriteProperty} from "@/api/favoriteProperty.js";
 export default {
   name: "FavoritePropertyItem",
   props: {
-    property: Object,
+    property: Object, // Property 정보를 받아오는 prop
   },
   methods: {
     removeFavorite() {
+      // 관심 매물 삭제 API 호출
       deleteFavoriteProperty(this.property.id,
         (response) => {
-          // 삭제 후 부모에게 이벤트 전달
+          // 삭제 후 부모 컴포넌트에 이벤트 전달
           this.$emit("remove", this.property.id);
         },
         (error) => {

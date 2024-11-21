@@ -3,9 +3,9 @@
     <div class="property-cards-container">
       <FavoritePropertyItem
         v-for="(property, index) in favoriteProperties"
-        :key="index"
+        :key="property.id"
         :property="property"
-        @remove="removePropertyFromList"
+        @remove="removeFromList"
       />
     </div>
   </div>
@@ -22,26 +22,28 @@ export default {
   },
   data() {
     return {
-      favoriteProperties: [],
+      favoriteProperties: [], // 관심 매물 목록
     };
   },
   mounted() {
-    this.fetchFavoriteProperties();
+    this.fetchFavoriteProperties(); // 컴포넌트가 마운트되면 데이터 로드
   },
   methods: {
     fetchFavoriteProperties() {
       getFavoriteProperties(
         (response) => {
-          this.favoriteProperties = response.data;
+          this.favoriteProperties = response.data; // 매물 정보 로드
+          console.log(response.data);
         },
         (error) => {
           console.error("Error fetching favorite properties", error);
         }
       );
     },
-    removePropertyFromList(propertyId) {
+    removeFromList(favoriteId) {
+      // 관심 매물 목록에서 삭제된 항목을 제거
       this.favoriteProperties = this.favoriteProperties.filter(
-        (property) => property.id !== propertyId
+        (property) => property.id !== favoriteId
       );
     },
   },
