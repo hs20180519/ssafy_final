@@ -3,6 +3,7 @@ package com.ssafy.auth.service;
 import java.sql.SQLException;
 
 import com.ssafy.auth.model.request.LoginRequest;
+import com.ssafy.auth.model.request.SignUpRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.member.model.MemberDto;
 
@@ -13,7 +14,7 @@ public interface AuthService {
 
 	public MemberDto login(LoginRequest loginInfo) throws SQLException;
 
-	public void signUp(MemberDto memberDto) throws SQLException;
+	public void signUp(SignUpRequest memberDto) throws SQLException;
 
 	public int sendSignUpMail(String mail, HttpSession session) throws MessagingException;
 

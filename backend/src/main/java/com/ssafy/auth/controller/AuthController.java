@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.auth.model.request.LoginRequest;
+import com.ssafy.auth.model.request.SignUpRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.auth.service.AuthService;
 import com.ssafy.member.model.MemberDto;
@@ -152,10 +153,10 @@ public class AuthController {
 		@ApiResponse(responseCode = "500", description = "서버 오류 - 회원 가입 중 오류 발생")})
 	@PostMapping("/signup")
 	public ResponseEntity<String> signup(@RequestBody
-	MemberDto memberDto) {
+	SignUpRequest signUpRequest) {
 		try {
-			System.out.println(memberDto);
-			authService.signUp(memberDto);
+			System.out.println(signUpRequest);
+			authService.signUp(signUpRequest);
 			return ResponseEntity.status(HttpStatus.CREATED).body("회원 가입이 완료되었습니다. 로그인 해주세요.");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 가입 중 오류가 발생했습니다.");
