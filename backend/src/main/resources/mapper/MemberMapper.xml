@@ -23,10 +23,14 @@
 	</insert>
 
 	<update id="updateMember" parameterType="memberDto">
-		update members
-		set name = #{name}, password=#{password}
-		where id = #{id};
+	    update members
+	    set name = #{name}
+	    <if test="password != null and password != ''">
+	        , password = #{password}
+	    </if>
+	    where id = #{id};
 	</update>
+
 
 	<select id="getMemberByMemberId" parameterType="String">
 		select * 
