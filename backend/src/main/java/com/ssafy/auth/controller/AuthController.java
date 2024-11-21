@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CookieValue;
-//import org.springframework.security.core.token.TokenService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,8 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.auth.model.request.LoginRequest;
 import com.ssafy.auth.model.request.ResetPasswordRequest;
 import com.ssafy.auth.model.request.SignUpRequest;
+import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.auth.service.AuthService;
+import com.ssafy.exception.ApiException;
+import com.ssafy.exception.ErrorCode;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.token.TokenProvider;
 import com.ssafy.token.TokenService;
@@ -31,10 +33,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
+@Slf4j
 public class AuthController {
 	private final AuthService authService;
 	private final TokenProvider tokenProvider;
@@ -162,11 +166,11 @@ public class AuthController {
 		}
 	}
 
-	//	@PostMapping("/signup-email")
-	//	public ResponseEntity<String> sendSignUpMail(@RequestParam
-	//	String email) throws MessagingException {
-	//		return ResponseEntity.ok(authService.sendSignUpMail(email));
-	//	}
+	@PostMapping("/signup-email")
+	public ResponseEntity<String> sendSignUpMail(@RequestParam
+	String email) throws MessagingException {
+		return ResponseEntity.ok(authService.sendSignUpMail(email));
+	}
 
 	@PostMapping("/signup-verification")
 	public ResponseEntity<Boolean> verifySignUpCode(@RequestBody
@@ -180,25 +184,23 @@ public class AuthController {
 	String email) {
 		return ResponseEntity.ok(authService.findId(name, email));
 	}
-	//
-	//	@PostMapping("/password-reset-email")
-	//	public ResponseEntity<String> sendResetPasswordEmail(@RequestBody
-	//	SendResetPasswordEmailRequest request) {
-	//		try {
-	//			return ResponseEntity.ok(authService.sendResetPasswordEmail(request));
-	//		} catch (MessagingException e) {
-	//			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("서버 오류");
-	//		}
-	//	}
-	//
-	//	@PostMapping("/password-reset-verification")
-	//	public ResponseEntity<Boolean> verifyResetPasswordCode(@RequestParam("uuid")
-	//	String uuid) {
-	//		return ResponseEntity.ok(authService.verifyResetPasswordCode(uuid));
-	//	}
+	
+	@PostMapping("/password-reset-email")
+	public ResponseEntity<String> sendResetPasswordEmail(@RequestBody SendResetPasswordEmailRequest request) {
+		try {
+			return ResponseEntity.ok(authService.sendResetPasswordEmail(request));
+		} catch (MessagingException e) {
+			throw new ApiException(ErrorCode.FAILED_SEND_EMAIL);
+		}
+	}
+
+	@PostMapping("/password-reset-verification")
+	public ResponseEntity<Boolean> verifyResetPasswordCode(@RequestParam("uuid") String uuid) {
+		return ResponseEntity.ok(authService.verifyResetPasswordCode(uuid));
+	}
 
 	@PutMapping("/password")
-	public ResponseEntity<Void> rupdatePassword(@RequestBody
+	public ResponseEntity<Void> updatePassword(@RequestBody
 	ResetPasswordRequest request) {
 		authService.updatePassword(request);
 		return ResponseEntity.ok().build();
