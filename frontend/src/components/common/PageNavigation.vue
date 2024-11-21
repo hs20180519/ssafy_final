@@ -1,9 +1,33 @@
 <script setup>
+import { ref, defineProps, defineEmits, watch } from 'vue';
+import { useHouseDealStore } from "@/stores/houseDealStore";
+
+const { VITE_ARTICLE_LIST_SIZE } = import.meta.env;
+const houseDealStore = useHouseDealStore();
+
+const props = defineProps({
+    total: Number
+})
+
+watch(() => props.total,
+(newVal) => {
+    total.value = newVal;
+    console.log(newVal);
+})
+
+const total = ref(); // 전체 item 개수
+const pageSize = Number(import.meta.env.VITE_ARTICLE_LIST_SIZE); // 한 페이지당 element 개수
+const num = ref();
+
+const currentChange = (num) => {
+    houseDealStore.setPgno(num);
+}
+
 </script>
 
 <template>
     <div>
-        <el-pagination layout='prev, pager, next' :total='50' />
+        <el-pagination :page-size="pageSize" layout='prev, pager, next' :total="total" @current-change="currentChange"/>
     </div>
 </template>
 

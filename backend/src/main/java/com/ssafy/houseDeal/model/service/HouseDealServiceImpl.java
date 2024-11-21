@@ -2,6 +2,7 @@ package com.ssafy.houseDeal.model.service;
 
 import java.util.List;
 
+import com.ssafy.houseDeal.model.request.GetHouseDealWithKeywordRequest;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.houseDeal.model.HouseDealDto;
@@ -24,9 +25,14 @@ public class HouseDealServiceImpl implements HouseDealService {
     }
 
 	@Override
-	public List<HouseDealDto> getHouseDealsWithKeyword(String type, String code) {
-		// TODO Auto-generated method stub
-		System.out.println(code + " " + type);
-		return houseDealMapper.getHouseDealsWithKeyword(type, code);
+	public List<HouseDealDto> getHouseDealsWithKeyword(GetHouseDealWithKeywordRequest request) {
+		int offset = (request.getPgno() - 1) * request.getPgSize();
+		request.setOffset(offset);
+		return houseDealMapper.getHouseDealsWithKeyword(request);
+	}
+
+	@Override
+	public int getCountHouseDealsWithKeyword(String type, String code) {
+		return houseDealMapper.getCountHouseDealsWithKeyword(type, code);
 	}
 }

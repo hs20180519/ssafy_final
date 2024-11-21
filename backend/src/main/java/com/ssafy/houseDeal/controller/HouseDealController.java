@@ -2,6 +2,7 @@ package com.ssafy.houseDeal.controller;
 
 import java.util.List;
 
+import com.ssafy.houseDeal.model.request.GetHouseDealWithKeywordRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -49,7 +50,7 @@ public class HouseDealController {
     		@RequestParam(name = "pgno", defaultValue = "1") int pgno
     		) {
     	GetHouseDealRequest request = GetHouseDealRequest.builder()
-    			.dongCode(dongCode)
+    			.sidoCode(sidoCode)
     			.gugunCode(gugunCode)
     			.dongCode(dongCode)
     			.keyword(keyword)
@@ -64,9 +65,26 @@ public class HouseDealController {
     @GetMapping("/keyword")
     public ResponseEntity<List<HouseDealDto>> getHouseDealsByKeyword(
     		@RequestParam("type") String type,
-    		@RequestParam("code") String code) {
-    	List<HouseDealDto> houseDeals = houseDealService.getHouseDealsWithKeyword(type, code);
+    		@RequestParam("code") String code,
+			@RequestParam("pgSize") int pgSize,
+			@RequestParam(name = "pgno", defaultValue = "1") int pgno
+			) {
+
+		GetHouseDealWithKeywordRequest request = GetHouseDealWithKeywordRequest.builder()
+				.type(type)
+				.code(code)
+				.pgSize(pgSize)
+				.pgno(pgno)
+				.build();
+    	List<HouseDealDto> houseDeals = houseDealService.getHouseDealsWithKeyword(request);
     	return ResponseEntity.ok(houseDeals);
     }
 
+	@GetMapping("/keyword/count")
+	public ResponseEntity<Integer> getCountHouseDealByKeyword(
+			@RequestParam("type") String type,
+			@RequestParam("code") String code) {
+		int count = houseDealService.getCountHouseDealsWithKeyword(type, code);
+		return ResponseEntity.ok(count);
+	}
 }
