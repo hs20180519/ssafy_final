@@ -44,17 +44,17 @@ public class HouseDealController {
     		@RequestParam("sidoCode") String sidoCode,
     		@RequestParam("gugunCode") String gugunCode,
     		@RequestParam("dongCode") String dongCode,
-    		@RequestParam("keyword") String keyword
-//    		@RequestParam("pgSize") int pgSize,
-//    		@RequestParam(name = "pgno", defaultValue = "1") int pgno
+    		@RequestParam("keyword") String keyword,
+    		@RequestParam("pgSize") int pgSize,
+    		@RequestParam(name = "pgno", defaultValue = "1") int pgno
     		) {
     	GetHouseDealRequest request = GetHouseDealRequest.builder()
     			.dongCode(dongCode)
     			.gugunCode(gugunCode)
     			.dongCode(dongCode)
     			.keyword(keyword)
-//    			.pgSize(pgSize)
-//    			.pgno(pgno)
+    			.pgSize(pgSize)
+    			.pgno(pgno)
     			.build();
     	
         List<HouseDealDto> houseDeals = houseDealService.getHouseDeals(request);

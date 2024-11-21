@@ -12,7 +12,7 @@ public class GetHouseDealRequest {
 	private String gugunCode;
 	private String dongCode;
 	private String keyword;
-//	private int pgSize;
-//	private int pgno;
-//	private int offset;
+	private int pgSize;
+	private int pgno;
+	private int offset;
 }

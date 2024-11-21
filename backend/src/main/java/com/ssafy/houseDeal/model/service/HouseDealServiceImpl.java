@@ -18,8 +18,8 @@ public class HouseDealServiceImpl implements HouseDealService {
 
     @Override
     public List<HouseDealDto> getHouseDeals(GetHouseDealRequest request) {
-//    	int offset = (request.getPgno() - 1) * request.getPgSize();
-//    	request.setOffset(offset);
+    	int offset = (request.getPgno() - 1) * request.getPgSize();
+    	request.setOffset(offset);
         return houseDealMapper.getHouseDeals(request);
     }
 
