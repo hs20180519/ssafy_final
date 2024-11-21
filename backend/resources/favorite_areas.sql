@@ -1,10 +1,10 @@
 DROP TABLE IF EXISTS `ssafyhome`.`favorite_areas`;
 
-CREATE TABLE IF NOT EXISTS `ssafyhome`.`favorite_areas`
+CREATE TABLE IF NOT EXISTS `ssafyhome`.`favorite_properties`
 (
-    id        int primary key auto_increment,
-    member_id varchar(45),
-    dong_code varchar(10),
-    foreign key (member_id) references members (id) ON DELETE CASCADE,
-    foreign key (dong_code) references dong_codes (dong_code)
-);
+    id        INT AUTO_INCREMENT PRIMARY KEY,
+    member_id VARCHAR(45) NOT NULL,
+    apt_seq   VARCHAR(20) NOT NULL,
+    FOREIGN KEY (member_id) REFERENCES members (id) ON DELETE CASCADE,
+    FOREIGN KEY (apt_seq) REFERENCES house_infos (apt_seq)
+)
