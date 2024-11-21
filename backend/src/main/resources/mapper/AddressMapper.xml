@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.address.model.mapper.AddressMapper">
+
+	<!-- 주소지 조회 -->
+    <select id="selectAddressesByMemberId" resultType="AddressDto">
+        SELECT address_id AS addressId, member_id AS memberId, name, road_name_address AS roadNameAddress
+        FROM addresses
+        WHERE member_id = #{memberId}
+    </select>
+
+    <!-- 주소지 추가 -->
+    <insert id="insertAddress">
+        INSERT INTO addresses (member_id, name, road_name_address)
+        VALUES (#{memberId}, #{name}, #{roadNameAddress})
+    </insert>
+
+    <!-- 주소지 수정 -->
+    <update id="updateAddress">
+        UPDATE addresses
+	    SET road_name_address = #{roadNameAddress}, name=#{name}
+	    WHERE member_id = #{memberId} AND address_id = #{addressId}
+    </update>
+
+    <!-- 주소지 삭제 -->
+    <delete id="deleteAddress">
+        DELETE FROM addresses
+    	WHERE address_id = #{addressId}
+    </delete>
+
+</mapper>

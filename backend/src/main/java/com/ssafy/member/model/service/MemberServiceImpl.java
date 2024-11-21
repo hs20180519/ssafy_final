@@ -20,7 +20,9 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void updateMember(MemberDto memberDto) throws SQLException {
 		String password = memberDto.getPassword();
-		memberDto.setPassword(PasswordUtil.encodePassword(password));
+		if (password != "" && password != null) {
+			memberDto.setPassword(PasswordUtil.encodePassword(password));
+		}
 		memberMapper.updateMember(memberDto);
 	}
 
@@ -55,7 +57,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public boolean existsByEmailAndId(String email, String id) {
-		if(memberMapper.getMemberCountByEmailAndId(email, id) == 0) {
+		if (memberMapper.getMemberCountByEmailAndId(email, id) == 0) {
 			return false;
 		}
 		return true;

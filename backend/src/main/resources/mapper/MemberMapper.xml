@@ -17,16 +17,20 @@
 		where email=#{email} and name=#{name};
 	</select>
 
-	<insert id="insertMember" parameterType="memberDto">
+	<insert id="insertMember" parameterType="memberDto" useGeneratedKeys="true" keyProperty="id">
 		insert into members(id, password, email, name, role)
 		values (#{id},#{password}, #{email}, #{name}, #{role})
 	</insert>
 
 	<update id="updateMember" parameterType="memberDto">
-		update members
-		set name = #{name}, password=#{password}
-		where id = #{id};
+	    update members
+	    set name = #{name}
+	    <if test="password != null and password != ''">
+	        , password = #{password}
+	    </if>
+	    where id = #{id};
 	</update>
+
 
 	<select id="getMemberByMemberId" parameterType="String">
 		select * 
