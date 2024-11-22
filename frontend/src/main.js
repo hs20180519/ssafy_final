@@ -1,26 +1,26 @@
-import { createApp } from "vue";
-import { createPinia } from "pinia";
-import { useAuthStore } from "./stores/authStore";
+import {createApp} from "vue";
+import {createPinia} from "pinia";
+import {useAuthStore} from "./stores/authStore";
 
 import App from "./App.vue";
 import router from "./router";
 
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import {library} from "@fortawesome/fontawesome-svg-core";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {
   faHouse,
   faUser,
   faCircleInfo,
   faStar,
-  faMagnifyingGlass,
+  faMagnifyingGlass, faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useKakao } from "vue3-kakao-maps";
+import {useKakao} from "vue3-kakao-maps";
 
 import ElementPlus from 'element-plus'
 
 
-library.add(faHouse, faUser, faCircleInfo, faStar, faMagnifyingGlass);
+library.add(faHouse, faUser, faCircleInfo, faStar, faMagnifyingGlass, faBookmark);
 
 useKakao(import.meta.env.VITE_KAKAO_APP_KEY);
 

@@ -1,5 +1,5 @@
 // router/index.js
-import { createRouter, createWebHistory } from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 import HomePage from "@/views/HomePage.vue";
 import HouseDealPage from "@/views/HouseDealPage.vue";
 import MemberLoginPage from "@/views/member/MemberLoginPage.vue";
@@ -15,8 +15,10 @@ import MemberFindPage from "@/views/member/MemberFindPage.vue";
 // member
 import MemberPasswordResetPage from "@/views/member/MemberPasswordResetPage.vue";
 import VerifyPasswordPage from "@/views/member/MemberVerifyPasswordPage.vue";
-// import MemberEditProfilePage from "@/views/member/MemberEditProfilePage.vue";
 import MyPage from "@/views/member/MyPage.vue";
+
+import FavoritePropertyPage from "@/views/favoriteProperty/FavoritePropertyPage.vue";
+
 
 const routes = [
   {
@@ -83,6 +85,11 @@ const routes = [
     name: "MyPage",
     component: MyPage,
   },
+  {
+    path: "/favorite-property",
+    name: "FavoritePropertyPage",
+    component: FavoritePropertyPage,
+  }
 ];
 
 const router = createRouter({
