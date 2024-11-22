@@ -5,8 +5,8 @@
       <p @click="goToHome">
         <font-awesome-icon :icon="['fas', 'house']"/>
       </p>
-      <p @click="goToFavoriteProperty">
-        <font-awesome-icon :icon="['fas', 'bookmark']"/>
+      <p>
+        <font-awesome-icon :icon="['fas', 'star']"/>
       </p>
     </div>
 
@@ -16,16 +16,14 @@
       </div>
       <div>
         <p @click="goToBoard">
-          <font-awesome-icon :icon="['fas', 'circle-info']"/>
-        </p>
-      </div>
+     <font-awesome-icon :icon="['fas', 'circle-info']"/></p></div>
     </div>
   </div>
-  <DropdownMenu :showDropdown="showDropdown"/>
+  <DropdownMenu :showDropdown="showDropdown" />
 </template>
 
 <script>
-import {useAuthStore} from '@/stores/authStore'; // Pinia store 임포트
+import { useAuthStore } from '@/stores/authStore'; // Pinia store 임포트
 import DropdownMenu from '@/components/layout/DropDownMenu.vue'; // DropdownMenu 컴포넌트 임포트
 
 export default {
@@ -59,9 +57,6 @@ export default {
     },
     goToBoard() {
       this.$router.push('/board')
-    },
-    goToFavoriteProperty() {
-      this.$router.push({name: "FavoritePropertyPage"})
     }
   },
 };
@@ -84,7 +79,6 @@ export default {
 
 .nav-links p {
   display: flex;
-  justify-content: center;
   align-items: center;
   margin: 10px 0;
   text-align: center;

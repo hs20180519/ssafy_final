@@ -1,33 +1,18 @@
 <script setup>
 import MemberEditProfile from "@/components/mypage/MemberEditProfile.vue";
 import MemberAddress from "@/components/mypage/MemberAddress.vue";
-import { ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { ref } from "vue";
 
-const activeName = ref("editProfile");
-const route = useRoute();
-
-// 라우트 쿼리 파라미터로 탭을 활성화
-watch(
-  () => route.query.tab,
-  (newTab) => {
-    if (newTab === "editAddress") {
-      activeName.value = "editAddress"; // 주소지 관리 탭 활성화
-    } else {
-      activeName.value = "editProfile"; // 기본 탭은 회원정보 수정
-    }
-  },
-  { immediate: true } // 컴포넌트가 처음 렌더링될 때도 실행
-);
+const activeName = ref("findId");
 </script>
 
 <template>
   <div class="main-container">
     <el-tabs v-model="activeName">
-      <el-tab-pane label="회원정보 수정" name="editProfile">
+      <el-tab-pane label="회원정보 수정" name="findId">
         <MemberEditProfile />
       </el-tab-pane>
-      <el-tab-pane label="주소지 관리" name="editAddress">
+      <el-tab-pane label="주소지 관리" name="findPassword">
         <MemberAddress />
       </el-tab-pane>
     </el-tabs>
