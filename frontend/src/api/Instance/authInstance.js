@@ -18,7 +18,6 @@ export const authApi = () => {
       const authStore = useAuthStore();
       const token = authStore.getAuthToken;
 
-      console.log(token);
       if (token) {
         config.headers["Authorization"] = `Bearer ${token}`;
       }
@@ -48,7 +47,6 @@ export const authApi = () => {
             { withCredentials: true } // 쿠키 포함 설정
           );
 
-          console.log("새로 발급받다");
           // 새로 발급받은 Access Token
           const newAccessToken = response.headers["authorization"].replace(
             "Bearer ",
@@ -64,9 +62,21 @@ export const authApi = () => {
           return axios(originalRequest);
         } catch (refreshError) {
           const authStore = useAuthStore();
+
           console.error("토큰 갱신 실패", refreshError);
           authStore.logout();
+
+          alert("권한이 없습니다. 다시 로그인 해주세요.");
         }
+      }
+      // 403 오류 시, 바로 로그인 페이지로 리다이렉트
+      if (error.response.status === 403) {
+        const authStore = useAuthStore();
+
+        console.error("권한이 없습니다.");
+        authStore.logout();
+
+        alert("권한이 없습니다. 다시 로그인 해주세요.");
       }
 
       return Promise.reject(error);

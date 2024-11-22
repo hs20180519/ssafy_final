@@ -1,5 +1,5 @@
 // router/index.js
-import {createRouter, createWebHistory} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "@/views/HomePage.vue";
 import HouseDealPage from "@/views/HouseDealPage.vue";
 import MemberLoginPage from "@/views/member/MemberLoginPage.vue";
@@ -18,7 +18,7 @@ import VerifyPasswordPage from "@/views/member/MemberVerifyPasswordPage.vue";
 import MyPage from "@/views/member/MyPage.vue";
 
 import FavoritePropertyPage from "@/views/favoriteProperty/FavoritePropertyPage.vue";
-
+import { useAuthStore } from "@/stores/authStore";
 
 const routes = [
   {
@@ -89,12 +89,28 @@ const routes = [
     path: "/favorite-property",
     name: "FavoritePropertyPage",
     component: FavoritePropertyPage,
-  }
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
+  const isAuthenticated = authStore.getAuthToken;
+
+  if (to.name === "Home" || to.name === "Signup") {
+    return next();
+  }
+
+  if (!isAuthenticated && to.name !== "Login") {
+    alert("권한이 없습니다. 로그인 해주세요.");
+    next({ name: "Login" });
+  } else {
+    next();
+  }
 });
 
 export default router;
