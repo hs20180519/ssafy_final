@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,11 +41,9 @@ public class MemberController {
 	})
 	@PostMapping("/verify-password")
 	public ResponseEntity<String> verifyPassword(@RequestBody
-	PasswordRequest passwordRequest, Authentication authentication) {
+	PasswordRequest passwordRequest, @AuthenticationPrincipal
+	String memberId) {
 		try {
-			// 현재 로그인된 사용자 ID 가져오기
-			String memberId = (String)authentication.getPrincipal();
-			// 사용자 정보 조회
 			MemberDto memberDto = memberService.findMemberByMemberId(memberId);
 
 			if (memberDto == null) {
@@ -91,9 +90,9 @@ public class MemberController {
 	@ApiResponses({@ApiResponse(responseCode = "200", description = "회원 정보 조회 성공"),
 		@ApiResponse(responseCode = "500", description = "서버 오류 - 회원 정보 조회 중 오류 발생")})
 	@GetMapping()
-	public ResponseEntity<MemberDto> findMember(Authentication authentication) {
+	public ResponseEntity<MemberDto> findMember(@AuthenticationPrincipal
+	String memberId) {
 		try {
-			String memberId = (String)authentication.getPrincipal();
 			MemberDto memberDto = memberService.findMemberByMemberId(memberId);
 			//			memberDto.setPassword(null); TODO : 비밀번호는 공개 X
 			return ResponseEntity.ok(memberDto);
