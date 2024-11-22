@@ -8,6 +8,8 @@ export const useHouseDealStore = defineStore('housedeal', () => {
     const dongName = ref("")
     const dongCode = ref("")
 
+    const pgno = ref(1);
+
     const searchOption = computed(() => {
         return {
             keyword: keyword.value,
@@ -31,7 +33,9 @@ export const useHouseDealStore = defineStore('housedeal', () => {
         dongCode.value = code;
     }
 
-
+    const setPgno = (num) => {
+        pgno.value = num;
+    }
 
     return {
         keyword,
@@ -39,7 +43,9 @@ export const useHouseDealStore = defineStore('housedeal', () => {
         gugunName,
         dongName,
         searchOption,
+        pgno,
         setKeyword,
-        setRegion
+        setRegion,
+        setPgno
     }
 })

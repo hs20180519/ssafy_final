@@ -2,6 +2,9 @@ package com.ssafy.houseDeal.controller;
 
 import java.util.List;
 
+import com.ssafy.houseDeal.model.request.GetHouseDealWithKeywordRequest;
+import com.ssafy.houseDeal.model.response.GetHouseDealWithKeywordResponse;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.houseDeal.model.HouseDealDto;
+import com.ssafy.houseDeal.model.request.GetHouseDealRequest;
 import com.ssafy.houseDeal.model.service.HouseDealService;
-import com.ssafy.houseDeal.request.GetHouseDealRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -44,25 +47,47 @@ public class HouseDealController {
     		@RequestParam("sidoCode") String sidoCode,
     		@RequestParam("gugunCode") String gugunCode,
     		@RequestParam("dongCode") String dongCode,
-    		@RequestParam("keyword") String keyword) {
+    		@RequestParam("keyword") String keyword,
+    		@RequestParam("pgSize") int pgSize,
+    		@RequestParam(name = "pgno", defaultValue = "1") int pgno
+    		) {
     	GetHouseDealRequest request = GetHouseDealRequest.builder()
-    			.dongCode(dongCode)
+    			.sidoCode(sidoCode)
     			.gugunCode(gugunCode)
     			.dongCode(dongCode)
     			.keyword(keyword)
+    			.pgSize(pgSize)
+    			.pgno(pgno)
     			.build();
     	
-    	// 파라미터 타입 바꾸기
         List<HouseDealDto> houseDeals = houseDealService.getHouseDeals(request);
         return ResponseEntity.ok(houseDeals);
     }
     
     @GetMapping("/keyword")
-    public ResponseEntity<List<HouseDealDto>> getHouseDealsByKeyword(
+    public ResponseEntity<List<GetHouseDealWithKeywordResponse>> getHouseDealsByKeyword(
     		@RequestParam("type") String type,
-    		@RequestParam("code") String code) {
-    	List<HouseDealDto> houseDeals = houseDealService.getHouseDealsWithKeyword(type, code);
+    		@RequestParam("code") String code,
+			@RequestParam("pgSize") int pgSize,
+			@RequestParam(name = "pgno", defaultValue = "1") int pgno
+			) {
+
+		GetHouseDealWithKeywordRequest request = GetHouseDealWithKeywordRequest.builder()
+				.type(type)
+				.code(code)
+				.pgSize(pgSize)
+				.pgno(pgno)
+				.build();
+		List<GetHouseDealWithKeywordResponse> houseDeals = houseDealService.getHouseDealsWithKeyword(request);
+		System.out.println(houseDeals);
     	return ResponseEntity.ok(houseDeals);
     }
 
+	@GetMapping("/keyword/count")
+	public ResponseEntity<Integer> getCountHouseDealByKeyword(
+			@RequestParam("type") String type,
+			@RequestParam("code") String code) {
+		int count = houseDealService.getCountHouseDealsWithKeyword(type, code);
+		return ResponseEntity.ok(count);
+	}
 }

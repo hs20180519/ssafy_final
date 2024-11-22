@@ -34,19 +34,47 @@
  		ORDER BY binary(gugun_name), binary(dong_name)
  	</select>
 
-	<select id="getHouseByKeyword" resultMap="house" parameterType="String">
+	<select id="getHouseByKeyword" resultMap="house" parameterType="searchRequest">
 		SELECT dc.sido_name, dc.gugun_name, dc.dong_name, d.apt_seq, i.apt_nm
 		FROM house_deals d
 		    JOIN house_infos i ON i.apt_seq = d.apt_seq
 			JOIN dong_codes dc ON dc.dong_code = concat(i.sgg_cd, umd_cd)
-		WHERE i.apt_nm LIKE concat("%", #{keyword}, "%")
+        <where>
+            <if test="sidoCode != null and sidoCode != ''">
+                i.sgg_cd LIKE concat(#{sidoCode}, '%')
+            </if>
+            <if test="gugunCode != null and gugunCode != ''">
+                AND i.sgg_cd LIKE concat(#{gugunCode}, '%')
+            </if>
+            <if test="dongCode != null and dongCode != ''">
+                AND i.umd_cd = #{dongCode}
+            </if>
+            <if test="keyword != null">
+	            AND i.apt_nm LIKE concat("%", #{keyword}, "%")
+            </if>
+        </where>
 		GROUP BY dc.sido_name, dc.gugun_name, dc.dong_name, d.apt_seq, i.apt_nm
 	</select>
 
-	<select id="getDongCodeByKeyword" resultMap="dongCode" parameterType="String">
-		SELECT * FROM dong_codes
-		WHERE sido_name LIKE concat("%", #{keyword}, "%") OR
-		      gugun_name LIKE concat("%", #{keyword}, "%") OR
-		      dong_name LIKE concat("%", #{keyword}, "%")
+	<select id="getDongCodeByKeyword" resultMap="dongCode" parameterType="searchRequest">
+		SELECT sido_name, gugun_name, dong_name, dc.dong_code
+		FROM dong_codes dc
+        <where>
+            <if test="sidoCode != null and sidoCode != ''">
+                dong_code LIKE concat(#{sidoCode}, '%')
+            </if>
+            <if test="gugunCode != null and gugunCode != ''">
+                AND dong_code LIKE concat(#{gugunCode}, '%')
+            </if>
+            <if test="dongCode != null and dongCode != ''">
+                AND dong_code like concat("%", #{dongCode})
+            </if>
+            <if test="keyword != null and keyword != ''">
+	            AND (sido_name LIKE concat("%", #{keyword}, "%") OR
+		      	gugun_name LIKE concat("%", #{keyword}, "%") OR
+		      	dong_name LIKE concat("%", #{keyword}, "%"))
+            </if>
+        </where>
 	</select>
+	
  </mapper>

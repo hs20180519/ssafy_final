@@ -2,7 +2,6 @@ package com.ssafy.dongCode.controller;
 
 import java.util.List;
 
-import com.ssafy.dongCode.model.response.SearchResultResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.dongCode.model.DongCodeDto;
+import com.ssafy.dongCode.model.request.SearchRequest;
+import com.ssafy.dongCode.model.response.SearchResultResponse;
 import com.ssafy.dongCode.model.service.DongCodeService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,8 +41,20 @@ public class DongCodeController {
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<SearchResultResponse> searchByKeyword(@RequestParam String keyword) {
-		SearchResultResponse response = dongCodeService.searchByKeyword(keyword);
+	public ResponseEntity<SearchResultResponse> searchByKeyword(@RequestParam("keyword") String keyword,
+			@RequestParam("sidoCode") String sidoCode,
+			@RequestParam("gugunCode") String gugunCode,
+			@RequestParam("dongCode") String dongCode) {
+		
+		SearchRequest request = SearchRequest.builder()
+				.keyword(keyword)
+				.sidoCode(sidoCode)
+				.gugunCode(gugunCode)
+				.dongCode(dongCode)
+				.build();
+		
+		SearchResultResponse response = dongCodeService.searchByKeyword(request);
+		
 		return ResponseEntity.ok(response);
 	}
 }

@@ -43,11 +43,10 @@
 	            AND i.apt_nm LIKE concat("%", #{keyword}, "%")
             </if>
         </where>
-        GROUP BY dc.sido_name, dc.gugun_name, dc.dong_name, d.apt_seq, i.apt_nm
-        limit 20;
+        LIMIT #{pgSize} OFFSET #{offset};
     </select>
     
-    <select id="getHouseDealsWithKeyword" parameterType="map" resultMap="houseDeal">
+    <select id="getHouseDealsWithKeyword" parameterType="getHouseDealWithKeywordRequest" resultMap="houseDeal">
     	SELECT d.no, d.apt_seq, apt_dong, floor, deal_year, deal_month, deal_day,
 				exclu_use_ar, deal_amount, i.sgg_cd, i.umd_cd, jibun, road_nm_sgg_cd, road_nm,
 				road_nm_bonbun, road_nm_bubun, apt_nm, build_year, latitude, longitude
@@ -62,6 +61,26 @@
 				AND i.umd_cd = SUBSTRING(#{code}, 6, 10)
 			</if>
 		</where>
-		limit 20;
+		ORDER BY deal_year desc, deal_month desc, deal_day desc
+		LIMIT #{pgSize} OFFSET #{offset};
+    </select>
+
+    <select id="getCountHouseDealsWithKeyword" parameterType="map" resultType="int">
+        SELECT count(*) count
+        FROM (
+        	SELECT d.apt_seq
+	        FROM house_deals d
+	        JOIN house_infos i ON i.apt_seq = d.apt_seq
+	        <where>
+	            <if test="type == 'house'">
+	                i.apt_seq = #{code}
+	            </if>
+	            <if test="type == 'region'">
+	                i.sgg_cd = SUBSTRING(#{code}, 1, 5)
+	                AND i.umd_cd = SUBSTRING(#{code}, 6, 10)
+	            </if>
+	        </where>
+	        GROUP BY (d.apt_seq)
+        ) TMP;
     </select>
 </mapper>

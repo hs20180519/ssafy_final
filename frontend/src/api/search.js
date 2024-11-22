@@ -3,11 +3,15 @@ import { api } from "./Instance/axiosInstance";
 const searchApi = api();
 
 function searchKeyword(param, success, fail) {
+  console.log(param)
   searchApi
     .get("/dong-code/search", {
       params: {
-        keyword: param,
-      },
+        sidoCode: param.sidoCode,
+        gugunCode: param.gugunCode,
+        dongCode: param.dongCode,
+        keyword: param.keyword
+      }
     })
     .then(success)
     .catch(fail);
