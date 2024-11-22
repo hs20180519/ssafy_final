@@ -1,9 +1,8 @@
-
 import { authApi } from "./Instance/authInstance";
 
 const boardApi = authApi();
 
-export function createQuestion(body, success, fail) {
+export async function createQuestion(body, success, fail) {
   return boardApi.post("/board/questions", body).then(success).catch(fail);
 }
 
