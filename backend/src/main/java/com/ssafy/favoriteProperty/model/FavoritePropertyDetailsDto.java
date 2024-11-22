@@ -1,5 +1,7 @@
 package com.ssafy.favoriteProperty.model;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -14,4 +16,5 @@ public class FavoritePropertyDetailsDto {
 	private int dealYear;
 	private int dealMonth;
 	private int dealDay;
+	private List<String> distances;
 }

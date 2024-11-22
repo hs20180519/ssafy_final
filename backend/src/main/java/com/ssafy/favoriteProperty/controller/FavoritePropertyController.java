@@ -27,7 +27,8 @@ public class FavoritePropertyController {
 
 	@PostMapping
 	public ResponseEntity<String> addFavoriteProperty(@AuthenticationPrincipal
-	String memberId, @RequestBody FavoritePropertyDto favoritePropertyDTO) {
+	String memberId, @RequestBody
+	FavoritePropertyDto favoritePropertyDTO) {
 		favoritePropertyDTO.setMemberId(memberId);
 		favoritePropertyService.addFavoriteProperty(favoritePropertyDTO);
 		return ResponseEntity.ok("관심 매물이 추가되었습니다.");
@@ -36,12 +37,14 @@ public class FavoritePropertyController {
 	@GetMapping
 	public ResponseEntity<List<FavoritePropertyDetailsDto>> getFavoriteProperties(@AuthenticationPrincipal
 	String memberId) {
+		// 회원의 관심 매물 정보 가져오기
 		List<FavoritePropertyDetailsDto> properties = favoritePropertyService.getFavoriteProperties(memberId);
 		return ResponseEntity.ok(properties);
 	}
 
 	@DeleteMapping("/{favoritePropertyId}")
-	public ResponseEntity<String> deleteFavoriteProperty(@PathVariable String favoritePropertyId) {
+	public ResponseEntity<String> deleteFavoriteProperty(@PathVariable
+	String favoritePropertyId) {
 		favoritePropertyService.deleteFavoriteProperty(favoritePropertyId);
 		return ResponseEntity.ok("관심 매물이 삭제되었습니다.");
 	}
