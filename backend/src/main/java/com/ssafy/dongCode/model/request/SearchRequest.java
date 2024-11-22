@@ -1,13 +1,11 @@
-package com.ssafy.houseDeal.request;
+package com.ssafy.dongCode.model.request;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 
 @Data
-@ToString
 @Builder
-public class GetHouseDealRequest {
+public class SearchRequest {
 	private String sidoCode;
 	private String gugunCode;
 	private String dongCode;

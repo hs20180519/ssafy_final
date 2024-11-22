@@ -24,7 +24,7 @@ watch(
 </script>
 
 <template>
-    <div>
+    <div class="map-container">
         <KakaoMap :lat=latitude :lng=longitude>
             <div v-if="markervisible">
                 <KakaoMapMarker :lat=latitude :lng=longitude>
@@ -38,5 +38,4 @@ watch(
 </template>
 
 <style scoped>
-
 </style>

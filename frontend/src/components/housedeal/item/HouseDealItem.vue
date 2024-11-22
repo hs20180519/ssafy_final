@@ -11,13 +11,15 @@ onUpdated(() => {
 </script>
 
 <template>
-    <div>
+    <div class="main-container">
         <h3>{{ item.aptNm }}</h3>
-        거래일시: {{ item.dealYear }}.{{ item.dealMonth }}.{{ item.dealDay }} <br>
-        거래금액: {{ item.dealAmount }}
+        최근거래일시: {{ item.latestDealYear }}.{{ item.latestDealMonth }}.{{ item.latestDealDay }} <br>
+        최근거래금액: {{ item.latestDealAmount }} (만원)
     </div>
 </template>
 
 <style scoped>
-
+.main-container {
+    width: 100%;
+}
 </style>
