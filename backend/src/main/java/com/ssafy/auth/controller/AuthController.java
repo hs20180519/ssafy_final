@@ -26,12 +26,12 @@ import com.ssafy.exception.ErrorCode;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.token.TokenProvider;
 import com.ssafy.token.TokenService;
+import com.ssafy.util.CookieUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,25 +53,14 @@ public class AuthController {
 	public ResponseEntity<?> login(@RequestBody
 	LoginRequest request, HttpServletResponse response) {
 		try {
-			// 로그인 처리
 			MemberDto memberDto = authService.login(request);
 
-			// Access Token 생성
 			String accessToken = tokenProvider.generateAccessToken(memberDto.getId(), memberDto.getRole());
-
-			// Refresh Token 생성 및 저장
 			String refreshToken = tokenProvider.generateRefreshToken(memberDto.getId());
 			tokenService.storeRefreshToken(memberDto.getId(), refreshToken);
 
-			// 새 Refresh Token을 HTTP-Only 쿠키로 생성
-			Cookie cookie = new Cookie("refreshToken", refreshToken);
-			cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
-			cookie.setPath("/"); // 모든 경로에 대해 유효
-			cookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유효
+			CookieUtil.addCookie(response, "refreshToken", refreshToken, 7 * 24 * 60 * 60, "/");
 
-			response.addCookie(cookie); // 응답에 쿠키 추가
-
-			// 응답 헤더에 Access Token 포함
 			HttpHeaders headers = new HttpHeaders();
 			headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 
@@ -100,7 +89,6 @@ public class AuthController {
 	public ResponseEntity<?> refreshAccessToken(@CookieValue(name = "refreshToken", required = false)
 	String refreshToken, HttpServletResponse response) {
 		try {
-			// Refresh Token 유효성 검사
 			if (refreshToken == null || !tokenProvider.validateToken(refreshToken)) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 Refresh Token");
 			}
@@ -108,17 +96,10 @@ public class AuthController {
 			String memberId = tokenProvider.getMemberIdFromToken(refreshToken);
 			String role = tokenProvider.getMemberRoleFromToken(refreshToken);
 
-			// 새 Access Token 및 Refresh Token 생성
 			String newAccessToken = tokenProvider.generateAccessToken(memberId, role);
 			String newRefreshToken = tokenProvider.generateRefreshToken(memberId);
 
-			// 새 Refresh Token을 HTTP-Only 쿠키로 생성
-			Cookie cookie = new Cookie("refreshToken", newRefreshToken);
-			cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
-			cookie.setPath("/"); // 모든 경로에 대해 유효
-			cookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유효
-
-			response.addCookie(cookie); // 응답에 쿠키 추가
+			CookieUtil.addCookie(response, "refreshToken", newRefreshToken, 7 * 24 * 60 * 60, "/");
 
 			HttpHeaders headers = new HttpHeaders();
 			headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + newAccessToken);
@@ -138,14 +119,9 @@ public class AuthController {
 	public ResponseEntity<?> logout(HttpServletResponse response, Authentication authentication) {
 		try {
 			String memberId = (String)authentication.getPrincipal();
-			tokenService.deleteRefreshToken(memberId); // 리프레시 토큰 삭제
+			tokenService.deleteRefreshToken(memberId);
 
-			// 쿠키 삭제 (Refresh Token 쿠키)
-			Cookie cookie = new Cookie("refreshToken", null);
-			cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
-			cookie.setPath("/"); // 모든 경로에서 유효
-			cookie.setMaxAge(0); // 쿠키 만료 시간을 0으로 설정하여 삭제
-			response.addCookie(cookie); // 응답에 쿠키 추가
+			CookieUtil.deleteCookie(response, "refreshToken", "/");
 
 			return ResponseEntity.ok().body("로그아웃 성공");
 		} catch (Exception e) {
