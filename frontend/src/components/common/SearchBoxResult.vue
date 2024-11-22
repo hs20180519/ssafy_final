@@ -35,7 +35,8 @@ function goDetail(type, data) {
         houseDealStore.setRegion(data.sidoName, data.gugunName, data.dongName, data.dongCode)
     }
 
-    console.log("goDetail 호출", code, type);
+    houseDealStore.setPgno(1);
+    console.log("goDetail 호출", code, type, houseDealStore.pgno);
     router.push({
         name: "HouseDeal",
         query: {

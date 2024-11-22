@@ -13,8 +13,8 @@ const houseDealStore = useHouseDealStore();
 
 const { VITE_ARTICLE_LIST_SIZE } = import.meta.env;
 
-const type = route.query.type;
-const keyword = route.query.keyword;
+const type = ref(route.query.type);
+const keyword = ref(route.query.keyword);
 
 const clickedItem = ref({});
 
@@ -23,8 +23,8 @@ const total = ref();
 
 onMounted(() => {
     console.log("새로고침됨");
-    getResultList(type, keyword, houseDealStore.pgno);
-    getCountResult(type, keyword);
+    getResultList(type.value, keyword.value, houseDealStore.pgno);
+    getCountResult(type.value, keyword.value);
 })
 
 // query나 params가 변경되었을 때 실행(e.g. houseDealPage에서 재검색)
@@ -34,18 +34,22 @@ onBeforeRouteUpdate((to, from, next) => {
     getResultList(to.query.type, to.query.keyword);
     getCountResult(to.query.type, to.query.keyword);
 
+    type.value = to.query.type;
+    keyword.value = to.query.keyword;
+
     next();
 })
 
 watch(
     () => houseDealStore.pgno,
     (newVal) => {
-        console.log("pgno changed");
-        getResultList(type, keyword, newVal);
+        console.log("pgno changed,", type, keyword);
+        getResultList(type.value, keyword.value, newVal);
     }
 )
 
 const getResultList = (type, keyword, pgno = houseDealStore.pgno) => {
+    console.log()
     getHouseDealByKeyword(
         {
             type: type,
