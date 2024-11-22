@@ -18,7 +18,6 @@ export const authApi = () => {
       const authStore = useAuthStore();
       const token = authStore.getAuthToken;
 
-      console.log(token);
       if (token) {
         config.headers["Authorization"] = `Bearer ${token}`;
       }
@@ -68,8 +67,6 @@ export const authApi = () => {
           authStore.logout();
 
           alert("권한이 없습니다. 다시 로그인 해주세요.");
-
-          // router.replace({ name: "Login" });
         }
       }
       // 403 오류 시, 바로 로그인 페이지로 리다이렉트
@@ -80,8 +77,6 @@ export const authApi = () => {
         authStore.logout();
 
         alert("권한이 없습니다. 다시 로그인 해주세요.");
-
-        // router.replace({ name: "Login" }); // 403 오류 시 바로 로그인 페이지로 이동
       }
 
       return Promise.reject(error);

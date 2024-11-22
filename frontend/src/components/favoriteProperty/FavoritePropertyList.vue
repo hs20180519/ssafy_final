@@ -40,7 +40,6 @@ export default {
       getFavoriteProperties(
         (response) => {
           this.favoriteProperties = response.data; // 매물 정보 로드
-          console.log(response.data);
         },
         (error) => {
           console.error("Error fetching favorite properties", error);

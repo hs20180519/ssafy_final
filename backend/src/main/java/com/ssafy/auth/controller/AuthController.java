@@ -67,15 +67,11 @@ public class AuthController {
 			Map<String, Object> responseBody = Map.of(
 				"name", memberDto.getName(),
 				"refreshToken", refreshToken);
-
 			return ResponseEntity.ok().headers(headers).body(responseBody);
-
-		} catch (IllegalArgumentException e) {
-			// 로그인 실패 (예: 사용자 없음, 비밀번호 불일치)
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패: " + e.getMessage());
+		} catch (ApiException e) {
+			throw e;
 		} catch (Exception e) {
-			// 서버 오류
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류: " + e.getMessage());
+			throw new ApiException("로그인 처리 중 예상치 못한 오류가 발생했습니다.", ErrorCode.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -106,7 +102,7 @@ public class AuthController {
 
 			return ResponseEntity.ok().headers(headers).body("새로운 Access Token이 발급되었습니다.");
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+			throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -177,7 +173,7 @@ public class AuthController {
 	}
 
 	@PutMapping("/password")
-	public ResponseEntity<Void> rupdatePassword(@RequestBody
+	public ResponseEntity<Void> updatePassword(@RequestBody
 	ResetPasswordRequest request) {
 		authService.updatePassword(request);
 		return ResponseEntity.ok().build();

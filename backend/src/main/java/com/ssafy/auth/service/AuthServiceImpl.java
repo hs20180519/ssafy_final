@@ -51,17 +51,20 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public MemberDto login(LoginRequest loginInfo) throws SQLException {
-		// 사용자 정보 조회
-		MemberDto member = memberMapper.getMemberByMemberId(loginInfo.getId());
-		if (member == null) {
-			throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
+		try {
+			MemberDto member = memberMapper.getMemberByMemberId(loginInfo.getId());
+			if (member == null) {
+				throw new ApiException("존재하지 않는 사용자입니다.", ErrorCode.MEMBER_NOT_FOUND);
+			}
+			if (!PasswordUtil.verifyPassword(loginInfo.getPassword(), member.getPassword())) {
+				throw new ApiException("비밀번호가 일치하지 않습니다.", ErrorCode.INVALID_PASSWORD);
+			}
+			return member;
+		} catch (ApiException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ApiException("로그인 중 오류가 발생했습니다.", ErrorCode.INTERNAL_SERVER_ERROR);
 		}
-		// 비밀번호 검증
-
-		if (!PasswordUtil.verifyPassword(loginInfo.getPassword(), member.getPassword())) {
-			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-		}
-		return member;
 	}
 
 	@Transactional
