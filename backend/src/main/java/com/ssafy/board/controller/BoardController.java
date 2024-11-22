@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,9 +55,10 @@ public class BoardController {
 	// 질문 등록
 	@PostMapping("/questions")
 	public ResponseEntity<String> createQuestion(@RequestBody
-	BoardQuestionDto question, Authentication authentication) {
+	BoardQuestionDto question, @AuthenticationPrincipal
+	String memberId) {
 		try {
-			question.setAuthor((String)authentication.getPrincipal());
+			question.setAuthor(memberId);
 			boardService.createQuestion(question);
 			return ResponseEntity.status(HttpStatus.CREATED).body("질문이 등록되었습니다.");
 		} catch (Exception e) {
@@ -137,12 +139,11 @@ public class BoardController {
 	@PostMapping("/questions/{questionId}/answers")
 	public ResponseEntity<String> createAnswer(@PathVariable
 	int questionId, @RequestBody
-	BoardAnswerDto answer, Authentication authentication) {
+	BoardAnswerDto answer, @AuthenticationPrincipal
+	String memberId) {
 		try {
-			String author = (String)authentication.getPrincipal();
-
 			answer.setQuestionId(questionId);
-			answer.setAuthor(author);
+			answer.setAuthor(memberId);
 			boardService.createAnswer(answer);
 			return ResponseEntity.status(HttpStatus.CREATED).body("답변이 등록되었습니다.");
 		} catch (Exception e) {

@@ -5,17 +5,17 @@ import java.sql.SQLException;
 import com.ssafy.auth.model.request.LoginRequest;
 import com.ssafy.auth.model.request.ResetPasswordRequest;
 import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
+import com.ssafy.auth.model.request.SignUpRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.member.model.MemberDto;
 
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpSession;
 
 public interface AuthService {
 
 	public MemberDto login(LoginRequest loginInfo) throws SQLException;
 
-	public void signUp(MemberDto memberDto) throws SQLException;
+	public void signUp(SignUpRequest signUpRequest) throws SQLException;
 
 	public String sendSignUpMail(String mail) throws MessagingException;
 

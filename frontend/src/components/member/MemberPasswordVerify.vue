@@ -35,7 +35,7 @@ export default {
         });
 
         if (isPasswordCorrect) {
-          this.$router.push({ name: "EditProfile" }); // 회원정보 수정 페이지로 이동
+          this.$router.push({ name: "MyPage" }); // 마이페이지로 이동
         } else {
           this.errorMessage = "비밀번호가 틀렸습니다.";
         }

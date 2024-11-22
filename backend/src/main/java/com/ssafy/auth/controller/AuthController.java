@@ -1,14 +1,12 @@
 package com.ssafy.auth.controller;
 
-
 import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CookieValue;
-//import org.springframework.security.core.token.TokenService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.auth.model.request.LoginRequest;
 import com.ssafy.auth.model.request.ResetPasswordRequest;
 import com.ssafy.auth.model.request.SendResetPasswordEmailRequest;
+import com.ssafy.auth.model.request.SignUpRequest;
 import com.ssafy.auth.model.request.SignUpVerificationRequest;
 import com.ssafy.auth.service.AuthService;
 import com.ssafy.exception.ApiException;
@@ -27,12 +26,12 @@ import com.ssafy.exception.ErrorCode;
 import com.ssafy.member.model.MemberDto;
 import com.ssafy.token.TokenProvider;
 import com.ssafy.token.TokenService;
+import com.ssafy.util.CookieUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,40 +53,25 @@ public class AuthController {
 	public ResponseEntity<?> login(@RequestBody
 	LoginRequest request, HttpServletResponse response) {
 		try {
-			// 로그인 처리
 			MemberDto memberDto = authService.login(request);
 
-			// Access Token 생성
 			String accessToken = tokenProvider.generateAccessToken(memberDto.getId(), memberDto.getRole());
-
-			// Refresh Token 생성 및 저장
 			String refreshToken = tokenProvider.generateRefreshToken(memberDto.getId());
 			tokenService.storeRefreshToken(memberDto.getId(), refreshToken);
 
-			// 새 Refresh Token을 HTTP-Only 쿠키로 생성
-			Cookie cookie = new Cookie("refreshToken", refreshToken);
-			cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
-			cookie.setPath("/"); // 모든 경로에 대해 유효
-			cookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유효
+			CookieUtil.addCookie(response, "refreshToken", refreshToken, 7 * 24 * 60 * 60, "/");
 
-			response.addCookie(cookie); // 응답에 쿠키 추가
-
-			// 응답 헤더에 Access Token 포함
 			HttpHeaders headers = new HttpHeaders();
 			headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 
 			Map<String, Object> responseBody = Map.of(
 				"name", memberDto.getName(),
 				"refreshToken", refreshToken);
-
 			return ResponseEntity.ok().headers(headers).body(responseBody);
-
-		} catch (IllegalArgumentException e) {
-			// 로그인 실패 (예: 사용자 없음, 비밀번호 불일치)
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패: " + e.getMessage());
+		} catch (ApiException e) {
+			throw e;
 		} catch (Exception e) {
-			// 서버 오류
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류: " + e.getMessage());
+			throw new ApiException("로그인 처리 중 예상치 못한 오류가 발생했습니다.", ErrorCode.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -101,7 +85,6 @@ public class AuthController {
 	public ResponseEntity<?> refreshAccessToken(@CookieValue(name = "refreshToken", required = false)
 	String refreshToken, HttpServletResponse response) {
 		try {
-			// Refresh Token 유효성 검사
 			if (refreshToken == null || !tokenProvider.validateToken(refreshToken)) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 Refresh Token");
 			}
@@ -109,24 +92,17 @@ public class AuthController {
 			String memberId = tokenProvider.getMemberIdFromToken(refreshToken);
 			String role = tokenProvider.getMemberRoleFromToken(refreshToken);
 
-			// 새 Access Token 및 Refresh Token 생성
 			String newAccessToken = tokenProvider.generateAccessToken(memberId, role);
 			String newRefreshToken = tokenProvider.generateRefreshToken(memberId);
 
-			// 새 Refresh Token을 HTTP-Only 쿠키로 생성
-			Cookie cookie = new Cookie("refreshToken", newRefreshToken);
-			cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
-			cookie.setPath("/"); // 모든 경로에 대해 유효
-			cookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유효
-
-			response.addCookie(cookie); // 응답에 쿠키 추가
+			CookieUtil.addCookie(response, "refreshToken", newRefreshToken, 7 * 24 * 60 * 60, "/");
 
 			HttpHeaders headers = new HttpHeaders();
 			headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + newAccessToken);
 
 			return ResponseEntity.ok().headers(headers).body("새로운 Access Token이 발급되었습니다.");
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+			throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -136,18 +112,11 @@ public class AuthController {
 		@ApiResponse(responseCode = "500", description = "서버 오류")
 	})
 	@PostMapping("/logout")
-	public ResponseEntity<?> logout(HttpServletResponse response, Authentication authentication) {
+	public ResponseEntity<?> logout(HttpServletResponse response, @AuthenticationPrincipal
+	String memberId) {
 		try {
-			String memberId = (String)authentication.getPrincipal();
-			tokenService.deleteRefreshToken(memberId); // 리프레시 토큰 삭제
-
-			// 쿠키 삭제 (Refresh Token 쿠키)
-			Cookie cookie = new Cookie("refreshToken", null);
-			cookie.setHttpOnly(true); // 클라이언트에서 접근 불가
-			cookie.setPath("/"); // 모든 경로에서 유효
-			cookie.setMaxAge(0); // 쿠키 만료 시간을 0으로 설정하여 삭제
-			response.addCookie(cookie); // 응답에 쿠키 추가
-
+			tokenService.deleteRefreshToken(memberId);
+			CookieUtil.deleteCookie(response, "refreshToken", "/");
 			return ResponseEntity.ok().body("로그아웃 성공");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
@@ -159,9 +128,9 @@ public class AuthController {
 		@ApiResponse(responseCode = "500", description = "서버 오류 - 회원 가입 중 오류 발생")})
 	@PostMapping("/signup")
 	public ResponseEntity<String> signup(@RequestBody
-	MemberDto memberDto) {
+	SignUpRequest signUpRequest) {
 		try {
-			authService.signUp(memberDto);
+			authService.signUp(signUpRequest);
 			return ResponseEntity.status(HttpStatus.CREATED).body("회원 가입이 완료되었습니다. 로그인 해주세요.");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 가입 중 오류가 발생했습니다.");
@@ -169,7 +138,8 @@ public class AuthController {
 	}
 
 	@PostMapping("/signup-email")
-	public ResponseEntity<String> sendSignUpMail(@RequestParam String email) throws MessagingException {
+	public ResponseEntity<String> sendSignUpMail(@RequestParam
+	String email) throws MessagingException {
 		return ResponseEntity.ok(authService.sendSignUpMail(email));
 	}
 
@@ -185,9 +155,10 @@ public class AuthController {
 	String email) {
 		return ResponseEntity.ok(authService.findId(name, email));
 	}
-	
+
 	@PostMapping("/password-reset-email")
-	public ResponseEntity<String> sendResetPasswordEmail(@RequestBody SendResetPasswordEmailRequest request) {
+	public ResponseEntity<String> sendResetPasswordEmail(@RequestBody
+	SendResetPasswordEmailRequest request) {
 		try {
 			return ResponseEntity.ok(authService.sendResetPasswordEmail(request));
 		} catch (MessagingException e) {
@@ -196,13 +167,16 @@ public class AuthController {
 	}
 
 	@PostMapping("/password-reset-verification")
-	public ResponseEntity<Boolean> verifyResetPasswordCode(@RequestParam("uuid") String uuid) {
+	public ResponseEntity<Boolean> verifyResetPasswordCode(@RequestParam("uuid")
+	String uuid) {
 		return ResponseEntity.ok(authService.verifyResetPasswordCode(uuid));
 	}
 
 	@PutMapping("/password")
-	public ResponseEntity<Void> rupdatePassword(@RequestBody ResetPasswordRequest request) {
+	public ResponseEntity<Void> updatePassword(@RequestBody
+	ResetPasswordRequest request) {
 		authService.updatePassword(request);
 		return ResponseEntity.ok().build();
 	}
+
 }
