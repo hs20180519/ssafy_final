@@ -47,8 +47,14 @@ const onClick = (item) => {
 </template>
 
 <style scoped>
+
 .housedeal-list {
     margin-left: 50px;
-    width: 30%;
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* HouseDealList의 너비 */
+    border-right: 1px solid rgb(204, 204, 204);
+    background-color: rgb(255, 255, 255);
+    z-index: 1;
 }
 </style>

@@ -3,6 +3,8 @@ package com.ssafy.houseDeal.controller;
 import java.util.List;
 
 import com.ssafy.houseDeal.model.request.GetHouseDealWithKeywordRequest;
+import com.ssafy.houseDeal.model.response.GetHouseDealWithKeywordResponse;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -63,7 +65,7 @@ public class HouseDealController {
     }
     
     @GetMapping("/keyword")
-    public ResponseEntity<List<HouseDealDto>> getHouseDealsByKeyword(
+    public ResponseEntity<List<GetHouseDealWithKeywordResponse>> getHouseDealsByKeyword(
     		@RequestParam("type") String type,
     		@RequestParam("code") String code,
 			@RequestParam("pgSize") int pgSize,
@@ -76,7 +78,8 @@ public class HouseDealController {
 				.pgSize(pgSize)
 				.pgno(pgno)
 				.build();
-    	List<HouseDealDto> houseDeals = houseDealService.getHouseDealsWithKeyword(request);
+		List<GetHouseDealWithKeywordResponse> houseDeals = houseDealService.getHouseDealsWithKeyword(request);
+		System.out.println(houseDeals);
     	return ResponseEntity.ok(houseDeals);
     }
 

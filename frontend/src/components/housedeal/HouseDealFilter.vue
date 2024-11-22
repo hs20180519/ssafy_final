@@ -157,6 +157,7 @@ const getDongFilter = (code) => {
 .housedeal-filter {
     margin-left: 50px;
     position: relative; 
+    width: 50%;
 }
 
 </style>

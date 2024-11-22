@@ -66,17 +66,21 @@
     </select>
 
     <select id="getCountHouseDealsWithKeyword" parameterType="map" resultType="int">
-        SELECT count(d.no)
-        FROM house_deals d
-        JOIN house_infos i ON i.apt_seq = d.apt_seq
-        <where>
-            <if test="type == 'house'">
-                i.apt_seq = #{code}
-            </if>
-            <if test="type == 'region'">
-                i.sgg_cd = SUBSTRING(#{code}, 1, 5)
-                AND i.umd_cd = SUBSTRING(#{code}, 6, 10)
-            </if>
-        </where>
+        SELECT count(*) count
+        FROM (
+        	SELECT d.apt_seq
+	        FROM house_deals d
+	        JOIN house_infos i ON i.apt_seq = d.apt_seq
+	        <where>
+	            <if test="type == 'house'">
+	                i.apt_seq = #{code}
+	            </if>
+	            <if test="type == 'region'">
+	                i.sgg_cd = SUBSTRING(#{code}, 1, 5)
+	                AND i.umd_cd = SUBSTRING(#{code}, 6, 10)
+	            </if>
+	        </where>
+	        GROUP BY (d.apt_seq)
+        ) TMP;
     </select>
 </mapper>
