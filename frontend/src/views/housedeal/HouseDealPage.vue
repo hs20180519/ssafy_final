@@ -39,6 +39,7 @@ onBeforeRouteUpdate((to, from, next) => {
 
     type.value = to.query.type;
     keyword.value = to.query.keyword;
+    isDetailVisible.value = false;
 
     next();
 })
