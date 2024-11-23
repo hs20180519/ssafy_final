@@ -138,7 +138,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/signup-email")
-	public ResponseEntity<String> sendSignUpMail(@RequestParam
+	public ResponseEntity<String> sendSignUpMail(@RequestParam("email")
 	String email) throws MessagingException {
 		return ResponseEntity.ok(authService.sendSignUpMail(email));
 	}

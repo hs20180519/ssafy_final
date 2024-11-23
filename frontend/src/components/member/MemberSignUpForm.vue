@@ -41,6 +41,20 @@
         </button>
       </div>
 
+      <div v-if='emailSent' class="input-group">
+        <label for="verify-code">이메일 인증번호</label>
+        <input
+          type="text"
+          id="verify-code"
+          v-model="verifyCode"
+          placeholder="인증번호를 입력하세요"
+          required
+        />
+        <button type="button" @click="verifySignUpCode" :disabled="verified">
+          이메일 인증
+        </button>
+      </div>
+
       <div class="input-group">
         <label for="password">비밀번호</label>
         <input
@@ -68,9 +82,18 @@
   </div>
 </template>
 
+<!-- <script setup>
+import { ref } from 'vue';
+
+const verifyCode = ref();
+const emailSent = ref(false);
+
+</script> -->
+
 <script>
-import { signup } from "@/api/auth.js";
+import { signup, sendSignUpEmail, verifySignUpCode } from "@/api/auth.js";
 import AddressSearch from "@/components/AddressSearch.vue";
+import { ref } from "vue";
 
 export default {
   components: { AddressSearch },
@@ -83,12 +106,20 @@ export default {
       email: "",
       password: "",
       confirmPassword: "",
+      verifyCode: "",
+      emailSent: false,
+      verified: false
     };
   },
   methods: {
     async handleSignup() {
       if (this.password !== this.confirmPassword) {
         alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+        return;
+      }
+
+      if(!this.verified) {
+        alert("이메일 인증이 완료되지 않았습니다.")
         return;
       }
 
@@ -115,8 +146,37 @@ export default {
     },
     // 인증번호 전송 (추후 수정 필요)
     sendVerificationCode() {
+      sendSignUpEmail(this.email,
+        ({data}) => {
+          console.log(data);
+          this.emailSent = true;
+        },
+        (error) => {
+          console.log(error);
+        }
+      )
       console.log("이메일 인증번호 전송");
     },
+    verifySignUpCode() {
+      verifySignUpCode(
+        {
+          email: this.email,
+          code: this.verifyCode
+        },
+        ({data}) => {
+          console.log(data);
+          if(data) {
+            this.verified = true;
+            alert("이메일 인증이 완료되었습니다.");
+          } else {
+            alert("인증번호를 다시 확인해주세요.");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      )
+    }
   },
 };
 </script>
