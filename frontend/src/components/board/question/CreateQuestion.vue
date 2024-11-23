@@ -21,6 +21,7 @@
 
 <script>
 import {createQuestion} from "@/api/board";
+import {toast} from "vue3-toastify";
 
 export default {
   name: "CreateQuestion",
@@ -34,9 +35,12 @@ export default {
     async submitQuestion() {
       const body = {title: this.title, content: this.content};
       console.log(body);
-      createQuestion(
+      await createQuestion(
         body,
         () => {
+          toast.success("질문이 성공적으로 등록되었습니다.", {
+            autoClose: 3000, // 3000ms 동안 토스트 메시지가 표시됨
+          });
           this.$router.push("/board"); // 성공 시 페이지 이동
         },
         (error) => {

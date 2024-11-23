@@ -1,15 +1,19 @@
 <template>
   <Navbar/>
   <router-view/>
+  <ToastifyContainer position="top-right" autoClose="3000"/>
 </template>
 
 <script>
 import Navbar from "@/components/layout/SideNavbar.vue";
+import {ToastifyContainer} from "vue3-toastify";
+import 'vue3-toastify/dist/index.css';
 
 export default {
   name: 'App',
   components: {
-    Navbar
+    Navbar,
+    ToastifyContainer
   }
 };
 </script>

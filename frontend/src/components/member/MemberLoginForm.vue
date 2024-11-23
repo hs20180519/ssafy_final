@@ -35,6 +35,7 @@
 <script>
 import {login} from "@/api/auth";
 import {useAuthStore} from "@/stores/authStore";
+import {toast} from "vue3-toastify";
 
 export default {
   data() {
@@ -64,15 +65,15 @@ export default {
           const authStore = useAuthStore();
           authStore.login(accessToken, memberName, memberId);
           document.cookie = `refreshToken=${refreshToken}; path=/; HttpOnly`;
-          alert("로그인 성공");
+          toast.success("로그인 성공");
           this.$router.push({name: "Home"}); // 로그인 후 리디렉션
         }
       } catch (error) {
         // 로그인 실패 시 처리
         if (error.response && error.response.status === 401) {
-          alert("로그인 실패: 아이디나 비밀번호가 잘못되었습니다.");
+          toast.error("로그인 실패: 아이디나 비밀번호가 잘못되었습니다.");
         } else {
-          alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+          toast.error("서버 오류가 발생했습니다. 다시 시도해주세요.");
         }
       }
     },

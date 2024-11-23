@@ -70,8 +70,9 @@
 </template>
 
 <script>
-import { getMemberInfo, updateMemberInfo } from "@/api/member"; // 회원 정보 가져오기 및 수정 API
-import { useAuthStore } from "@/stores/authStore";
+import {getMemberInfo, updateMemberInfo} from "@/api/member"; // 회원 정보 가져오기 및 수정 API
+import {useAuthStore} from "@/stores/authStore";
+import {toast} from "vue3-toastify";
 
 export default {
   data() {
@@ -99,26 +100,28 @@ export default {
   },
   methods: {
     async handleSubmit() {
+
       if (this.form.password !== this.form.confirmPassword) {
-        this.errorMessage = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
+        toast.error("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
         return;
       }
 
       try {
         // confirmPassword를 제외한 새로운 객체 생성
-        const { confirmPassword, email, id, ...dataToSend } = this.form;
+        const {confirmPassword, email, id, ...dataToSend} = this.form;
 
         const response = await updateMemberInfo(dataToSend); // 수정된 정보 서버로 전송
         if (response.status === 200) {
-          alert("회원 정보가 성공적으로 수정되었습니다.");
+          toast.success("회원 정보가 성공적으로 수정되었습니다!");
+
           const authStore = useAuthStore();
           authStore.memberName = this.form.name; // 이름 업데이트
           authStore.saveToSessionStorage(); // 세션 스토리지에 저장
 
-          this.$router.push({ name: "Home" }); // 홈 페이지로 이동
+          this.$router.push({name: "Home"}); // 홈 페이지로 이동
         }
       } catch (error) {
-        this.errorMessage = "회원 정보 수정 중 오류가 발생했습니다.";
+        toast.error("회원 정보 수정 중 오류가 발생했습니다.");
       }
     },
   },
