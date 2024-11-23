@@ -1,17 +1,69 @@
 <script setup>
-import { ref, defineEmits, defineProps } from 'vue'
+import { ref, defineEmits, defineProps, onUpdated } from 'vue';
+import { createFavoriteProperty, deleteFavoriteProperty, existsFavoritePropertyByAptSeqAndId } from '@/api/favoriteProperty'
+import { useAuthStore } from '@/stores/authStore';
 
 const emit = defineEmits(['closeDetail']);
-
-defineProps({
+const props = defineProps({
     isVisible: Boolean,
     clickedItem: Object
+})
+
+const authStore = useAuthStore();
+
+const bookmarked = ref(false);
+
+
+onUpdated(() => {
+    if(authStore.isLoggedIn) { // 로그인했을 때만 북마크 여부 확인
+        existsFavoritePropertyByAptSeqAndId(
+            props.clickedItem.aptSeq,
+            ({ data }) => {
+                bookmarked.value = data;
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+    }
 })
 
 
 const closeDetail = () => {
     emit('closeDetail');
 }
+
+const onClickBookmark = () => {
+    bookmarked.value = !bookmarked.value
+    if(bookmarked.value) { // 북마크 추가
+        createFavoriteProperty(
+            {
+                aptSeq: props.clickedItem.aptSeq
+            },
+            ({ data }) => {
+                console.log(props.clickedItem);
+                console.log(data);
+                bookmarked.value = true;
+                console.log(bookmarked.value);
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+    } else { // 북마크 삭제
+        console.log("북마크 삭제됨");
+        deleteFavoriteProperty(
+            props.clickedItem.aptSeq,
+            ({data}) => {
+                console.log(data);
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+    }
+}
+
 
 </script>
 
@@ -23,7 +75,13 @@ const closeDetail = () => {
         <!-- 이미지 섹션 -->
         <div class="image-section">
             <img src="https://via.placeholder.com/300x200" alt="매물 이미지" />
-            <button class="bookmark-button">★</button>
+            <button class="bookmark-button" @click="onClickBookmark">
+                <font-awesome-icon :icon="['far', 'bookmark']" v-if="!bookmarked"/>
+                <font-awesome-icon :icon="['fas', 'bookmark']" v-if="bookmarked"/>
+            </button>
+            <p>
+                
+            </p>
         </div>
 
         <!-- 길찾기 버튼 -->

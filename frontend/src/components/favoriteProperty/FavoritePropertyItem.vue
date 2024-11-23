@@ -54,10 +54,10 @@ export default {
     removeFavorite() {
       // 관심 매물 삭제 API 호출
       deleteFavoriteProperty(
-        this.property.id,
+        this.property.aptSeq,
         (response) => {
           // 삭제 후 부모 컴포넌트에 이벤트 전달
-          this.$emit("remove", this.property.id);
+          this.$emit("remove", this.property.aptSeq);
         },
         (error) => {
           console.error("Error removing property", error);

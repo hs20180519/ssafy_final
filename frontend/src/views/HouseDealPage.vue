@@ -135,7 +135,7 @@ const closeDetail = () => {
 }
 
 .list-container {
-    width: 30vh;
+    width: 40vh;
 }
 
 .detail-overlay {

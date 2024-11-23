@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class FavoritePropertyDetailsDto {
-	private int id;
 	private String memberId;
 	private String aptSeq;
 	private String aptNm;

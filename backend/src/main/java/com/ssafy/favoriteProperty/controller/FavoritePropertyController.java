@@ -2,6 +2,8 @@ package com.ssafy.favoriteProperty.controller;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,10 +44,20 @@ public class FavoritePropertyController {
 		return ResponseEntity.ok(properties);
 	}
 
-	@DeleteMapping("/{favoritePropertyId}")
-	public ResponseEntity<String> deleteFavoriteProperty(@PathVariable
-	String favoritePropertyId) {
-		favoritePropertyService.deleteFavoriteProperty(favoritePropertyId);
+	@GetMapping("/{aptSeq}/exists")
+	public ResponseEntity<Boolean> existsFavoritePropertyByAptSeqAndId(@AuthenticationPrincipal String memberId,
+																					   @PathVariable String aptSeq) {
+		System.out.println(memberId + " " + aptSeq);
+		boolean exists = favoritePropertyService.existsFavoritePropertyByAptSeqAndId(memberId, aptSeq);
+
+		return ResponseEntity.ok(exists);
+	}
+
+	@DeleteMapping("/{aptSeq}")
+	public ResponseEntity<String> deleteFavoriteProperty(@AuthenticationPrincipal String memberId, @PathVariable
+	String aptSeq) {
+		System.out.println(memberId + " " + aptSeq);
+		favoritePropertyService.deleteFavoriteProperty(memberId, aptSeq);
 		return ResponseEntity.ok("관심 매물이 삭제되었습니다.");
 	}
 }
