@@ -25,13 +25,15 @@
         ></textarea>
       </div>
 
-      <button type="submit">수정 완료</button>
+      <div class="form-actions">
+        <button type="submit">수정 완료</button>
+      </div>
     </form>
   </div>
 </template>
 
 <script>
-import { getQuestionDetails, updateQuestion } from "@/api/board";
+import {getQuestionDetails, updateQuestion} from "@/api/board";
 
 export default {
   name: "EditQuestion",
@@ -68,7 +70,7 @@ export default {
             console.log("질문이 수정되었습니다:", response);
             this.$router.push({
               name: "BoardQuestionDetails",
-              params: { questionId: questionId },
+              params: {questionId: questionId},
             }); // Redirect to board list or appropriate page
           },
           (error) => {
@@ -114,7 +116,7 @@ textarea {
 
 button {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #70abd8;
   color: white;
   border: none;
   cursor: pointer;
@@ -123,5 +125,12 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+/* Aligning the submit button to the right */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
 }
 </style>

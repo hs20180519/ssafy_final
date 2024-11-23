@@ -11,8 +11,7 @@ import {
   faHouse,
   faUser,
   faCircleInfo,
-  faStar,
-  faMagnifyingGlass, faBookmark, faHeart,
+  faMagnifyingGlass, faHeart, faEye, faComment,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {useKakao} from "vue3-kakao-maps";
@@ -20,7 +19,7 @@ import {useKakao} from "vue3-kakao-maps";
 import ElementPlus from 'element-plus'
 
 
-library.add(faHouse, faUser, faCircleInfo, faMagnifyingGlass, faHeart);
+library.add(faHouse, faUser, faCircleInfo, faMagnifyingGlass, faHeart, faEye, faComment);
 
 useKakao(import.meta.env.VITE_KAKAO_APP_KEY);
 

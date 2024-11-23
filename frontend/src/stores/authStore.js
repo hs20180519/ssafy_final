@@ -1,26 +1,29 @@
-import { defineStore } from "pinia";
-import { jwtDecode } from "jwt-decode";
+import {defineStore} from "pinia";
+import {jwtDecode} from "jwt-decode";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     isLoggedIn: false,
     authToken: null,
     memberName: null,
-    tokenExpiry: null, // 만료 시간 추가
+    memberId: null, // 사용자 아이디 추가
+    tokenExpiry: null,
   }),
   getters: {
     isAuthenticated: (state) => !!state.authToken,
     getAuthToken: (state) => state.authToken,
     getMember: (state) => state.memberName,
+    getMemberId: (state) => state.memberId, // 사용자 아이디 반환
   },
   actions: {
-    login(token, memberName) {
+    login(token, memberName, memberId) {
       this.isLoggedIn = true;
       this.authToken = token;
       this.memberName = memberName;
+      this.memberId = memberId; // 로그인 시 아이디 저장
 
       try {
-        const { exp } = jwtDecode(token); // 만료 시간 설정
+        const {exp} = jwtDecode(token);
         this.tokenExpiry = exp * 1000;
       } catch (error) {
         console.error("Invalid token:", error);
@@ -33,10 +36,10 @@ export const useAuthStore = defineStore("auth", {
       this.isLoggedIn = false;
       this.authToken = null;
       this.memberName = null;
+      this.memberId = null; // 로그아웃 시 아이디도 초기화
       this.tokenExpiry = null;
       this.removeFromSessionStorage();
     },
-    // 세션 스토리지에 상태 저장
     saveToSessionStorage() {
       sessionStorage.setItem(
         "auth",
@@ -44,23 +47,23 @@ export const useAuthStore = defineStore("auth", {
           isLoggedIn: this.isLoggedIn,
           authToken: this.authToken,
           memberName: this.memberName,
+          memberId: this.memberId, // 아이디도 세션에 저장
           tokenExpiry: this.tokenExpiry,
         })
       );
     },
-    // 세션 스토리지에서 상태 제거
     removeFromSessionStorage() {
       sessionStorage.removeItem("auth");
     },
-    // 세션 스토리지에서 상태 복원
     restoreFromSessionStorage() {
       const storedData = sessionStorage.getItem("auth");
       if (storedData) {
-        const { isLoggedIn, authToken, memberName, tokenExpiry } =
+        const {isLoggedIn, authToken, memberName, memberId, tokenExpiry} =
           JSON.parse(storedData);
         this.isLoggedIn = isLoggedIn;
         this.authToken = authToken;
         this.memberName = memberName;
+        this.memberId = memberId; // 아이디 복원
         this.tokenExpiry = tokenExpiry;
       }
     },

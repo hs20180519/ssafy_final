@@ -38,7 +38,7 @@
         title="Q&A 게시판"
       >
         <font-awesome-icon :icon="['fas', 'circle-info']"/>
-        <span class="menu-text">게시판</span>
+        <span class="menu-text">문의하기</span>
       </div>
     </div>
     <DropdownMenu :showDropdown="showDropdown"/>

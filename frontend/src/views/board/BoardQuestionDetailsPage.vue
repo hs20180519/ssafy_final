@@ -1,7 +1,7 @@
 <template>
   <div class="board-question-details-page">
-    <BoardQuestionDetails :questionId="questionId" />
-    <BoardAnswerList ref="answerList" :questionId="questionId" />
+    <BoardQuestionDetails :questionId="questionId"/>
+    <BoardAnswerList ref="answerList" :questionId="questionId"/>
     <BoardAnswerForm
       :questionId="questionId"
       @answerSubmitted="refreshAnswers"
@@ -37,6 +37,7 @@ export default {
 
 <style scoped>
 .board-question-details-page {
-  padding: 120px;
+  padding-left: 200px;
+  padding-right: 140px;
 }
 </style>
