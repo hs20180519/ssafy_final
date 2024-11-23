@@ -19,18 +19,20 @@ export default {
 
 <style scoped>
 .home {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100vh;
+  //display: flex;
+  //flex-direction: column;
+  //align-items: center;
+  //height: 100vh;
+  background-color: #f8f9fa; /* 메인 배경색 */
 }
 
 .main-content-wrapper {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 100px;
+  background-color: #f8f9fa; /* 메인 배경색 */
+  //display: flex;
+  //align-items: center;
+  //justify-content: center;
 }
+
 
 </style>
