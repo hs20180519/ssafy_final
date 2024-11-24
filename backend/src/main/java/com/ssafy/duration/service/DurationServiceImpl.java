@@ -5,6 +5,9 @@ import com.ssafy.duration.model.response.CarApiResponse;
 import com.ssafy.duration.model.response.DurationResponse;
 import com.ssafy.duration.model.response.TransitApiResponse;
 import com.ssafy.duration.model.response.WalkApiResponse;
+import com.ssafy.exception.ApiException;
+import com.ssafy.exception.ErrorCode;
+import com.ssafy.util.KakaoApiUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DurationServiceImpl implements DurationService {
 
+    private final KakaoApiUtil kakaoApiUtil;
+
     @Value("${tmap.app_key}")
     private String APP_KEY;
 
@@ -28,6 +33,8 @@ public class DurationServiceImpl implements DurationService {
 
     @Override
     public Mono<DurationResponse> getCarDuration(TMapDurationRequest request) {
+        geocode(request);
+
         WebClient webClient = WebClient.builder()
                 .baseUrl(TMAP_BASE_URL)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -43,7 +50,6 @@ public class DurationServiceImpl implements DurationService {
 
         return response.map(apiResponse -> {
             int totalTime = apiResponse.getFeatures().get(0).getProperties().getTotalTime();
-
             return DurationResponse.builder()
                     .totalTime(totalTime)
                     .build();
@@ -53,6 +59,8 @@ public class DurationServiceImpl implements DurationService {
 
     @Override
     public Mono<DurationResponse> getWalkDuration(TMapDurationRequest request) {
+        geocode(request);
+
         // TODO: webClient build 분리설계
         WebClient webClient = WebClient.builder()
                 .baseUrl(TMAP_BASE_URL)
@@ -78,6 +86,8 @@ public class DurationServiceImpl implements DurationService {
 
     @Override
     public Mono<DurationResponse> getTransitDuration(TMapDurationRequest request) {
+        geocode(request);
+
         WebClient webClient = WebClient.builder()
                 .baseUrl(TMAP_TRANSIT_BASE_URL)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -105,5 +115,16 @@ public class DurationServiceImpl implements DurationService {
         });
     }
 
-
+    private void geocode(TMapDurationRequest request) {
+        if(request.getStartX() == 0 && request.getStartY() == 0) {
+            try {
+                KakaoApiUtil.Location location = kakaoApiUtil.getCoordinates(request.getStartAddress());
+                request.setStartX((float)location.getLongitude());
+                request.setStartY((float)location.getLatitude());
+                System.out.println(request.getStartX() + " " + request.getStartY());
+            } catch (Exception e) {
+                throw new ApiException(ErrorCode.FAILED_KAKAO_GEOCODE);
+            }
+        }
+    }
 }

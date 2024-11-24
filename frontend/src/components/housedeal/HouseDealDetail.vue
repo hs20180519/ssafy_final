@@ -2,6 +2,7 @@
 import { ref, defineEmits, defineProps, onUpdated } from 'vue';
 import { createFavoriteProperty, deleteFavoriteProperty, existsFavoritePropertyByAptSeqAndId } from '@/api/favoriteProperty'
 import { useAuthStore } from '@/stores/authStore';
+import HouseDealDuration from './HouseDealDuration.vue';
 
 const emit = defineEmits(['closeDetail']);
 const props = defineProps({
@@ -13,8 +14,11 @@ const authStore = useAuthStore();
 
 const bookmarked = ref(false);
 
+const isVisibleDuration = ref(false);
+
 
 onUpdated(() => {
+    console.log("Item clicked: ", props.clickedItem);
     if(authStore.isLoggedIn) { // 로그인했을 때만 북마크 여부 확인
         existsFavoritePropertyByAptSeqAndId(
             props.clickedItem.aptSeq,
@@ -64,6 +68,10 @@ const onClickBookmark = () => {
     }
 }
 
+const onClickDuration = () => {
+    isVisibleDuration.value = !isVisibleDuration.value;
+}
+
 
 </script>
 
@@ -86,7 +94,11 @@ const onClickBookmark = () => {
 
         <!-- 길찾기 버튼 -->
         <div class="navigate-button">
-            <button>길찾기</button>
+            <button @click="onClickDuration">길찾기</button>
+        </div>
+
+        <div class="duration-container" v-if="isVisibleDuration">
+            <HouseDealDuration :lat="clickedItem.latitude" :lng="clickedItem.longitude"/>
         </div>
 
         <!-- 거래 기록 섹션 -->
@@ -144,6 +156,10 @@ const onClickBookmark = () => {
 
 .navigate-button button:hover {
     background-color: #0056b3;
+}
+
+.duration-container {
+    width: 100%;
 }
 
 /* .record-section: 거래 기록 */

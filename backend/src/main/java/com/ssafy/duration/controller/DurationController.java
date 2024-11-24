@@ -2,7 +2,6 @@ package com.ssafy.duration.controller;
 
 import com.ssafy.duration.model.request.TMapDurationRequest;
 import com.ssafy.duration.model.response.DurationResponse;
-import com.ssafy.duration.model.response.TransitApiResponse;
 import com.ssafy.duration.service.DurationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +16,22 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class DurationController {
     private final DurationService durationService;
+
     @GetMapping("/car")
     public ResponseEntity<Mono<DurationResponse>> getCarDuration(
             @RequestParam("startX") float startX,
             @RequestParam("startY") float startY,
+            @RequestParam("startAddress") String startAddress,
             @RequestParam("endX") float endX,
             @RequestParam("endY") float endY
-    ) {
+    ) throws Exception {
 
         return ResponseEntity.ok(
                 durationService.getCarDuration(
                         TMapDurationRequest.builder()
                                 .startX(startX)
                                 .startY(startY)
+                                .startAddress(startAddress)
                                 .endX(endX)
                                 .endY(endY)
                                 .build()
@@ -41,6 +43,7 @@ public class DurationController {
     public ResponseEntity<Mono<DurationResponse>> getWalkDuration(
             @RequestParam("startX") float startX,
             @RequestParam("startY") float startY,
+            @RequestParam("startAddress") String startAddress,
             @RequestParam("endX") float endX,
             @RequestParam("endY") float endY,
             @RequestParam("startName") String startName,
@@ -51,6 +54,7 @@ public class DurationController {
                         TMapDurationRequest.builder()
                                 .startX(startX)
                                 .startY(startY)
+                                .startAddress(startAddress)
                                 .endX(endX)
                                 .endY(endY)
                                 .startName(startName)
@@ -64,6 +68,7 @@ public class DurationController {
     public ResponseEntity<Mono<DurationResponse>> getTransitDuration(
             @RequestParam("startX") float startX,
             @RequestParam("startY") float startY,
+            @RequestParam("startAddress") String startAddress,
             @RequestParam("endX") float endX,
             @RequestParam("endY") float endY
 
@@ -73,6 +78,7 @@ public class DurationController {
                         TMapDurationRequest.builder()
                                 .startX(startX)
                                 .startY(startY)
+                                .startAddress(startAddress)
                                 .endX(endX)
                                 .endY(endY)
                                 .build()
