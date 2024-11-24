@@ -1,9 +1,9 @@
 <script setup>
 // import { TabsPaneContext } from 'element-plus';
-import MemberIdFindForm from "@/components/member/MemberIdFindForm.vue";
-import MemberIdFindResult from "@/components/member/MemberIdFindResult.vue";
-import MemberPasswordResetReqForm from "@/components/member/MemberPasswordResetReqForm.vue";
-import {ref} from 'vue'
+import MemberIdFindForm from "@/components/memberFind/MemberIdFindForm.vue";
+import MemberIdFindResult from "@/components/memberFind/MemberIdFindResult.vue";
+import MemberPasswordResetReqForm from "@/components/memberFind/MemberPasswordResetReqForm.vue";
+import { ref } from 'vue'
 
 const activeName = ref("findId")
 

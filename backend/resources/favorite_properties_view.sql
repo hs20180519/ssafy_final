@@ -2,8 +2,7 @@
 DROP VIEW IF EXISTS `ssafyhome`.`favorite_property_details`;
 
 CREATE VIEW `ssafyhome`.`favorite_property_details` AS
-SELECT f.id AS favorite_id,
-       f.member_id,
+SELECT f.member_id,
        f.apt_seq,
 
        h.apt_nm,

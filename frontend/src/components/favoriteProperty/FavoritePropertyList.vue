@@ -10,7 +10,7 @@
     <div v-else class="property-cards-container">
       <FavoritePropertyItem
         v-for="(property, index) in favoriteProperties"
-        :key="property.id"
+        :key="property.aptSeq"
         :property="property"
         @remove="removeFromList"
       />
@@ -39,6 +39,7 @@ export default {
     fetchFavoriteProperties() {
       getFavoriteProperties(
         (response) => {
+          console.log(response.data);
           this.favoriteProperties = response.data; // 매물 정보 로드
         },
         (error) => {
@@ -46,10 +47,10 @@ export default {
         }
       );
     },
-    removeFromList(favoriteId) {
+    removeFromList(aptSeq) {
       // 관심 매물 목록에서 삭제된 항목을 제거
       this.favoriteProperties = this.favoriteProperties.filter(
-        (property) => property.id !== favoriteId
+        (property) => property.aptSeq !== aptSeq
       );
     },
   },

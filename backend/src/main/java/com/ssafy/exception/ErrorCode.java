@@ -40,7 +40,8 @@ public enum ErrorCode {
 	 */
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Server error."),
 	FAILED_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR, "이메일 전송에 실패했습니다."),
-	INVALID_PASSWORD(HttpStatus.INTERNAL_SERVER_ERROR, "비밀번호가 틀렸습니다");
+	INVALID_PASSWORD(HttpStatus.INTERNAL_SERVER_ERROR, "비밀번호가 틀렸습니다"),
+	FAILED_KAKAO_GEOCODE(HttpStatus.INTERNAL_SERVER_ERROR, "도로명주소를 좌표로 변환하는 데 실패했습니다.");
 
 	private final HttpStatus status;
 	private final String message;

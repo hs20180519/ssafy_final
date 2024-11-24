@@ -63,7 +63,17 @@ public class FavoritePropertyServiceImpl implements FavoritePropertyService {
 	}
 
 	@Override
-	public void deleteFavoriteProperty(String favoritePropertyId) {
-		favoritePropertyMapper.deleteFavoriteProperty(favoritePropertyId);
+	public boolean existsFavoritePropertyByAptSeqAndId(String memberId, String aptSeq) {
+		FavoritePropertyDto favoriteProperty = favoritePropertyMapper.getFavoritePropertyByAptSeqAndId(memberId, aptSeq);
+		System.out.println(favoriteProperty);
+		if(favoriteProperty == null) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void deleteFavoriteProperty(String memberId, String aptSeq) {
+		favoritePropertyMapper.deleteFavoriteProperty(memberId, aptSeq);
 	}
 }

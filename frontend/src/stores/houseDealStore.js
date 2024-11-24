@@ -18,7 +18,6 @@ export const useHouseDealStore = defineStore('housedeal', () => {
             dongName: dongName.value,
             dongCode: dongCode.value
         }
-
     })
 
     const setKeyword = (input) => {

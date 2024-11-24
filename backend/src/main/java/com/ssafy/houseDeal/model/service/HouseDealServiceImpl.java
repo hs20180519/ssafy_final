@@ -32,9 +32,9 @@ public class HouseDealServiceImpl implements HouseDealService {
 	public List<GetHouseDealWithKeywordResponse> getHouseDealsWithKeyword(GetHouseDealWithKeywordRequest request) {
 		int offset = (request.getPgno() - 1) * request.getPgSize();
 		request.setOffset(offset);
-		List<HouseDealDto> housedeals = houseDealMapper.getHouseDealsWithKeyword(request);
+		List<HouseDealDto> houseDeals = houseDealMapper.getHouseDealsWithKeyword(request);
 		
-		Map<String, List<HouseDealDto>> groupedByAptSeq = housedeals.stream()
+		Map<String, List<HouseDealDto>> groupedByAptSeq = houseDeals.stream()
 				.collect(Collectors.groupingBy(HouseDealDto::getAptSeq));
 		
 		List<GetHouseDealWithKeywordResponse> result = groupedByAptSeq.entrySet().stream()
@@ -57,8 +57,9 @@ public class HouseDealServiceImpl implements HouseDealService {
 							.build();
 				})
 				.collect(Collectors.toList());
-		
-		return result;
+		int end = Math.min(offset + request.getPgSize(), result.size());
+
+		return result.subList(offset, end);
 		
 	}
 
