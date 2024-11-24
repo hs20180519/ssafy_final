@@ -1,7 +1,6 @@
 <template>
   <Navbar/>
   <router-view/>
-  <ToastifyContainer position="top-right" autoClose="3000"/>
 </template>
 
 <script>
@@ -13,7 +12,6 @@ export default {
   name: 'App',
   components: {
     Navbar,
-    ToastifyContainer
   }
 };
 </script>

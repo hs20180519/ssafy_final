@@ -2,7 +2,9 @@
   <div v-if="isAdmin" class="answer-form">
     <textarea v-model="newAnswer" placeholder="답변을 작성하세요..." class="answer-input" rows="4"></textarea>
     <div class="buttons">
-      <button @click="submitAnswer" class="submit-btn">답변 등록</button>
+      <button @click="submitAnswer" class="submit-btn">
+        <font-awesome-icon :icon="['fas', 'check']"/>
+      </button>
     </div>
   </div>
 </template>
@@ -22,7 +24,6 @@ export default {
   computed: {
     isAdmin() {
       const authStore = useAuthStore();
-      // console.log(authStore.)
       return authStore.getMemberRole === "admin"; // admin 역할 확인
     },
   },
@@ -42,49 +43,41 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .answer-form {
-  margin-top: 20px;
-  padding: 20px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #fafafa;
+  border-radius: 6px;
+  border: 1px solid #ddd;
 }
 
 .answer-input {
   width: 97%;
-  padding: 12px;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 0.9rem; /* 크기 축소 */
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px; /* 여백 축소 */
   resize: none;
 }
 
 .buttons {
   display: flex;
-  justify-content: flex-end; /* 버튼을 오른쪽에 배치 */
+  justify-content: flex-end;
 }
 
 .submit-btn {
-  padding: 10px 20px;
-  background-color: #70abd8;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  padding: 8px 12px; /* 버튼 크기 축소 */
+  background-color: #e0f7fa;
+  color: #00796b;
+  border: 1px solid #b2dfdb;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 0.9rem;
 }
 
 .submit-btn:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
-}
-
-.submit-btn:active {
-  background-color: #004085;
-  transform: translateY(0);
+  background-color: #b2dfdb;
 }
 </style>

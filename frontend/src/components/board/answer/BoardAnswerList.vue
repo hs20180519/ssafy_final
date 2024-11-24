@@ -7,7 +7,9 @@
 
         <div v-else class="edit-container">
           <input v-model="editedContent" @keyup.enter="submitEdit(answer.id)" class="edit-input"/>
-          <button class="submit-edit-btn" @click="submitEdit(answer.id)">수정완료</button>
+          <button class="submit-edit-btn" @click="submitEdit(answer.id)">
+            <font-awesome-icon :icon="['fas', 'check']"/>
+          </button>
         </div>
 
         <!-- 답변 작성자와 작성일자 표시 -->
@@ -19,9 +21,15 @@
         </div>
 
         <div class="actions" v-if="isAdmin">
-          <button v-if="editingAnswerId !== answer.id" @click="startEditing(answer)" class="edit-btn">수정</button>
-          <button v-else @click="cancelEditing" class="cancel-btn">취소</button>
-          <button @click="deleteAnswer(answer.id)" class="delete-btn">삭제</button>
+          <button v-if="editingAnswerId !== answer.id" @click="startEditing(answer)" class="edit-btn">
+            <font-awesome-icon :icon="['fas', 'pen']"/>
+          </button>
+          <button v-else @click="cancelEditing" class="cancel-btn">
+            <font-awesome-icon :icon="['fas', 'ban']"/>
+          </button>
+          <button @click="deleteAnswer(answer.id)" class="delete-btn">
+            <font-awesome-icon :icon="['fas', 'trash']"/>
+          </button>
         </div>
       </div>
     </div>
@@ -48,8 +56,6 @@ export default {
   computed: {
     isAdmin() {
       const authStore = useAuthStore();
-      console.log(authStore.memberName);
-      console.log(authStore.memberRole);
       return authStore.memberRole === "admin"; // admin 역할 확인
     },
   },
@@ -104,98 +110,87 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .answers {
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .answer-item {
-  background-color: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
 }
 
 .edit-container {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .edit-input {
-  width: 80%;
+  width: 100%;
   padding: 8px;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #ddd;
+  font-size: 0.85rem; /* 크기 축소 */
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }
 
 .answer-author,
 .answer-date {
-  font-size: 0.9rem;
-  color: #555;
-  margin-top: 10px;
+  font-size: 0.85rem; /* 크기 축소 */
+  color: #666;
+  margin-top: 8px;
 }
 
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 8px; /* 버튼 간 간격 축소 */
 }
 
-.submit-edit-btn,
-.edit-btn,
-.cancel-btn,
-.delete-btn {
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  border: none;
-  border-radius: 6px;
+button {
+  padding: 6px 10px; /* 버튼 크기 축소 */
+  font-size: 0.85rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .submit-edit-btn {
-  background-color: #007bff;
-  color: white;
+  //background-color: #e0f7fa;
+  color: #00796b;
 }
 
 .submit-edit-btn:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
-}
-
-.submit-edit-btn:active {
-  background-color: #004085;
-  transform: translateY(0);
+  background-color: #b2dfdb;
 }
 
 .edit-btn {
-  background-color: #70abd8;
-  color: white;
+  //background-color: #e0f7fa;
+  color: #00796b;
 }
 
 .edit-btn:hover {
-  background-color: #004085;
+  background-color: #b2dfdb;
 }
 
 .cancel-btn {
-  background-color: #6c757d;
-  color: white;
+  background-color: #fbe9e7;
+  color: #d84315;
 }
 
 .cancel-btn:hover {
-  background-color: #5a6268;
+  background-color: #ffccbc;
 }
 
 .delete-btn {
-  background-color: #d26464;
-  color: white;
+  background-color: #ffebee;
+  color: #c62828;
 }
 
 .delete-btn:hover {
-  background-color: #c82333;
+  background-color: #ef9a9a;
 }
 </style>

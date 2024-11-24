@@ -7,8 +7,12 @@
     </div>
     <p class="question-content">{{ question.content }}</p>
     <div class="buttons" v-if="canEditOrDelete">
-      <button @click="editQuestion" class="edit-btn">수정</button>
-      <button @click="deleteQuestion" class="delete-btn">삭제</button>
+      <button @click="editQuestion" class="edit-btn">
+        <font-awesome-icon :icon="['fas', 'pen']"/>
+      </button>
+      <button @click="deleteQuestion" class="delete-btn">
+        <font-awesome-icon :icon="['fas', 'trash']"/>
+      </button>
     </div>
   </div>
 </template>
@@ -75,70 +79,66 @@ export default {
 
 <style scoped>
 .question-details {
-
-  margin: 80px auto;
-  padding: 20px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin: 40px auto;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #ddd;
 }
 
 .question-title {
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 1.5rem; /* 제목 크기 축소 */
+  font-weight: 500; /* 가벼운 굵기 */
   color: #333;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .question-meta {
-  font-size: 0.9rem;
-  color: #777;
-  margin-bottom: 20px;
+  font-size: 0.85rem; /* 크기 축소 */
+  color: #666;
+  margin-bottom: 15px;
 }
 
 .question-author,
 .question-date {
-  margin-bottom: 5px;
+  margin-bottom: 2px; /* 간격 축소 */
 }
 
 .question-content {
-  font-size: 1.1rem;
-  color: #555;
-  line-height: 1.6;
-  margin-bottom: 30px;
+  font-size: 1rem; /* 크기 축소 */
+  color: #444;
+  line-height: 1.5; /* 줄 간격 축소 */
+  margin-bottom: 20px;
 }
 
 .buttons {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 8px; /* 버튼 간 간격 축소 */
 }
 
 button {
-  padding: 8px 16px;
-  border-radius: 5px;
-  font-size: 1rem;
+  padding: 6px 12px; /* 버튼 크기 축소 */
+  font-size: 0.9rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s ease;
 }
 
 .edit-btn {
-  background-color: #70abd8;
-  color: white;
-  border: none;
+  color: #00796b;
 }
 
 .edit-btn:hover {
-  background-color: #0056b3;
+  background-color: #b2dfdb;
 }
 
 .delete-btn {
-  background-color: #d26464;
-  color: white;
-  border: none;
+  color: #c62828;
 }
 
 .delete-btn:hover {
-  background-color: #e60000;
+  background-color: #ef9a9a;
 }
 </style>

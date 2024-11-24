@@ -1,8 +1,8 @@
 <script setup>
 import MemberEditProfile from "@/components/mypage/MemberEditProfile.vue";
 import MemberAddress from "@/components/mypage/MemberAddress.vue";
-import { ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import {ref, watch} from "vue";
+import {useRoute} from "vue-router";
 
 const activeName = ref("editProfile");
 const route = useRoute();
@@ -17,7 +17,7 @@ watch(
       activeName.value = "editProfile"; // 기본 탭은 회원정보 수정
     }
   },
-  { immediate: true } // 컴포넌트가 처음 렌더링될 때도 실행
+  {immediate: true} // 컴포넌트가 처음 렌더링될 때도 실행
 );
 </script>
 
@@ -25,10 +25,10 @@ watch(
   <div class="main-container">
     <el-tabs v-model="activeName">
       <el-tab-pane label="회원정보 수정" name="editProfile">
-        <MemberEditProfile />
+        <MemberEditProfile/>
       </el-tab-pane>
       <el-tab-pane label="주소지 관리" name="editAddress">
-        <MemberAddress />
+        <MemberAddress/>
       </el-tab-pane>
     </el-tabs>
   </div>

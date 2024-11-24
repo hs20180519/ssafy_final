@@ -28,7 +28,6 @@ export default {
   },
   methods: {
     async refreshAnswers() {
-      // this.$refs.answerList.refreshAnswers();
       await this.$refs.answerList.fetchAnswers();
     },
   },

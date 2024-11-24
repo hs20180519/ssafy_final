@@ -1,6 +1,6 @@
 <template>
   <div class="verify-password-page">
-    <MemberPasswordVerify />
+    <MemberPasswordVerify/>
   </div>
 </template>
 
@@ -21,6 +21,8 @@ export default {
   flex-direction: column;
   align-items: center;
   /* //padding: 20px; */
-  padding-top: 300px;
+  justify-content: center;
+  text-align: center;
+  min-height: 100vh;
 }
 </style>

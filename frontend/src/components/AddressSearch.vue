@@ -75,14 +75,14 @@ export default {
 .input-group button {
   margin-top: 10px;
   padding: 8px;
-  background-color: #70abd8;
-  color: white;
+  //background-color: #d4f4ff;
+  color: black;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 .input-group button:hover {
-  background-color: #0056b3;
+  background-color: #4e4e4e;
 }
 </style>
