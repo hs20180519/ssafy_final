@@ -13,8 +13,9 @@ const props = defineProps({
 const authStore = useAuthStore();
 
 const bookmarked = ref(false);
-
 const isVisibleDuration = ref(false);
+
+const selectedSortFilter = ref("date-new");
 
 
 onUpdated(() => {
@@ -73,13 +74,19 @@ const onClickDuration = () => {
     console.log(isVisibleDuration.value);
 }
 
+const onSortChange = () => {
+    console.log("정렬필터바꿈");
+}
+
 
 </script>
 
 <template>
     <div class="sidebar" v-if='isVisible'>
         <!-- 닫기 버튼 -->
-        <button class="close-button" @click="closeDetail">X</button>
+        <button class="close-button" @click="closeDetail">
+            X
+        </button>
 
         <!-- 이미지 섹션 -->
         <div class="image-section">
@@ -104,7 +111,16 @@ const onClickDuration = () => {
 
         <!-- 거래 기록 섹션 -->
         <div class="record-section">
-            <h3>거래 기록</h3>
+            <div class="record-header">
+                <h3>거래 기록</h3>
+                <select id="filter-select" v-model="selectedSortFilter" @change="onSortChange">
+                    <option value="date-new">최신순</option>
+                    <option value="date-old">오래된순</option>
+                    <option value="price-high">높은거래가순</option>
+                    <option value="price-low">낮은거래가순</option>
+                </select>
+            </div>
+
             <ul class="record-list">
                 <li v-for="record in clickedItem.dealList" :key="record.id" class="record-item">
                     <p><strong>거래일시:</strong> {{ record.dealYear }}.{{ record.dealMonth }}.{{ record.dealDay }}</p>
@@ -113,6 +129,7 @@ const onClickDuration = () => {
                 </li>
             </ul>
         </div>
+
     </div>
 </template>
 
@@ -125,7 +142,8 @@ const onClickDuration = () => {
     width: 300px;
     height: 100%; /* 화면 전체 높이 */
     background-color: #ffffff;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-left: 1px solid #ddd;
     position: relative;
 }
@@ -148,7 +166,7 @@ const onClickDuration = () => {
     width: 100%;
     padding: 10px;
     font-size: 1rem;
-    background-color: #007bff;
+    background-color: #4e4e4e;
     color: white;
     border: none;
     cursor: pointer;
@@ -156,7 +174,7 @@ const onClickDuration = () => {
 }
 
 .navigate-button button:hover {
-    background-color: #0056b3;
+    background-color: #4e4e4e;
 }
 
 .duration-container {
@@ -170,6 +188,8 @@ const onClickDuration = () => {
     padding: 15px;
     box-sizing: border-box;
 }
+
+
 
 /* .close-button: 닫기 버튼 */
 .close-button {
@@ -198,4 +218,45 @@ const onClickDuration = () => {
     font-size: 1rem;
     cursor: pointer;
 }
+
+.record-header {
+    display: flex;
+    align-items: center; /* 수직 정렬 */
+    justify-content: space-between; /* 양 끝으로 배치 */
+    margin-bottom: 10px; /* 하단 여백 추가 */
+}
+
+.record-header h3 {
+    font-size: 1.2rem; /* 거래 기록 텍스트 크기 */
+    margin: 0;
+}
+
+#filter-select {
+    width: auto; /* 너비를 내용에 맞춤 */
+    max-width: 120px; /* 최대 너비 설정 */
+    font-size: 0.9rem; /* 거래 기록 폰트 크기에 맞게 조정 */
+    margin-left: 10px; /* 제목과 약간의 간격 */
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #ffffff;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 12px;
+    appearance: none;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+#filter-select:hover {
+    border-color: #4e4e4e;
+}
+
+#filter-select:focus {
+    outline: none;
+    border-color: #4e4e4e;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+}
+
 </style>

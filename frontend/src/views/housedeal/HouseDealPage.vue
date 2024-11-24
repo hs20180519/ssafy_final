@@ -100,22 +100,18 @@ const closeDetail = () => {
 <template>
     <div class="main-container">
         <HouseDealFilter class='filter-container'/>
-        <div class="container">
-            <div class="list-container">
-                <HouseDealList :list="result" @onItemClick="onItemClick" :total="total"/>
-            </div>
-
-            <div class="map-container">
-                <MapResult :clickedItem="clickedItem" />
-
-                <div class="detail-overlay">
-                    <HouseDealDetail
-                        class="sidebar"
-                        :isVisible="isDetailVisible"
-                        @closeDetail="closeDetail"
-                        :clickedItem='clickedItem'
-                    />
-                </div>
+        <div class="list-overlay">
+            <HouseDealList :list="result" @onItemClick="onItemClick" :total="total"/>
+        </div>
+        <div class="map-container">
+            <MapResult :clickedItem="clickedItem" />
+            <div class="detail-overlay">
+                <HouseDealDetail
+                    class="sidebar"
+                    :isVisible="isDetailVisible"
+                    @closeDetail="closeDetail"
+                    :clickedItem='clickedItem'
+                />
             </div>
         </div>
     </div>
@@ -123,37 +119,61 @@ const closeDetail = () => {
 
 <style scoped>
 
-.container {
-    display: flex;
+.main-container {
+    position: relative; /* 자식 요소의 위치 기준 */
     width: 100%;
-    height: 100vh; /* 화면 전체 높이 */
+    height: 100vh;
+    overflow: hidden;
+}
+
+.filter-container {
+    position: relative;
+    z-index: 15;
+    margin-left: 50px;
+    width: 50%; /* 너비 조정 */
+}
+
+.list-overlay {
+    position: absolute;
+    top: 130px; /* Filter 높이 아래로 배치 */
+    margin-left: 50px; /* Filter 왼쪽 위치와 맞춤 */
+    left: 20px;
+    width: 40vh; /* 고정된 너비 */
+    height: calc(100vh - 150px); /* Filter 높이를 뺀 공간 사용 */
+    background-color: rgba(255, 255, 255, 0.9); /* 투명한 배경 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    overflow-y: auto; /* 스크롤 추가 */
+    /* border: 1px solid rgb(204, 204, 204); */
+    border-radius: 8px;
 }
 
 .map-container {
-    flex-grow: 1; /* 남은 공간 차지 */
-    position: relative; /* HouseDealDetail의 위치 기준 */
-    background-color: #f9f9f9;
+    flex-grow: 1;
+    position: relative;
+    height: 100%;
 }
 
-.list-container {
-    width: 40vh;
+.map-container > MapResult {
+    width: 100%;
+    height: 100%;
 }
 
 .detail-overlay {
     position: absolute;
-    top: 0;
-    height: 100%;
-    width: 300px; /* HouseDealDetail의 고정 너비 */
-    z-index: 10; /* MapResult 위에 표시 */
+    top: 30px; /* Filter 높이 아래로 배치 */
+    left: calc(20px + 40vh + 55px); /* HouseDealList의 너비(40vh)와 간격(10px) 만큼 오른쪽으로 배치 */
+    width: 300px;
+    height: calc(100vh - 150px); /* Filter 높이를 뺀 공간 사용 */
+    z-index: 20;
+    overflow-y: auto; /* 스크롤 추가 */
+    /* border-left: 1px solid rgb(204, 204, 204); */
+    border-radius: 8px;
 }
 
 .sidebar {
-    width: 100%; /* detail-overlay의 너비에 맞게 */
-    height: 100%; /* 부모 높이를 모두 차지 */
-    background-color: rgb(255, 255, 255);
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
-    border-left: 1px solid rgb(204, 204, 204);
-    z-index: 10;
+    width: 100%;
+    height: 100%;
 }
 
 </style>

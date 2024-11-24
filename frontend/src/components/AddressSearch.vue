@@ -75,7 +75,7 @@ export default {
 .input-group button {
   margin-top: 10px;
   padding: 8px;
-  //background-color: #d4f4ff;
+  /* background-color: #d4f4ff; */
   color: black;
   border: none;
   border-radius: 4px;
