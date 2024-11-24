@@ -56,6 +56,7 @@ export default {
         const token = response.headers["authorization"];
         const memberName = response.data.name;
         const memberId = response.data.id;
+        const memberRole = response.data.role;
 
         // 로그인 성공 시 처리
         if (token) {
@@ -63,7 +64,7 @@ export default {
           const refreshToken = response.data.refreshToken;
 
           const authStore = useAuthStore();
-          authStore.login(accessToken, memberName, memberId);
+          authStore.login(accessToken, memberName, memberId, memberRole);
           document.cookie = `refreshToken=${refreshToken}; path=/; HttpOnly`;
           toast.success("로그인 성공");
           this.$router.push({name: "Home"}); // 로그인 후 리디렉션

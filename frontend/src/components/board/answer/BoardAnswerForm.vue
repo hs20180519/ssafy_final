@@ -1,5 +1,5 @@
 <template>
-  <div class="answer-form">
+  <div v-if="isAdmin" class="answer-form">
     <textarea v-model="newAnswer" placeholder="답변을 작성하세요..." class="answer-input" rows="4"></textarea>
     <div class="buttons">
       <button @click="submitAnswer" class="submit-btn">답변 등록</button>
@@ -9,6 +9,7 @@
 
 <script>
 import {createAnswer} from "@/api/board";
+import {useAuthStore} from "@/stores/authStore";
 
 export default {
   name: "AnswerForm",
@@ -17,6 +18,13 @@ export default {
     return {
       newAnswer: "",
     };
+  },
+  computed: {
+    isAdmin() {
+      const authStore = useAuthStore();
+      // console.log(authStore.)
+      return authStore.getMemberRole === "admin"; // admin 역할 확인
+    },
   },
   methods: {
     async submitAnswer() {
@@ -33,6 +41,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .answer-form {

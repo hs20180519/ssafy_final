@@ -20,62 +20,57 @@
     </div>
   </div>
 </template>
-
 <script>
-import {ref, onMounted} from "vue";
+import {ref} from "vue";
 import SearchBox from "@/components/common/SearchBox.vue";
-import SearchBoxResult from "@/components/common/SearchBoxResult.vue";
-import {searchKeyword} from "@/api/search";
-import {useHouseDealStore} from "@/stores/houseDealStore";
-import {useAuthStore} from "@/stores/authStore";
 
 export default {
   name: "MainContent",
   components: {
     SearchBox,
-    SearchBoxResult,
-  },
-  setup() {
-    const houseDealStore = useHouseDealStore();
-    const authStore = useAuthStore();
-    const isLoaded = ref(false);
-    const result = ref(null);
-
-    // 검색 수행 함수
-    const onSearch = async () => {
-      if (!houseDealStore.keyword.trim()) {
-        return; // 빈 키워드일 경우 검색하지 않음
-      }
-      try {
-        const {data} = await searchKeyword({
-          sidoCode: "",
-          gugunCode: "",
-          dongCode: "",
-          keyword: houseDealStore.keyword,
-        });
-        result.value = data;
-        isLoaded.value = true;
-      } catch (error) {
-        console.error("검색 중 오류 발생:", error);
-      }
-    };
-
-    // 페이지가 처음 로드되었을 때 키워드를 초기화
-    onMounted(() => {
-      houseDealStore.setKeyword("");
-    });
-
-    return {
-      isLoaded,
-      result,
-      onSearch,
-      authStore,  // authStore를 template에서 사용할 수 있게 리턴
-    };
   },
 };
 </script>
 
-<
+<script setup>
+import {defineEmits, onMounted} from "vue";
+import {searchKeyword} from "@/api/search";
+import {useHouseDealStore} from "@/stores/houseDealStore";
+import {useAuthStore} from "@/stores/authStore";
+import SearchBoxResult from "@/components/common/SearchBoxResult.vue";
+
+defineEmits(["onSearch"]);
+
+const houseDealStore = useHouseDealStore();
+const authStore = useAuthStore();
+
+const isLoaded = ref(false);
+const result = ref();
+
+onMounted(() => {
+  houseDealStore.setKeyword("");
+});
+
+const onSearch = () => {
+  searchKeyword(
+    {
+      sidoCode: "",
+      gugunCode: "",
+      dongCode: "",
+      keyword: houseDealStore.keyword
+    },
+    ({data}) => {
+      result.value = data;
+      isLoaded.value = true;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+</script>
+
+
 <style scoped>
 .main-content {
   display: flex;

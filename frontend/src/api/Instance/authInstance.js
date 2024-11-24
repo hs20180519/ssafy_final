@@ -56,7 +56,7 @@ export const authApi = () => {
           const authStore = useAuthStore();
 
           // 상태 업데이트
-          authStore.login(newAccessToken, authStore.getMember, authStore.getMemberId); // 새로운 액세스 토큰으로 로그인 상태 갱신
+          authStore.login(newAccessToken, authStore.getMember, authStore.getMemberId, authStore.getMemberRole); // 새로운 액세스 토큰으로 로그인 상태 갱신
           // 기존 요청 헤더에 새로운 Access Token 추가
           originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
 

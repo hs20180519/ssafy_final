@@ -7,20 +7,24 @@ export const useAuthStore = defineStore("auth", {
     authToken: null,
     memberName: null,
     memberId: null, // 사용자 아이디 추가
+    memberRole: null, // TODO
     tokenExpiry: null,
   }),
   getters: {
     isAuthenticated: (state) => !!state.authToken,
     getAuthToken: (state) => state.authToken,
     getMember: (state) => state.memberName,
-    getMemberId: (state) => state.memberId, // 사용자 아이디 반환
+    getMemberId: (state) => state.memberId,
+    getMemberRole: (state) => state.memberRole,
+
   },
   actions: {
-    login(token, memberName, memberId) {
+    login(token, memberName, memberId, memberRole) {
       this.isLoggedIn = true;
       this.authToken = token;
       this.memberName = memberName;
-      this.memberId = memberId; // 로그인 시 아이디 저장
+      this.memberId = memberId;
+      this.memberRole = memberRole;
 
       try {
         const {exp} = jwtDecode(token);
@@ -36,7 +40,8 @@ export const useAuthStore = defineStore("auth", {
       this.isLoggedIn = false;
       this.authToken = null;
       this.memberName = null;
-      this.memberId = null; // 로그아웃 시 아이디도 초기화
+      this.memberId = null;
+      this.memberRole = null;
       this.tokenExpiry = null;
       this.removeFromSessionStorage();
     },
@@ -47,7 +52,8 @@ export const useAuthStore = defineStore("auth", {
           isLoggedIn: this.isLoggedIn,
           authToken: this.authToken,
           memberName: this.memberName,
-          memberId: this.memberId, // 아이디도 세션에 저장
+          memberId: this.memberId,
+          memberRole: this.memberRole,
           tokenExpiry: this.tokenExpiry,
         })
       );
@@ -58,12 +64,13 @@ export const useAuthStore = defineStore("auth", {
     restoreFromSessionStorage() {
       const storedData = sessionStorage.getItem("auth");
       if (storedData) {
-        const {isLoggedIn, authToken, memberName, memberId, tokenExpiry} =
+        const {isLoggedIn, authToken, memberName, memberId, memberRole, tokenExpiry} =
           JSON.parse(storedData);
         this.isLoggedIn = isLoggedIn;
         this.authToken = authToken;
         this.memberName = memberName;
-        this.memberId = memberId; // 아이디 복원
+        this.memberId = memberId;
+        this.memberRole = memberRole;
         this.tokenExpiry = tokenExpiry;
       }
     },

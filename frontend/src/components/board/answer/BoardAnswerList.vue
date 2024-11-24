@@ -18,7 +18,7 @@
           <span>답변일자: {{ formatDate(answer.createdAt) }}</span>
         </div>
 
-        <div class="actions">
+        <div class="actions" v-if="isAdmin">
           <button v-if="editingAnswerId !== answer.id" @click="startEditing(answer)" class="edit-btn">수정</button>
           <button v-else @click="cancelEditing" class="cancel-btn">취소</button>
           <button @click="deleteAnswer(answer.id)" class="delete-btn">삭제</button>
@@ -33,6 +33,7 @@
 
 <script>
 import {getAnswers, updateAnswer, deleteAnswer} from "@/api/board";
+import {useAuthStore} from "@/stores/authStore";
 
 export default {
   name: "AnswerList",
@@ -44,6 +45,14 @@ export default {
       editedContent: "",
     };
   },
+  computed: {
+    isAdmin() {
+      const authStore = useAuthStore();
+      console.log(authStore.memberName);
+      console.log(authStore.memberRole);
+      return authStore.memberRole === "admin"; // admin 역할 확인
+    },
+  },
   mounted() {
     this.fetchAnswers();
   },
@@ -51,7 +60,6 @@ export default {
     async fetchAnswers() {
       try {
         const response = await getAnswers(this.questionId);
-        console.log(response);
         this.answers = response.data;
       } catch (error) {
         console.error("답변 목록 조회 중 오류 발생:", error);
@@ -95,6 +103,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .answers {

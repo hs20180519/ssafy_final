@@ -67,6 +67,7 @@ public class AuthController {
 			Map<String, Object> responseBody = Map.of(
 				"name", memberDto.getName(),
 				"id", memberDto.getId(),
+				"role", memberDto.getRole(),
 				"refreshToken", refreshToken);
 			return ResponseEntity.ok().headers(headers).body(responseBody);
 		} catch (ApiException e) {
