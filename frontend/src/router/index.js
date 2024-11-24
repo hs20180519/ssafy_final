@@ -101,7 +101,7 @@ router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   const isAuthenticated = authStore.getAuthToken;
 
-  if (to.name === "Home" || to.name === "Signup" || to.name === "HouseDeal" || to.name === "MemberFind") {
+  if (to.name === "Home" || to.name === "Signup" || to.name === "HouseDeal" || to.name === "MemberFind" || to.name === "PasswordReset") {
     return next();
   }
 

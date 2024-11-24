@@ -36,7 +36,7 @@ public class SecurityConfig {
 			.cors(corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource()))
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-				.requestMatchers("/api/auth/**", "/api/dong-code/**", "/api/house/**", "/swagger-ui/**", "/api/dong-code/**").permitAll()
+				.requestMatchers("/api/auth/**", "/api/dong-code/**", "/api/duration/**", "/api/house/**", "/swagger-ui/**", "/api/dong-code/**").permitAll()
 				.anyRequest().authenticated())
 			.formLogin(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)

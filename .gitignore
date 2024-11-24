@@ -12,4 +12,6 @@ backend/.settings/
 backend/target/
 backend/src/main/resources/application.properties
 
+frontend/.env
+
 .DS_Store
