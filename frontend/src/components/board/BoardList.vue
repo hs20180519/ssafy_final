@@ -56,7 +56,7 @@ export default {
 
 <style scoped>
 .board-list {
-  padding-left: 60px;
+  //padding-left: 60px;
   //padding: 20px;
   padding-top: 40px;
   padding-bottom: 40px;

@@ -95,12 +95,14 @@ const onSearch = () => {
   color: transparent;
   opacity: 0;
   animation: fadeInSlideUp 1.5s ease-out forwards;
+  margin-top: 0;
 }
 
 .sub-title {
+  margin-top: 0;
   font-size: 1.2rem;
   color: #666;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   opacity: 0;
   animation: fadeInSlideUp 2s ease-out forwards;
 }

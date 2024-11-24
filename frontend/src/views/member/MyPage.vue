@@ -36,7 +36,7 @@ watch(
 
 <style scoped>
 .main-container {
-  padding-left: 50px;
+  //padding-left: 50px;
   display: flex;
   justify-content: center;
   align-items: center;

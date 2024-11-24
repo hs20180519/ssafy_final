@@ -105,9 +105,8 @@ public class MemberController {
 	@ApiResponses({@ApiResponse(responseCode = "204", description = "회원 삭제 성공"),
 		@ApiResponse(responseCode = "404", description = "회원 없음 - 존재하지 않는 회원 ID"),
 		@ApiResponse(responseCode = "500", description = "서버 오류 - 삭제 중 오류 발생")})
-	@DeleteMapping("/{memberId}")
-	public ResponseEntity<String> deleteMember(@PathVariable
-	String memberId) {
+	@DeleteMapping
+	public ResponseEntity<String> deleteMember(@AuthenticationPrincipal String memberId) {
 		try {
 			MemberDto memberDto = memberService.findMemberByMemberId(memberId);
 			if (memberDto == null) {
