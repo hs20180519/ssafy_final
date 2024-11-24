@@ -1,37 +1,26 @@
 <template>
-  <div class="question-edit">
+  <div class="edit-question">
     <h2>질문 수정</h2>
-
-    <!-- Form for editing question -->
     <form @submit.prevent="submitEdit">
-      <div class="form-group">
-        <label for="title">제목</label>
-        <input
-          type="text"
-          id="title"
-          v-model="question.title"
-          placeholder="질문 제목을 입력하세요"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="content">내용</label>
-        <textarea
-          id="content"
-          v-model="question.content"
-          placeholder="질문 내용을 입력하세요"
-          required
-        ></textarea>
-      </div>
-
-      <button type="submit">수정 완료</button>
+      <input
+        v-model="question.title"
+        placeholder="제목"
+        required
+        class="input"
+      />
+      <textarea
+        v-model="question.content"
+        placeholder="내용"
+        required
+        class="input"
+      ></textarea>
+      <button type="submit" class="btn">수정 완료</button>
     </form>
   </div>
 </template>
 
 <script>
-import { getQuestionDetails, updateQuestion } from "@/api/board";
+import {getQuestionDetails, updateQuestion} from "@/api/board";
 
 export default {
   name: "EditQuestion",
@@ -49,7 +38,6 @@ export default {
   methods: {
     async fetchQuestionDetails() {
       const questionId = this.$route.params.id;
-
       try {
         const response = await getQuestionDetails(questionId);
         this.question = response.data;
@@ -57,26 +45,13 @@ export default {
         console.error("질문 상세 조회 중 오류 발생:", error);
       }
     },
-
     async submitEdit() {
       const questionId = this.$route.params.id;
       try {
-        await updateQuestion(
-          questionId,
-          this.question,
-          (response) => {
-            console.log("질문이 수정되었습니다:", response);
-            this.$router.push({
-              name: "BoardQuestionDetails",
-              params: { questionId: questionId },
-            }); // Redirect to board list or appropriate page
-          },
-          (error) => {
-            console.error("질문 수정 중 오류 발생:", error);
-          }
-        );
+        await updateQuestion(questionId, this.question);
+        this.$router.push({name: "BoardQuestionDetails", params: {questionId}});
       } catch (error) {
-        console.error("수정 실패:", error);
+        console.error("질문 수정 중 오류 발생:", error);
       }
     },
   },
@@ -84,44 +59,36 @@ export default {
 </script>
 
 <style scoped>
-.question-edit {
-  margin: 20px;
+.edit-question {
+  max-width: 600px;
+  margin: 20px auto;
 }
 
 h2 {
+  font-size: 1.5rem;
+  text-align: center;
   margin-bottom: 20px;
 }
 
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-input,
-textarea {
+.input {
   width: 100%;
-  padding: 8px;
-  font-size: 16px;
+  padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
+.btn {
+  width: 100%;
+  padding: 10px;
+  background: #4e4e4e;
+  color: #fff;
   border: none;
-  cursor: pointer;
   border-radius: 4px;
+  cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+.btn:hover {
+  background: #333;
 }
 </style>

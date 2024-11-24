@@ -1,53 +1,52 @@
 <script setup>
-import { ref } from 'vue';
-import { sendPasswordResetEmail } from "@/api/auth";
+import {ref} from 'vue';
+import {sendPasswordResetEmail} from "@/api/auth";
 
 const userId = ref("");
 const email = ref("");
 
 const handleSubmit = () => {
-    sendPasswordResetEmail(
-        {
-            email: email.value,
-            id: userId.value
-        },
-        ({ data }) => {
-            console.log(data);
-        },
-        (error) => {
-            console.log(error);
-        }
-    )
+  sendPasswordResetEmail(
+    {
+      email: email.value,
+      id: userId.value
+    },
+    ({data}) => {
+      console.log(data);
+    },
+    (error) => {
+      console.log(error);
+    }
+  )
 }
 </script>
 
 <template>
-    <div class='reset-password-form'>
-        <h2>비밀번호 찾기 </h2>
-        <form @submit.prevent="handleSubmit">
-            <div class="input-group">
-                <label for="userId">아이디</label>
-                <input
-                type="text"
-                id="userId"
-                v-model="userId"
-                placeholder="이름을 입력하세요"
-                required
-                />
-            </div>
-            <div class="input-group">
-                <label for="email">이메일</label>
-                <input
-                type="email"
-                id="email"
-                v-model="email"
-                placeholder="비밀번호를 입력하세요"
-                required
-                />
-            </div>
-            <button type="submit">인증번호 받기</button>
-        </form>
-    </div>
+  <div class='reset-password-form'>
+    <form @submit.prevent="handleSubmit">
+      <div class="input-group">
+        <label for="userId">아이디</label>
+        <input
+          type="text"
+          id="userId"
+          v-model="userId"
+          placeholder="이름을 입력하세요"
+          required
+        />
+      </div>
+      <div class="input-group">
+        <label for="email">이메일</label>
+        <input
+          type="email"
+          id="email"
+          v-model="email"
+          placeholder="비밀번호를 입력하세요"
+          required
+        />
+      </div>
+      <button type="submit">인증번호 받기</button>
+    </form>
+  </div>
 </template>
 
 <style scoped>
@@ -59,6 +58,7 @@ const handleSubmit = () => {
 }
 
 .input-group {
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
@@ -91,7 +91,7 @@ const handleSubmit = () => {
 button[type="submit"] {
   width: 100%;
   padding: 10px;
-  background-color: #d87070; /* #d87070 색상 적용 */
+  background-color: #4e4e4e;
   color: white;
   border: none;
   border-radius: 4px;
@@ -99,6 +99,6 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #b85b5b; /* 버튼 hover 색상 */
+  background-color: #333 /* 버튼 hover 색상 */
 }
 </style>

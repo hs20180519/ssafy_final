@@ -1,5 +1,5 @@
 // router/index.js
-import { createRouter, createWebHistory } from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 import HomePage from "@/views/HomePage.vue";
 import HouseDealPage from "@/views/housedeal/HouseDealPage.vue";
 import MemberLoginPage from "@/views/member/MemberLoginPage.vue";
@@ -18,7 +18,9 @@ import VerifyPasswordPage from "@/views/member/MemberVerifyPasswordPage.vue";
 import MyPage from "@/views/member/MyPage.vue";
 
 import FavoritePropertyPage from "@/views/favoriteProperty/FavoritePropertyPage.vue";
-import { useAuthStore } from "@/stores/authStore";
+import {useAuthStore} from "@/stores/authStore";
+
+import {toast} from "vue3-toastify";
 
 const routes = [
   {
@@ -100,14 +102,17 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   const isAuthenticated = authStore.getAuthToken;
+  // const alertStore = useAlertStore();
 
   if (to.name === "Home" || to.name === "Signup" || to.name === "HouseDeal" || to.name === "MemberFind" || to.name === "PasswordReset") {
     return next();
   }
 
   if (!isAuthenticated && to.name !== "Login") {
-    alert("권한이 없습니다. 로그인 해주세요.");
-    next({ name: "Login" });
+    console.log("dddd");
+
+    toast.error('권한이 없습니다. 로그인 해주세요.');
+    next({name: "Login"});
   } else {
     next();
   }

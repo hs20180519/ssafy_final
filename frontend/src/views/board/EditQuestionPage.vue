@@ -17,6 +17,6 @@ export default {
 
 <style scoped>
 .edit-question-page {
-  padding: 120px;
+  padding: 160px 90px 120px 150px;
 }
 </style>

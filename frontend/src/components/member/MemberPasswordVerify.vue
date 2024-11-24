@@ -1,9 +1,9 @@
 <template>
   <div class="password-check-form">
-    <h2>비밀번호 확인</h2>
+    <h1>비밀번호 확인</h1>
     <form @submit.prevent="handleSubmit">
       <div class="input-group">
-        <label for="password">비밀번호</label>
+        <label for="password">본인 확인을 위해 비밀번호를 입력해주세요</label>
         <input
           type="password"
           id="password"
@@ -18,7 +18,8 @@
 </template>
 
 <script>
-import { checkPassword } from "@/api/member"; // 서버에서 비밀번호를 확인하는 API
+import {checkPassword} from "@/api/member";
+import {toast} from "vue3-toastify"; // 서버에서 비밀번호를 확인하는 API
 
 export default {
   data() {
@@ -35,12 +36,16 @@ export default {
         });
 
         if (isPasswordCorrect) {
-          this.$router.push({ name: "MyPage" }); // 마이페이지로 이동
+          toast.success("비밀번호가 확인되었습니다.", {autoClose: false});
+          setTimeout(() => {
+            this.$router.push({name: "MyPage"});
+          }, 1000);
         } else {
-          this.errorMessage = "비밀번호가 틀렸습니다.";
+          toast.error("비밀번호가 틀렸습니다.");
         }
+
       } catch (error) {
-        this.errorMessage = "비밀번호 확인 중 오류가 발생했습니다.";
+        toast.error("비밀번호가 틀렸습니다.");
       }
     },
   },
@@ -52,16 +57,18 @@ export default {
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
+  padding-bottom: 50px;
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
+  color: gray;
 }
 
 .input-group label {
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 }
 
 .input-group input {
@@ -73,7 +80,7 @@ export default {
 button[type="submit"] {
   width: 100%;
   padding: 10px;
-  background-color: #d87070;
+  background-color: #4e4e4e;
   color: white;
   border: none;
   border-radius: 4px;
@@ -81,6 +88,6 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #b85b5b;
+  background-color: #333;
 }
 </style>
