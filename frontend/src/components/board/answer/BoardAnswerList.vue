@@ -4,21 +4,32 @@
     <div v-if="answers.length">
       <div v-for="answer in answers" :key="answer.id" class="answer-item">
         <p v-if="editingAnswerId !== answer.id">{{ answer.content }}</p>
+
         <div v-else class="edit-container">
-          <input v-model="editedContent" @keyup.enter="submitEdit(answer.id)" />
+          <input v-model="editedContent" @keyup.enter="submitEdit(answer.id)" class="edit-input"/>
           <button class="submit-edit-btn" @click="submitEdit(answer.id)">
-            수정완료
+            <font-awesome-icon :icon="['fas', 'check']"/>
           </button>
         </div>
-        <div class="actions">
-          <button
-            v-if="editingAnswerId !== answer.id"
-            @click="startEditing(answer)"
-          >
-            수정
+
+        <!-- 답변 작성자와 작성일자 표시 -->
+        <div class="answer-author">
+          <span>작성자: {{ answer.author }}</span>
+        </div>
+        <div class="answer-date">
+          <span>답변일자: {{ formatDate(answer.createdAt) }}</span>
+        </div>
+
+        <div class="actions" v-if="isAdmin">
+          <button v-if="editingAnswerId !== answer.id" @click="startEditing(answer)" class="edit-btn">
+            <font-awesome-icon :icon="['fas', 'pen']"/>
           </button>
-          <button v-else @click="cancelEditing">취소</button>
-          <button @click="deleteAnswer(answer.id)">삭제</button>
+          <button v-else @click="cancelEditing" class="cancel-btn">
+            <font-awesome-icon :icon="['fas', 'ban']"/>
+          </button>
+          <button @click="deleteAnswer(answer.id)" class="delete-btn">
+            <font-awesome-icon :icon="['fas', 'trash']"/>
+          </button>
         </div>
       </div>
     </div>
@@ -29,7 +40,8 @@
 </template>
 
 <script>
-import { getAnswers, updateAnswer, deleteAnswer } from "@/api/board";
+import {getAnswers, updateAnswer, deleteAnswer} from "@/api/board";
+import {useAuthStore} from "@/stores/authStore";
 
 export default {
   name: "AnswerList",
@@ -40,6 +52,12 @@ export default {
       editingAnswerId: null,
       editedContent: "",
     };
+  },
+  computed: {
+    isAdmin() {
+      const authStore = useAuthStore();
+      return authStore.memberRole === "admin"; // admin 역할 확인
+    },
   },
   mounted() {
     this.fetchAnswers();
@@ -55,14 +73,8 @@ export default {
     },
     async deleteAnswer(answerId) {
       try {
-        await deleteAnswer(
-          answerId,
-          () => {
-            console.log("답변 삭제 성공");
-            this.refreshAnswers();
-          },
-          (error) => console.error("답변 삭제 중 오류 발생:", error)
-        );
+        await deleteAnswer(answerId);
+        this.fetchAnswers(); // 답변 삭제 후 목록 새로고침
       } catch (error) {
         console.error("답변 삭제 중 오류 발생:", error);
       }
@@ -77,23 +89,22 @@ export default {
     },
     async submitEdit(answerId) {
       try {
-        await updateAnswer(
-          answerId,
-          this.editedContent,
-          () => {
-            console.log("답변 수정 성공");
-            this.editingAnswerId = null;
-            this.editedContent = "";
-            this.refreshAnswers();
-          },
-          (error) => console.error("답변 수정 중 오류 발생:", error)
-        );
+        await updateAnswer(answerId, this.editedContent);
+        this.editingAnswerId = null;
+        this.editedContent = "";
+        this.fetchAnswers();
       } catch (error) {
         console.error("답변 수정 중 오류 발생:", error);
       }
     },
-    refreshAnswers() {
-      this.fetchAnswers();
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      return `${year}-${month}-${day} ${hours}:${minutes}`;
     },
   },
 };
@@ -101,11 +112,15 @@ export default {
 
 <style scoped>
 .answers {
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .answer-item {
-  margin-bottom: 15px;
+  background-color: #f9f9f9;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
 }
 
 .edit-container {
@@ -114,17 +129,68 @@ export default {
   gap: 8px;
 }
 
-.submit-edit-btn {
-  padding: 4px 8px;
-  font-size: 12px;
-  cursor: pointer;
+.edit-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 0.85rem; /* 크기 축소 */
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.answer-author,
+.answer-date {
+  font-size: 0.85rem; /* 크기 축소 */
+  color: #666;
+  margin-top: 8px;
 }
 
 .actions {
-  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px; /* 버튼 간 간격 축소 */
 }
 
-.actions button {
-  margin-right: 10px;
+button {
+  padding: 6px 10px; /* 버튼 크기 축소 */
+  font-size: 0.85rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.submit-edit-btn {
+  //background-color: #e0f7fa;
+  color: #00796b;
+}
+
+.submit-edit-btn:hover {
+  background-color: #b2dfdb;
+}
+
+.edit-btn {
+  //background-color: #e0f7fa;
+  color: #00796b;
+}
+
+.edit-btn:hover {
+  background-color: #b2dfdb;
+}
+
+.cancel-btn {
+  background-color: #fbe9e7;
+  color: #d84315;
+}
+
+.cancel-btn:hover {
+  background-color: #ffccbc;
+}
+
+.delete-btn {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.delete-btn:hover {
+  background-color: #ef9a9a;
 }
 </style>

@@ -2,15 +2,16 @@
   <div v-if="isLoggedIn && showDropdown" class="dropdown">
     <!-- 환영 메시지 -->
     <p class="welcome-message">{{ member }}님</p>
-    <!-- 마이페이지와 로그아웃은 클릭 가능 -->
+    <!-- 마이페이지와 로그아웃 -->
     <p @click="goToMyPage">마이페이지</p>
     <p @click="logout">로그아웃</p>
   </div>
 </template>
 
 <script>
-import { useAuthStore } from "@/stores/authStore";
-import { logout } from "@/api/auth.js";
+import {useAuthStore} from "@/stores/authStore";
+import {logout} from "@/api/auth.js";
+import {toast} from "vue3-toastify";
 
 export default {
   props: {
@@ -31,7 +32,8 @@ export default {
   },
   methods: {
     goToMyPage() {
-      this.$router.push({ name: "VerifyPassword" });
+      this.$emit("closeDropdown"); // 드롭다운 닫기
+      this.$router.push({name: "VerifyPassword"});
     },
     async logout() {
       // 로그아웃 API 호출
@@ -41,48 +43,63 @@ export default {
       const authStore = useAuthStore();
       authStore.logout();
 
-      alert("로그아웃 되었습니다.");
-      this.$router.push({ name: "Home" }); // 메인 페이지로 이동
+
+      toast.success("로그아웃 되었습니다.", {autoClose: 1000});
+      setTimeout(() => {
+        this.$router.push({name: "Home"});
+      }, 1000);
+      this.$emit("closeDropdown"); // 드롭다운 닫기
     },
+    handleOutsideClick(event) {
+      const dropdownElement = this.$el; // 현재 컴포넌트의 루트 엘리먼트
+      if (!dropdownElement.contains(event.target)) {
+        this.$emit("closeDropdown");
+      }
+    },
+  },
+  mounted() {
+    document.addEventListener("click", this.handleOutsideClick);
+  },
+  beforeUnmount() {
+    document.removeEventListener("click", this.handleOutsideClick);
   },
 };
 </script>
 
 <style scoped>
 .dropdown {
-  background-color: #f0f0f0;
-  color: black;
-  position: fixed;
-  bottom: 0px; /* Adjust this to set vertical position */
-  left: 50px; /* Position dropdown on the right */
-  width: 150px;
+  background-color: #ffffff;
+  color: #333;
+  position: absolute;
+  bottom: 1px;
+  left: 60px;
+  width: 140px;
   text-align: center;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  z-index: 1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
 }
 
 .dropdown p {
-  padding: 10px;
+  padding: 12px;
+  font-size: 14px;
+  color: #555;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-/* 환영 메시지는 hover 효과가 없도록 설정 */
-.welcome-message {
-  font-weight: bold;
-  padding: 10px;
-  background-color: #d87070;
-  color: white;
-  border-radius: 5px;
-}
-
-/* 기본 p 태그에 hover 스타일이 적용되지 않도록 설정 */
-.welcome-message:hover {
-  background-color: #d87070 !important; /* 기존 배경색 그대로 유지 */
-}
-
-/* 나머지 메뉴 항목에는 hover 효과가 적용됨 */
 .dropdown p:hover {
-  background-color: #e0e0e0;
+  background-color: #f4f4f4;
+}
+
+.welcome-message {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  background-color: transparent;
+  margin-bottom: 5px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
 }
 </style>

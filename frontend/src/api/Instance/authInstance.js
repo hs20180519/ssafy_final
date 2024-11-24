@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const { VITE_VUE_API_URL } = import.meta.env;
-import { useAuthStore } from "@/stores/authStore";
+const {VITE_VUE_API_URL} = import.meta.env;
+import {useAuthStore} from "@/stores/authStore";
+import {toast} from "vue3-toastify";
 
 export const authApi = () => {
   const instance = axios.create({
@@ -44,7 +45,7 @@ export const authApi = () => {
           const response = await axios.post(
             `${VITE_VUE_API_URL}/auth/refresh`, // 서버의 토큰 재발급 API
             {},
-            { withCredentials: true } // 쿠키 포함 설정
+            {withCredentials: true} // 쿠키 포함 설정
           );
 
           // 새로 발급받은 Access Token
@@ -55,7 +56,7 @@ export const authApi = () => {
           const authStore = useAuthStore();
 
           // 상태 업데이트
-          authStore.login(newAccessToken, authStore.getMember); // 새로운 액세스 토큰으로 로그인 상태 갱신
+          authStore.login(newAccessToken, authStore.getMember, authStore.getMemberId, authStore.getMemberRole); // 새로운 액세스 토큰으로 로그인 상태 갱신
           // 기존 요청 헤더에 새로운 Access Token 추가
           originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
 
@@ -66,7 +67,7 @@ export const authApi = () => {
           console.error("토큰 갱신 실패", refreshError);
           authStore.logout();
 
-          alert("권한이 없습니다. 다시 로그인 해주세요.");
+
         }
       }
       // 403 오류 시, 바로 로그인 페이지로 리다이렉트
@@ -76,7 +77,7 @@ export const authApi = () => {
         console.error("권한이 없습니다.");
         authStore.logout();
 
-        alert("권한이 없습니다. 다시 로그인 해주세요.");
+        toast.error("권한이 없습니디.")
       }
 
       return Promise.reject(error);

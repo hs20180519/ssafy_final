@@ -1,7 +1,7 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from "vue-router";
-import { verifyResetUUID, resetPassword } from '@/api/auth'
+import {ref, onMounted} from 'vue'
+import {useRoute, useRouter} from "vue-router";
+import {verifyResetUUID, resetPassword} from '@/api/auth'
 
 const password = ref('');
 const confirmPassword = ref('');
@@ -11,80 +11,80 @@ const route = useRoute();
 const router = useRouter();
 
 onMounted(() => {
-    console.log(route.query.email, route.query.uuid);
-    
-    verifyResetUUID(
-        {
-            uuid: route.query.uuid
-        },
-        ({data}) => {
-            if(data == true) {
-                isValidUUID.value = true;
-            } else {
-            }
-        },
-        (error) => {
-            console.log(error);
-        }
-    )
+  console.log(route.query.email, route.query.uuid);
+
+  verifyResetUUID(
+    {
+      uuid: route.query.uuid
+    },
+    ({data}) => {
+      if (data == true) {
+        isValidUUID.value = true;
+      } else {
+      }
+    },
+    (error) => {
+      console.log(error);
+    }
+  )
 })
 
 const handleSubmit = () => {
-    if(password.value !== confirmPassword.value) {
-        alert("비밀번호가 일치하지 않습니다.");
-    } else {
-        resetPassword({
-            email: route.query.email,
-            newPassword: password.value,
-            confirmNewPassword: confirmPassword.value,
-            uuid: route.query.uuid
-        },
-        (response) => {
-            console.log(response);
-            if(response.status == 204) {
-                alert("비밀번호가 변경되었습니다. 확인을 누르면 로그인 화면으로 이동합니다.")
-                router.push({
-                    name: 'Login'
-                })
-            }
-        },
-        (error) => {
-            console.log(error);
-        })
-    }
+  if (password.value !== confirmPassword.value) {
+    alert("비밀번호가 일치하지 않습니다.");
+  } else {
+    resetPassword({
+        email: route.query.email,
+        newPassword: password.value,
+        confirmNewPassword: confirmPassword.value,
+        uuid: route.query.uuid
+      },
+      (response) => {
+        console.log(response);
+        if (response.status == 204) {
+          alert("비밀번호가 변경되었습니다. 확인을 누르면 로그인 화면으로 이동합니다.")
+          router.push({
+            name: 'Login'
+          })
+        }
+      },
+      (error) => {
+        console.log(error);
+      })
+  }
 }
 </script>
 
 <template>
-        <div class='reset-password-form' v-if="isValidUUID">
-            <h2>비밀번호 재설정</h2>
-            <form @submit.prevent="handleSubmit">
-                <div class="input-group">
-                    <label for="password">새 비밀번호</label>
-                    <input
-                    type="password"
-                    id="password"
-                    v-model="password"
-                    placeholder="새 비밀번호를 입력하세요"
-                    required
-                    />
-                </div>
-                <div class="input-group">
-                    <label for="confirmPassword">새 비밀번호 확인</label>
-                    <input
-                    type="password"
-                    id="confirmPassword"
-                    v-model="confirmPassword"
-                    placeholder="새 비밀번호를 입력하세요"
-                    required
-                    />
-                </div>
-                <button type="submit">비밀번호 재설정</button>
-            </form>
-        </div>
-        <div v-if="!isValidUUID">
-            <h2>유효하지 않은 링크입니다.</h2>
-        </div>
+  <div class='reset-password-form' v-if="isValidUUID">
+    <h2>비밀번호 재설정</h2>
+    <form @submit.prevent="handleSubmit">
+      <div class="input-group">
+        <label for="password">새 비밀번호</label>
+        <input
+          type="password"
+          id="password"
+          v-model="password"
+          placeholder="새 비밀번호를 입력하세요"
+          required
+        />
+      </div>
+      <div class="input-group">
+        <label for="confirmPassword">새 비밀번호 확인</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          v-model="confirmPassword"
+          placeholder="새 비밀번호를 입력하세요"
+          required
+        />
+      </div>
+      <button type="submit">비밀번호 재설정</button>
+    </form>
+  </div>
+  <div v-if="!isValidUUID">
+    <h2>유효하지 않은 링크입니다.</h2>
+  </div>
 </template>
 
 <style scoped>
