@@ -10,6 +10,8 @@ export const useHouseDealStore = defineStore('housedeal', () => {
 
     const pgno = ref(1);
 
+    const selectedDeparture = ref();
+
     const searchOption = computed(() => {
         return {
             keyword: keyword.value,
@@ -36,6 +38,10 @@ export const useHouseDealStore = defineStore('housedeal', () => {
         pgno.value = num;
     }
 
+    const setSelectedDeparture = (newObj) => {
+        selectedDeparture.value = newObj;
+    }
+
     return {
         keyword,
         sidoName,
@@ -43,8 +49,10 @@ export const useHouseDealStore = defineStore('housedeal', () => {
         dongName,
         searchOption,
         pgno,
+        selectedDeparture,
         setKeyword,
         setRegion,
-        setPgno
+        setPgno,
+        setSelectedDeparture,
     }
 })

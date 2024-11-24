@@ -70,6 +70,7 @@ const onClickBookmark = () => {
 
 const onClickDuration = () => {
     isVisibleDuration.value = !isVisibleDuration.value;
+    console.log(isVisibleDuration.value);
 }
 
 

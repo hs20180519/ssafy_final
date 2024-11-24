@@ -1,121 +1,171 @@
 <script setup>
 import { getAddressByMemberId } from '@/api/address';
-import { getCarDuration } from '@/api/dufation';
-import { onMounted, ref, defineProps } from 'vue';
+import { geocode, getCarDuration, getTransitDuration, getWalkDuration } from '@/api/duration';
+import { onMounted, ref, defineProps, watch } from 'vue';
+import { useHouseDealStore } from '@/stores/houseDealStore';
 
 const props = defineProps({
     lat: String,
     lng: String
 })
+const houseDealStore = useHouseDealStore();
 
-onMounted(() => {
-    console.log("onMounted");
-    getDepartures().then(getDurations(selectedDeparture.roadNameAddress));
-})
+onMounted(async () => {
+    try {
+        await getDepartures();
+        getDurations(selectedDeparture.value);
+        console.log("Departures loaded:", departures.value);
+    } catch (error) {
+        console.error("Failed to load departures:", error);
+    }
+});
 
 
 // 출발지 리스트 (사용자가 등록한 주소지)
 const departures = ref([]);
 const selectedDeparture = ref();
-const destination = ref({ // 목적지
-    lat: props.lat,
-    lng: props.lng
+
+watch(selectedDeparture, (newValue) => {
+    houseDealStore.setSelectedDeparture(newValue);
+    console.log("selectedDeparture changed:", houseDealStore.selectedDeparture);
 });
 
-const getDepartures = () => {
-    return new Promise((resolve, reject) => {
-        getAddressByMemberId(
-            ({data}) => {
-                console.log("getDepartures:", data);
-                departures.value = data;
-                if(data.length >= 1) {
-                    selectedDeparture.value = data[0];
-                }
-                resolve();
-            },
-            (error) => {
-                console.log(error);
-                reject(error);
-            }
-        )
+const getDepartures = async () => {
+    try {
+        // getAddressByMemberId 호출 및 data 가져오기
+        const data = await new Promise((resolve, reject) => {
+            getAddressByMemberId(
+                ({ data }) => resolve(data),
+                (error) => reject(error)
+            );
+        });
 
-    })
-}
+        console.log("getDepartures:", data);
 
-// 선택된 출발지
-// const selectedStartLocation = ref(savedLocations.value[0].address);
+        // departures 배열 초기화
+        departures.value = await Promise.all(
+            data.map(async (item) => {
+                // geocode 호출로 좌표 가져오기
+                const geocodeResult = await geocode(item.roadNameAddress);
+                // 새로운 속성 추가
+                return {
+                    ...item,
+                    coordinates: geocodeResult,
+                };
+            })
+
+        );
+        console.log(departures);
+
+        if (departures.value.length >= 1) {
+            selectedDeparture.value = departures.value[0];
+            console.log("selectedDeparture:", selectedDeparture.value);
+        }
+    } catch (error) {
+        console.error("Error in getDepartures:", error);
+        throw error; // 에러 발생 시 상위 호출자에게 전달
+    }
+};
 
 // 교통수단별 소요시간
-const routeTimes = ref({
-    도보: null,
-    대중교통: null,
-    승용차: null,
-});
+const routeTimes = ref([]);
 
 const getDurations = (departure) => {
-    getCarDuration({
-        startX: 0,
-        startY: 0,
-        startAddress: departure.roadNameAddress,
+    console.log(departure);
+
+    const params = {
+        startX: departure.coordinates.longitude,
+        startY: departure.coordinates.latitude,
+        // startAddress: departure.roadNameAddress,
         endX: props.lng,
         endY: props.lat
+    };
+
+    getCarDuration(
+        params,
+        ({data}) => {
+            routeTimes.value.push({
+                name: "승용차",
+                duration: formatTime(data.totalTime)
+            })
+            console.log("getCarDuration", data);
+        },
+        (error) => {
+            console.log(error);
+        }
+    );
+
+    getWalkDuration({
+        ...params,
+        startName: departure.name,
+        endName: "매물"
+    },
+    ({data}) => {
+        routeTimes.value.push({
+                name: "도보",
+                duration: formatTime(data.totalTime)
+            })
+        console.log("getWalkDuration", data);
+    },
+    (error) => {
+        console.log(error);
     })
+
+    // getTransitDuration(
+    //     params,
+    //     ({data}) => {
+    //         routeTimes.value.push({
+    //             name: "대중교통",
+    //             duration: formatTime(data.totalTime)
+    //         })
+    //         console.log("getTransitDuration", data);
+    //     },
+    //     (error) => {
+    //         console.log(error);
+    //     }
+    // )
+
 }
 
-// // 교통수단별 소요시간 가져오기
-// const fetchRouteTimes = async () => {
-// try {
-// const startLocation = selectedStartLocation.value;
+const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds/60);
+    if(minutes >= 60) {
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+        return `${hours}시간 ${remainingMinutes}분`;
+    }
+    return `${minutes}분`;
+}
 
-// // API 호출 로직 (예: axios 사용)
-// const response = await fakeApiCall(startLocation, destination);
+const onChange = () => {
+    routeTimes.value = [];
+    console.log("onChange", selectedDeparture.value);
+    getDurations(selectedDeparture.value);
+}
 
-// // 데이터 업데이트
-// routeTimes.value = response;
-// } catch (error) {
-// console.error("길찾기 데이터를 가져오는 중 오류 발생:", error);
-// }
-// };
-
-// // API 호출 대체 함수 (테스트용)
-// const fakeApiCall = async (start, end) => {
-// console.log(`출발지: ${start}, 목적지: ${end}`);
-// return new Promise((resolve) => {
-// setTimeout(() => {
-// resolve({
-// 도보: 50,
-// 대중교통: 30,
-// 승용차: 15,
-// });
-// }, 1000);
-// });
-// };
-
-// 컴포넌트 로드 시 초기 데이터 가져오기
-// fetchRouteTimes();
 </script>
 
 <template>
     <div class="route-time-component">
         <h3>교통수단별 소요시간</h3>
       <!-- 출발지 선택 -->
-        <div class="start-location">
+        <div class="start-location" v-if="selectedDeparture">
             <label for="departure">출발지:</label>
-            <select id="departure" v-model="selectedDeparture.roadNameAddress" @change="">
-                <option v-for="departure in departures" :key="departure.id" :value="departure.roadNameAddress">
+            <select id="departure" v-model="selectedDeparture" @change="onChange">
+                <option v-for="departure in departures" :key="departure.addressId" :value="departure">
                     {{ departure.name }}
                 </option>
             </select>
         </div>
     
         <!-- 교통수단별 소요시간 -->
-        <!-- <div class="transport-times">
+        <div class="transport-times">
             <ul>
-            <li v-for="(time, mode) in routeTimes" :key="mode">
-                <strong>{{ mode }}:</strong> {{ time }} 분
+            <li v-for="mode in routeTimes" :key="mode">
+                <strong>{{ mode.name }}:</strong> {{ mode.duration }}
             </li>
             </ul>
-        </div> -->
+        </div>
     </div>
 </template>
   
