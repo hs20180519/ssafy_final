@@ -11,6 +11,7 @@
 <script>
 import {useAuthStore} from "@/stores/authStore";
 import {logout} from "@/api/auth.js";
+import {toast} from "vue3-toastify";
 
 export default {
   props: {
@@ -42,9 +43,12 @@ export default {
       const authStore = useAuthStore();
       authStore.logout();
 
-      alert("로그아웃 되었습니다.");
+
+      toast.success("로그아웃 되었습니다.", {autoClose: 1000});
+      setTimeout(() => {
+        this.$router.push({name: "Home"});
+      }, 1000);
       this.$emit("closeDropdown"); // 드롭다운 닫기
-      this.$router.push({name: "Home"}); // 메인 페이지로 이동
     },
     handleOutsideClick(event) {
       const dropdownElement = this.$el; // 현재 컴포넌트의 루트 엘리먼트

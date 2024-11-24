@@ -12,7 +12,7 @@ import {
   faHouse,
   faUser,
   faCircleInfo,
-  faMagnifyingGlass, faHeart, faEye, faComment, faPenToSquare, faTrash, faPen, faCheck, faBan,
+  faMagnifyingGlass, faHeart, faEye, faComment, faPenToSquare, faTrash, faPen, faCheck, faBan, faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {useKakao} from "vue3-kakao-maps";
@@ -20,7 +20,7 @@ import {useKakao} from "vue3-kakao-maps";
 import ElementPlus from 'element-plus'
 
 
-library.add(faHouse, faUser, faCircleInfo, faMagnifyingGlass, faHeart, faEye, faComment, faPen, faTrash, faCheck, faBan);
+library.add(faHouse, faUser, faCircleInfo, faMagnifyingGlass, faHeart, faEye, faComment, faPen, faTrash, faCheck, faBan, faPlus);
 
 useKakao(import.meta.env.VITE_KAKAO_APP_KEY);
 

@@ -23,6 +23,6 @@ export default {
   /* //padding: 20px; */
   justify-content: center;
   text-align: center;
-  min-height: 100vh;
+  height: 100vh;
 }
 </style>

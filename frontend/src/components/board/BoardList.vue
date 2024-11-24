@@ -3,7 +3,10 @@
     <h2 class="title">문의하기</h2>
     <div class="button-container">
       <router-link to="/board/create">
-        <button class="new-question-btn">새 질문 등록</button>
+        <button class="new-question-btn">
+          문의하기
+          <font-awesome-icon :icon="['fas', 'pen']"/>
+        </button>
       </router-link>
     </div>
     <div v-if="questions.length">
@@ -23,6 +26,7 @@
 <script>
 import BoardListItem from "@/components/board/BoardListItem.vue";
 import {getQuestions} from "@/api/board";
+import {toast} from "vue3-toastify";
 
 export default {
   name: "BoardList",
@@ -41,10 +45,9 @@ export default {
     async fetchQuestions() {
       try {
         const response = await getQuestions();
-        console.log(response);
         this.questions = response.data;
       } catch (error) {
-        console.error("질문 목록을 가져오는 중 오류 발생:", error);
+        toast.error("질문 목록을 가져오는 중 오류 발생");
       }
     },
   },
@@ -83,21 +86,25 @@ export default {
 }
 
 .new-question-btn {
-  display: block;
+  display: inline-block;
   width: 100px;
-  padding: 12px;
-  background-color: #4e4e4e;
+  margin-right: 10px;
+  padding: 10px;
+  background-color: #676565;
   color: white;
   font-size: 0.8rem;
   border: none;
   border-radius: 5px;
   text-align: center;
-  margin-top: 30px;
+  //margin-top: 30px;
   cursor: pointer;
   transition: background-color 0.3s;
+  text-decoration: none;
 }
 
 .new-question-btn:hover {
   background-color: #333;
 }
+
+
 </style>

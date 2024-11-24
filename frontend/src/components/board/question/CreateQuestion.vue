@@ -26,10 +26,13 @@ export default {
       const body = {title: this.title, content: this.content};
       try {
         await createQuestion(body);
-        toast.success("질문이 등록되었습니다.");
-        this.$router.push("/board");
+
+        toast.success("질문이 등록되었습니다.", {autoClose: false});
+        setTimeout(() => {
+          this.$router.push({name: "BoardList"});
+        }, 1000);
       } catch (error) {
-        console.error("질문 등록 중 오류 발생:", error);
+        toast.error("질문 등록 중 오류 발생:", error);
       }
     },
   },
@@ -57,7 +60,7 @@ h2 {
 }
 
 .btn {
-  width: 100%;
+  width: 106%;
   padding: 10px;
   background: #333;
   color: #fff;

@@ -36,12 +36,11 @@ watch(
 
 <style scoped>
 .main-container {
-  padding-top: 80px; /* TOOD: 아이디/비밀번호 찾기에도 적용 */
   padding-left: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60vh;
+  height: 100vh;
   width: 100%;
 }
 

@@ -66,8 +66,11 @@ export default {
           const authStore = useAuthStore();
           authStore.login(accessToken, memberName, memberId, memberRole);
           document.cookie = `refreshToken=${refreshToken}; path=/; HttpOnly`;
-          toast.success("로그인 성공");
-          this.$router.push({name: "Home"}); // 로그인 후 리디렉션
+          toast.success("로그인 성공", {autoClose: false});
+          setTimeout(() => {
+            this.$router.push({name: "Home"});
+          }, 1000);
+
         }
       } catch (error) {
         // 로그인 실패 시 처리
@@ -123,7 +126,7 @@ export default {
 button[type="submit"] {
   width: 100%;
   padding: 10px;
-  background-color: #d87070; /* #d87070 색상 적용 */
+  background-color: #4e4e4e;
   color: white;
   border: none;
   border-radius: 4px;
@@ -131,7 +134,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #b85b5b; /* 버튼 hover 색상 */
+  background-color: #2c2b2b; /* 버튼 hover 색상 */
 }
 
 .auth-links {
@@ -142,7 +145,7 @@ button[type="submit"]:hover {
 }
 
 .auth-links a {
-  color: #d87070;
+  color: gray;
   text-decoration: none;
 }
 

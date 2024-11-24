@@ -1,9 +1,10 @@
 <template>
   <div class="address-page">
-    <h2>주소지 관리</h2>
 
     <!-- 주소지 추가 버튼 -->
-    <button @click="addAddress" class="add-address-btn">주소지 추가</button>
+    <button @click="addAddress" class="add-address-btn">
+      <font-awesome-icon :icon="['fas', 'plus']"/>
+    </button>
 
     <!-- 모달: 주소지 추가/수정 폼 -->
     <div v-if="isAddingOrEditing" class="modal-overlay" @click="cancelEdit">

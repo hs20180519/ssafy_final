@@ -71,6 +71,11 @@ export default {
       if (this.isLoggedIn) {
         this.activeMenu = "profile"; // 프로필 메뉴 활성화
         this.showDropdown = !this.showDropdown;
+
+        // 5초 후에 드롭다운 메뉴 닫기
+        setTimeout(() => {
+          this.showDropdown = false;
+        }, 3000);
       } else {
         this.$router.push("/login");
       }

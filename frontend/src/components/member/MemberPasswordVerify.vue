@@ -57,6 +57,7 @@ export default {
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
+  padding-bottom: 50px;
 }
 
 .input-group {
