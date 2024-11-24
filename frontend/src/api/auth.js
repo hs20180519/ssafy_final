@@ -43,7 +43,26 @@ function resetPassword(body, success, fail) {
   noAuth.put("/auth/password", body, null).then(success).catch(fail);
 }
 
-export { findId, sendPasswordResetEmail, verifyResetUUID, resetPassword };
+function sendSignUpEmail(email, success, fail) {
+  noAuth.post("/auth/signup-email", null, {
+    params: {
+      email: email
+    }
+  })
+  .then(success)
+  .catch(fail);
+}
+
+function verifySignUpCode(param, success, fail) {
+  noAuth.post("/auth/signup-verification", {
+    email: param.email,
+    code: param.code
+  })
+  .then(success)
+  .catch(fail);
+}
+
+export { findId, sendPasswordResetEmail, verifyResetUUID, resetPassword, sendSignUpEmail, verifySignUpCode };
 
 // 인증 필요 없는 api 사용
 export async function signup(memberData) {

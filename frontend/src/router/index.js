@@ -1,7 +1,7 @@
 // router/index.js
 import {createRouter, createWebHistory} from "vue-router";
 import HomePage from "@/views/HomePage.vue";
-import HouseDealPage from "@/views/HouseDealPage.vue";
+import HouseDealPage from "@/views/housedeal/HouseDealPage.vue";
 import MemberLoginPage from "@/views/member/MemberLoginPage.vue";
 import MemberSignUpPage from "@/views/member/MemberSignUpPage.vue";
 
@@ -104,7 +104,7 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = authStore.getAuthToken;
   // const alertStore = useAlertStore();
 
-  if (to.name === "Home" || to.name === "Signup" || to.name === "MemberFind") {
+  if (to.name === "Home" || to.name === "Signup" || to.name === "HouseDeal" || to.name === "MemberFind" || to.name === "PasswordReset") {
     return next();
   }
 

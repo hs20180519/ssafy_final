@@ -3,16 +3,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.favoriteProperty.model.mapper.FavoritePropertyMapper">
+    <resultMap id="favoriteProperty" type="favoritePropertyDto">
+        <result column="member_id" property="memberId" />
+        <result column="apt_seq" property="aptSeq" />
+    </resultMap>
 
     <!-- 관심 매물 추가 -->
     <insert id="insertFavoriteProperty">
-        INSERT INTO favorite_properties (id, member_id, apt_seq)
-        VALUES (#{id}, #{memberId}, #{aptSeq});
+        INSERT INTO favorite_properties (member_id, apt_seq)
+        VALUES (#{memberId}, #{aptSeq});
     </insert>
     <!-- 특정 사용자의 관심 매물 조회 (favorite_property_details 뷰 사용) -->
     <select id="selectFavoritePropertiesByMemberId" resultType="FavoritePropertyDetailsDto">
-        SELECT f.favorite_id  AS id,
-               f.member_id    AS memberId,
+        SELECT f.member_id    AS memberId,
                f.apt_seq      AS aptSeq,
                f.apt_nm       AS aptNm,
                f.land_address AS landAddress,
@@ -24,11 +27,21 @@
         FROM favorite_property_details f
         WHERE f.member_id = #{memberId};
     </select>
+
+    <!-- 특정 사용자의 특정 매물의 관심매물 조 -->
+    <select id="getFavoritePropertyByAptSeqAndId" parameterType="map" resultMap="favoriteProperty">
+        SELECT *
+        FROM favorite_properties
+        WHERE apt_seq = #{aptSeq}
+        AND member_id = #{memberId}
+    </select>
+
     <!-- 관심 매물 삭제 -->
-    <delete id="deleteFavoriteProperty">
+    <delete id="deleteFavoriteProperty" parameterType="map">
         DELETE
         FROM favorite_properties
-        WHERE id = #{id}
+        WHERE member_id = #{memberId}
+        AND apt_seq = #{aptSeq}
     </delete>
 
 </mapper>

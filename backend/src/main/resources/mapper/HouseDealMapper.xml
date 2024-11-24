@@ -61,8 +61,7 @@
 				AND i.umd_cd = SUBSTRING(#{code}, 6, 10)
 			</if>
 		</where>
-		ORDER BY deal_year desc, deal_month desc, deal_day desc
-		LIMIT #{pgSize} OFFSET #{offset};
+		ORDER BY deal_year desc, deal_month desc, deal_day desc;
     </select>
 
     <select id="getCountHouseDealsWithKeyword" parameterType="map" resultType="int">

@@ -39,6 +39,7 @@ onBeforeRouteUpdate((to, from, next) => {
 
     type.value = to.query.type;
     keyword.value = to.query.keyword;
+    isDetailVisible.value = false;
 
     next();
 })
@@ -135,7 +136,7 @@ const closeDetail = () => {
 }
 
 .list-container {
-    width: 30vh;
+    width: 40vh;
 }
 
 .detail-overlay {

@@ -133,11 +133,18 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-webflux -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <version>3.3.5</version>
+        </dependency>
 
 
 
 
-<!--		<dependency>-->
+
+        <!--		<dependency>-->
 <!--			<groupId>WhereIsMyHome</groupId>-->
 <!--			<artifactId>WhereIsMyHome</artifactId>-->
 <!--			<version>0.0.1-SNAPSHOT</version>-->

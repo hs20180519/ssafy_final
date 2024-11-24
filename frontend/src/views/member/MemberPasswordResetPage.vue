@@ -1,5 +1,5 @@
 <script setup>
-import MemberPasswordResetForm from '@/components/member/MemberPasswordResetForm.vue'
+import MemberPasswordResetForm from '@/components/memberFind/MemberPasswordResetForm.vue'
 
 </script>
 
