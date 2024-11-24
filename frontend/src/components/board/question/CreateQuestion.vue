@@ -2,15 +2,16 @@
   <div class="create-question">
     <h2>새 질문 등록</h2>
     <form @submit.prevent="submitQuestion">
-      <input v-model="title" placeholder="제목" required />
-      <textarea v-model="content" placeholder="내용" required></textarea>
-      <button type="submit">질문 등록</button>
+      <input v-model="title" placeholder="제목" required class="input"/>
+      <textarea v-model="content" placeholder="내용" required class="input"></textarea>
+      <button type="submit" class="btn">질문 등록</button>
     </form>
   </div>
 </template>
 
 <script>
-import { createQuestion } from "@/api/board";
+import {createQuestion} from "@/api/board";
+import {toast} from "vue3-toastify";
 
 export default {
   name: "CreateQuestion",
@@ -22,17 +23,17 @@ export default {
   },
   methods: {
     async submitQuestion() {
-      const body = { title: this.title, content: this.content };
-      console.log(body);
-      createQuestion(
-        body,
-        () => {
-          this.$router.push("/board"); // 성공 시 페이지 이동
-        },
-        (error) => {
-          console.error("질문 등록 중 오류 발생:", error);
-        }
-      );
+      const body = {title: this.title, content: this.content};
+      try {
+        await createQuestion(body);
+
+        toast.success("질문이 등록되었습니다.", {autoClose: false});
+        setTimeout(() => {
+          this.$router.push({name: "BoardList"});
+        }, 1000);
+      } catch (error) {
+        toast.error("질문 등록 중 오류 발생:", error);
+      }
     },
   },
 };
@@ -40,6 +41,35 @@ export default {
 
 <style scoped>
 .create-question {
-  padding: 20px;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+h2 {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.btn {
+  width: 106%;
+  padding: 10px;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #555;
 }
 </style>

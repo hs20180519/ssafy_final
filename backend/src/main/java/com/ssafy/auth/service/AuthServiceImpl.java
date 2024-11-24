@@ -2,6 +2,7 @@ package com.ssafy.auth.service;
 
 import java.sql.SQLException;
 import java.time.Duration;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -78,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
 		String hashedPassword = PasswordUtil.encodePassword(signUpRequest.getPassword());
 		memberDto.setPassword(hashedPassword);
 
-		if (signUpRequest.getRole() == "" || signUpRequest.getRole() == "null") {
+		if (Objects.equals(signUpRequest.getRole(), "") || Objects.equals(signUpRequest.getRole(), null)) {
 			memberDto.setRole("USER"); // 기본값으로 "USER" 설정
 		} else {
 			memberDto.setRole(signUpRequest.getRole());

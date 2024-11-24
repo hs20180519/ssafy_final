@@ -33,8 +33,9 @@
 </template>
 
 <script>
-import { login } from "@/api/auth";
-import { useAuthStore } from "@/stores/authStore";
+import {login} from "@/api/auth";
+import {useAuthStore} from "@/stores/authStore";
+import {toast} from "vue3-toastify";
 
 export default {
   data() {
@@ -54,6 +55,8 @@ export default {
 
         const token = response.headers["authorization"];
         const memberName = response.data.name;
+        const memberId = response.data.id;
+        const memberRole = response.data.role;
 
         // 로그인 성공 시 처리
         if (token) {
@@ -61,17 +64,20 @@ export default {
           const refreshToken = response.data.refreshToken;
 
           const authStore = useAuthStore();
-          authStore.login(accessToken, memberName);
+          authStore.login(accessToken, memberName, memberId, memberRole);
           document.cookie = `refreshToken=${refreshToken}; path=/; HttpOnly`;
-          alert("로그인 성공");
-          this.$router.push({ name: "Home" }); // 로그인 후 리디렉션
+          toast.success("로그인 성공", {autoClose: false});
+          setTimeout(() => {
+            this.$router.push({name: "Home"});
+          }, 1000);
+
         }
       } catch (error) {
         // 로그인 실패 시 처리
         if (error.response && error.response.status === 401) {
-          alert("로그인 실패: 아이디나 비밀번호가 잘못되었습니다.");
+          toast.error("로그인 실패: 아이디나 비밀번호가 잘못되었습니다.");
         } else {
-          alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+          toast.error("서버 오류가 발생했습니다. 다시 시도해주세요.");
         }
       }
     },
@@ -120,7 +126,7 @@ export default {
 button[type="submit"] {
   width: 100%;
   padding: 10px;
-  background-color: #d87070; /* #d87070 색상 적용 */
+  background-color: #4e4e4e;
   color: white;
   border: none;
   border-radius: 4px;
@@ -128,7 +134,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #b85b5b; /* 버튼 hover 색상 */
+  background-color: #2c2b2b; /* 버튼 hover 색상 */
 }
 
 .auth-links {
@@ -139,7 +145,7 @@ button[type="submit"]:hover {
 }
 
 .auth-links a {
-  color: #d87070;
+  color: gray;
   text-decoration: none;
 }
 
