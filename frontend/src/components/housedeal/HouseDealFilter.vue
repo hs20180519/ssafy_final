@@ -91,7 +91,7 @@ const getSidoFilter = (code) => {
                 ({ data }) => {
                 console.log(data);
                 sidoOptions.value = data.map(({ dongCode, sidoName }) => ({ value: dongCode, label: sidoName}));
-                sidoOptions.value.unshift({ value: "", label: "전체" })
+                sidoOptions.value.unshift({ value: "00", label: "전체" })
                 resolve();
             },
             (error) => {
@@ -113,8 +113,8 @@ const getGugunFilter = (code) => {
                 gugunOptions.value = data
                     .filter(item => item.gugunName !== null)
                     .map(({ dongCode, gugunName }) => ({ value: dongCode, label: gugunName }));
-                gugunOptions.value.unshift({ value: "", label: "전체" })
-                console.log(data);
+                gugunOptions.value.unshift({ value: "000", label: "전체" })
+                console.log(gugunOptions.value);
                 resolve();
             },
             (error) => {
@@ -135,7 +135,7 @@ const getDongFilter = (code) => {
             dongOptions.value = data
                 .filter(item => item.dongName !== null)
                 .map(({ dongCode, dongName }) => ({ value: dongCode, label: dongName }));
-            dongOptions.value.unshift({ value: "", label: "전체" });
+            dongOptions.value.unshift({ value: "00000", label: "전체" });
             console.log(data);
         }
     )
@@ -147,8 +147,8 @@ const getDongFilter = (code) => {
     <div class='housedeal-filter'>
         <SearchBox @onSearch='onSearch'/>
         <VSelect :selectOption=sidoOptions :selectedOption='selectedSido' @onKeySelect='onSelectSido'/>
-        <VSelect :selectOption=gugunOptions :selectedOption='selectedGugun' @onKeySelect='onSelectGugun' />
-        <VSelect :selectOption=dongOptions :selectedOption='selectedDong' @onKeySelect='onSelectDong' />
+        <VSelect :selectOption=gugunOptions :selectedOption='selectedGugun.slice(2, 5) == "000" ? "전체" : selectedGugun' @onKeySelect='onSelectGugun' />
+        <VSelect :selectOption=dongOptions :selectedOption='selectedDong.slice(-5) == "00000" ? "전체" : selectedDong' @onKeySelect='onSelectDong' />
         <SearchBoxResult v-if="isLoaded" :result="result" @onResultClicked="isLoaded = false" class='search-box-result'/>
     </div>
 </template>

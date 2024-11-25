@@ -2,7 +2,7 @@ import { authApi } from "./Instance/authInstance";
 
 const durationApi = authApi();
 
-function getCarDuration(param, success, fail) {
+async function getCarDuration(param, success, fail) {
     durationApi.get("/duration/car", {
         params: param
     })
@@ -10,7 +10,7 @@ function getCarDuration(param, success, fail) {
     .catch(fail);
 }
 
-function getWalkDuration(param, succes, fail) {
+async function getWalkDuration(param, succes, fail) {
     durationApi.get("/duration/walk", {
         params: param
     })
@@ -18,7 +18,7 @@ function getWalkDuration(param, succes, fail) {
     .catch(fail)
 }
 
-function getTransitDuration(param, success, fail) {
+async function getTransitDuration(param, success, fail) {
     durationApi.get("/duration/transit", {
         params: param
     })

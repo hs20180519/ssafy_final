@@ -41,10 +41,12 @@ onUpdated(() => {
 
 const closeDetail = () => {
   emit("closeDetail");
+  isVisibleDuration.value = false;
+  localDealList.value = [];
 };
 
+
 const onClickBookmark = () => {
-  bookmarked.value = !bookmarked.value;
   if (bookmarked.value) {
     // 북마크 추가
     createFavoriteProperty(
@@ -56,6 +58,7 @@ const onClickBookmark = () => {
         console.log(data);
         bookmarked.value = true;
         console.log(bookmarked.value);
+        bookmarked.value = !bookmarked.value;
       },
       (error) => {
         console.log(error);
@@ -84,29 +87,23 @@ const onClickDuration = () => {
 const sortDealList = () => {
   console.log("sortDealList");
   localDealList.value.sort((a, b) => {
+    const priceA = parseFloat(a.dealAmount.replace(/,/g, "")) || 0;
+    const priceB = parseFloat(b.dealAmount.replace(/,/g, "")) || 0;
+    const dateA = new Date(a.dealYear, a.dealMonth - 1, a.dealDay);
+    const dateB = new Date(b.dealYear, b.dealMonth - 1, b.dealDay);
+
     if (selectedSortFilter.value === "date-new") {
-      return (
-        new Date(b.dealYear, b.dealMonth - 1, b.dealDay) -
-        new Date(a.dealYear, a.dealMonth - 1, a.dealDay)
-      );
+      return dateB - dateA;
     } else if (selectedSortFilter.value === "date-old") {
-      return (
-        new Date(a.dealYear, a.dealMonth - 1, a.dealDay) -
-        new Date(b.dealYear, b.dealMonth - 1, b.dealDay)
-      );
+      return dateA - dateB;
     } else if (selectedSortFilter.value === "price-high") {
-      return (
-        parseFloat(b.dealAmount.replace(/,/g, "")) -
-        parseFloat(a.dealAmount.replace(/,/g, ""))
-      );
+      return priceB - priceA;
     } else if (selectedSortFilter.value === "price-low") {
-      return (
-        parseFloat(a.dealAmount.replace(/,/g, "")) -
-        parseFloat(b.dealAmount.replace(/,/g, ""))
-      );
+      return priceA - priceB;
     }
   });
 };
+
 
 // `selectedSortFilter` 값 변경 감지
 watch(selectedSortFilter, () => {
@@ -120,10 +117,14 @@ watch(
     if (newVal && newVal.dealList) {
       localDealList.value = [...newVal.dealList]; // dealList 복사
       sortDealList(); // 초기 정렬
+    } else {
+      localDealList.value = []; // clickedItem이 없는 경우 초기화
     }
+    isVisibleDuration.value = false; // 길찾기 초기화
   },
-  { immediate: true } // 컴포넌트 초기화 시에도 실행
+  { immediate: true }
 );
+
 </script>
 
 <template>
@@ -132,82 +133,78 @@ watch(
     <button class="close-button" @click="closeDetail">
       <font-awesome-icon :icon="['fas', 'x']" />
     </button>
+    <button class="bookmark-button" @click="onClickBookmark">
+      <font-awesome-icon :icon="['far', 'heart']" v-if="!bookmarked" />
+      <font-awesome-icon :icon="['fas', 'heart']" v-if="bookmarked" />
+    </button>
 
-    <!-- 이미지 섹션 -->
-    <div class="image-section">
-      <img src="https://via.placeholder.com/300x200" alt="매물 이미지" />
-      <button class="bookmark-button" @click="onClickBookmark">
-        <font-awesome-icon :icon="['far', 'heart']" v-if="!bookmarked" />
-        <font-awesome-icon :icon="['fas', 'heart']" v-if="bookmarked" />
-      </button>
-      <p></p>
-    </div>
+    
+    <!-- 스크롤 가능한 콘텐츠 -->
+    <div class="content">
+      <!-- 이미지 섹션 -->
+      <div class="image-section">
+        <img src="https://via.placeholder.com/300x200" alt="매물 이미지" />
+      </div>
+      <!-- 거래 내역 그래프 -->
+      <HouseDealGraph :dealList="localDealList" />
 
-    <!-- 거래 내역 그래프 -->
-    <HouseDealGraph :dealList="localDealList" />
-    <!-- 길찾기 버튼 -->
-    <div class="navigate-button">
-      <button @click="onClickDuration">길찾기</button>
-    </div>
-
-    <div class="duration-container" v-if="isVisibleDuration">
-      <HouseDealDuration
-        :lat="clickedItem.latitude"
-        :lng="clickedItem.longitude"
-      />
-    </div>
-
-    <!-- 거래 기록 섹션 -->
-    <div class="record-section">
-      <div class="record-header">
-        <h3>거래 기록</h3>
-        <select
-          id="filter-select"
-          v-model="selectedSortFilter"
-          @change="onSortChange"
-        >
-          <option value="date-new">최신순</option>
-          <option value="date-old">오래된순</option>
-          <option value="price-high">높은거래가순</option>
-          <option value="price-low">낮은거래가순</option>
-        </select>
+      <!-- 길찾기 버튼 -->
+      <div class="navigate-button">
+        <button @click="onClickDuration">길찾기</button>
       </div>
 
-      <ul class="record-list">
-        <li
-          v-for="record in localDealList"
-          :key="record.id"
-          class="record-item"
-        >
-          <p>
-            <strong>거래일시:</strong> {{ record.dealYear }}.{{
-              record.dealMonth
-            }}.{{ record.dealDay }}
-          </p>
-          <p><strong>금액:</strong> {{ record.dealAmount }}</p>
-          <p><strong>층:</strong> {{ record.floor }}</p>
-        </li>
-      </ul>
+      <div class="duration-container" v-if="isVisibleDuration">
+        <HouseDealDuration :lat="clickedItem.latitude" :lng="clickedItem.longitude" />
+      </div>
+
+      <!-- 거래 기록 섹션 -->
+      <div class="record-section">
+        <div class="record-header">
+          <h3>거래 기록</h3>
+          <select id="filter-select" v-model="selectedSortFilter" @change="onSortChange">
+            <option value="date-new">최신순</option>
+            <option value="date-old">오래된순</option>
+            <option value="price-high">높은거래가순</option>
+            <option value="price-low">낮은거래가순</option>
+          </select>
+        </div>
+
+        <ul class="record-list">
+          <li v-for="record in localDealList" :key="record.id" class="record-item">
+            <p>
+              <strong>거래일시:</strong> {{ record.dealYear }}.{{ record.dealMonth }}.{{ record.dealDay }}
+            </p>
+            <p><strong>금액(만원):</strong> {{ record.dealAmount }}</p>
+            <p><strong>층:</strong> {{ record.floor }}</p>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
+
 <style scoped>
 /* .sidebar: 사이드바의 전체 스타일 */
 .sidebar {
-  display: flex;
-  flex-direction: column; /* 수직으로 정렬 */
+  position: relative;
   width: 300px;
   height: 100%; /* 화면 전체 높이 */
-  background-color: #ffffff;
   background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-left: 1px solid #ddd;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex-grow: 1; /* 남은 공간을 차지 */
+  overflow-y: auto; /* 세로 스크롤 활성화 */
 }
 
 /* .image-section: 이미지 섹션 */
 .image-section {
+  position: relative; /* 자식의 절대 위치를 위해 필요 */
   height: 200px; /* 고정 높이 */
   width: 100%;
   border-bottom: 1px solid #ddd;
@@ -239,14 +236,6 @@ watch(
   width: 100%;
 }
 
-/* .record-section: 거래 기록 */
-.record-section {
-  flex-grow: 1; /* 남은 공간을 모두 차지 */
-  overflow-y: auto;
-  padding: 15px;
-  box-sizing: border-box;
-}
-
 /* .close-button: 닫기 버튼 */
 .close-button {
   position: absolute;
@@ -261,7 +250,7 @@ watch(
 
 .bookmark-button {
   position: absolute;
-  top: 50px; /* 닫기 버튼과 겹치지 않도록 아래로 이동 */
+  top: 50px; /* 닫기 버튼 아래에 위치 */
   right: 10px;
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -273,45 +262,86 @@ watch(
   justify-content: center;
   font-size: 1rem;
   cursor: pointer;
+  z-index: 11;
 }
+/* .record-section: 거래 기록 */
+.record-section {
+  flex-grow: 1;
+  padding: 15px;
+  box-sizing: border-box;
+  background-color: transparent; /* 섹션 배경 없음으로 설정 */
+}
+
 
 .record-header {
   display: flex;
-  align-items: center; /* 수직 정렬 */
-  justify-content: space-between; /* 양 끝으로 배치 */
-  margin-bottom: 10px; /* 하단 여백 추가 */
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
 }
 
 .record-header h3 {
-  font-size: 1.2rem; /* 거래 기록 텍스트 크기 */
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #222222; /* 더 짙은 텍스트 색상 */
   margin: 0;
 }
 
 #filter-select {
-  width: auto; /* 너비를 내용에 맞춤 */
-  max-width: 120px; /* 최대 너비 설정 */
-  font-size: 0.9rem; /* 거래 기록 폰트 크기에 맞게 조정 */
-  margin-left: 10px; /* 제목과 약간의 간격 */
-  padding: 4px 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  width: auto;
+  max-width: 130px;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
   background-color: #ffffff;
-  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  background-size: 12px;
   appearance: none;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 #filter-select:hover {
-  border-color: #4e4e4e;
+  border-color: #555555; /* 드롭다운 강조 */
 }
 
-#filter-select:focus {
-  outline: none;
-  border-color: #4e4e4e;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+.record-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* 항목 간 간격 */
 }
+
+.record-item {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* 항목 내 텍스트 간 간격 */
+  border-left: 3px solid #4e4e4e; /* 왼쪽에 포인트 색상 라인 */
+  padding-left: 12px; /* 라인과 텍스트 간 간격 */
+}
+
+/* 항목 내용 텍스트 */
+.record-item p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #444444; /* 일반 텍스트 색상 */
+  line-height: 1.5; /* 가독성을 위한 줄 간격 */
+}
+
+.record-item strong {
+  font-weight: bold;
+  color: #4e4e4e; /* 강조된 텍스트 색상 */
+}
+
+/* 리스트 섹션 분리선 (선택적) */
+.record-list::after {
+  content: "";
+  display: block;
+  margin-top: 15px;
+  height: 1px;
+  background-color: #eaeaea;
+}
+
 </style>

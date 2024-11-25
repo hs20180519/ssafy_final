@@ -57,23 +57,22 @@
 				i.apt_seq = #{code}
 			</if>
 			<if test="type == 'region'">
-				i.sgg_cd = SUBSTRING(#{code}, 1, 5)
-				AND i.umd_cd = SUBSTRING(#{code}, 6, 10)
+				<!-- 읍면동까지 선택된 경우 -->
+				<if test="code.substring(6, 10) != '0000'">
+					i.sgg_cd = SUBSTRING(#{code}, 1, 5)
+					AND i.umd_cd = SUBSTRING(#{code}, 6, 5)
+				</if>
+				<!-- 군구까지 선택된 경우 -->
+				<if test="code.substring(6, 10) == '00000' and code.substring(1, 5) != '00000'">
+					i.sgg_cd = SUBSTRING(#{code}, 1, 5)
+				</if>
+				<!-- 시까지 선택된 경우 -->
+				<if test="code.substring(3, 10) == '00000000'">
+					SUBSTRING(i.sgg_cd, 1, 2) = SUBSTRING(#{code}, 1, 2)
+				</if>
 			</if>
 		</where>
-		ORDER BY
-			<if test="sort == 'date-new'">
-				deal_year desc, deal_month desc, deal_day desc;
-			</if>
-			<if test="sort == 'date-old'">
-				deal_year, deal_month, deal_day;
-			</if>
-			<if test="sort == 'price-high'">
-				deal_amount desc;
-			</if>
-			<if test="sort == 'price-low'">
-				deal_amount;
-			</if>
+		ORDER BY deal_year desc, deal_month desc, deal_day desc
     </select>
 
     <select id="getCountHouseDealsWithKeyword" parameterType="map" resultType="int">

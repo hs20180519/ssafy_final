@@ -21,7 +21,8 @@ import {
   faCheck,
   faBan,
   faPlus,
-  faX
+  faX,
+  faLocationDot
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useKakao } from "vue3-kakao-maps";
@@ -41,7 +42,8 @@ library.add(
   faCheck,
   faBan,
   faPlus,
-  faX
+  faX,
+  faLocationDot
 );
 
 useKakao(import.meta.env.VITE_KAKAO_APP_KEY);
