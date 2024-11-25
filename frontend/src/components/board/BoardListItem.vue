@@ -6,8 +6,14 @@
     <div class="question-meta">
       <p class="question-author">{{ question.author }} · {{ formattedDate }}</p>
       <div class="question-info">
-        <span class="views"><font-awesome-icon :icon="['fas', 'eye']"/> {{ question.viewCount }}</span>
-        <span class="comments"><font-awesome-icon :icon="['fas', 'comment']"/> {{ question.commentsCount }}</span>
+        <span class="views"
+          ><font-awesome-icon :icon="['fas', 'eye']" />
+          {{ question.viewCount }}</span
+        >
+        <span class="comments"
+          ><font-awesome-icon :icon="['fas', 'comment']" />
+          {{ question.answerCount }}</span
+        >
       </div>
     </div>
     <div class="tags">
@@ -15,7 +21,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -31,10 +36,10 @@ export default {
     formattedDate() {
       const date = new Date(this.question.createdAt);
       const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
 
       return `${year}.${month}.${day} ${hours}:${minutes}`;
     },
@@ -107,4 +112,3 @@ export default {
   margin-top: 4px;
 }
 </style>
-

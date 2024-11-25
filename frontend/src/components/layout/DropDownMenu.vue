@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import {useAuthStore} from "@/stores/authStore";
-import {logout} from "@/api/auth.js";
-import {toast} from "vue3-toastify";
+import { useAuthStore } from "@/stores/authStore";
+import { logout } from "@/api/auth.js";
+import { toast } from "vue3-toastify";
 
 export default {
   props: {
@@ -33,7 +33,7 @@ export default {
   methods: {
     goToMyPage() {
       this.$emit("closeDropdown"); // 드롭다운 닫기
-      this.$router.push({name: "VerifyPassword"});
+      this.$router.push({ name: "VerifyPassword" });
     },
     async logout() {
       // 로그아웃 API 호출
@@ -43,10 +43,9 @@ export default {
       const authStore = useAuthStore();
       authStore.logout();
 
-
-      toast.success("로그아웃 되었습니다.", {autoClose: 1000});
+      toast.success("로그아웃 되었습니다.", { autoClose: 1000 });
       setTimeout(() => {
-        this.$router.push({name: "Home"});
+        this.$router.push({ name: "Home" });
       }, 1000);
       this.$emit("closeDropdown"); // 드롭다운 닫기
     },

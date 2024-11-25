@@ -7,7 +7,7 @@
         @click="goToHome"
         title="홈페이지"
       >
-        <font-awesome-icon :icon="['fas', 'house']"/>
+        <font-awesome-icon :icon="['fas', 'house']" />
         <span class="menu-text">홈</span>
       </p>
       <p
@@ -15,7 +15,7 @@
         @click="goToFavoriteProperty"
         title="관심 매물"
       >
-        <font-awesome-icon :icon="['fas', 'heart']"/>
+        <font-awesome-icon :icon="['fas', 'heart']" />
         <span class="menu-text">관심 매물</span>
       </p>
     </div>
@@ -28,7 +28,7 @@
         @click="toggleDropdown"
         title="마이페이지"
       >
-        <font-awesome-icon :icon="['fas', 'user']"/>
+        <font-awesome-icon :icon="['fas', 'user']" />
         <span class="menu-text">마이페이지</span>
       </div>
       <div
@@ -37,16 +37,16 @@
         @click="goToBoard"
         title="Q&A 게시판"
       >
-        <font-awesome-icon :icon="['fas', 'circle-info']"/>
+        <font-awesome-icon :icon="['fas', 'circle-info']" />
         <span class="menu-text">문의하기</span>
       </div>
     </div>
-    <DropdownMenu :showDropdown="showDropdown"/>
+    <DropdownMenu :showDropdown="showDropdown" />
   </div>
 </template>
 
 <script>
-import {useAuthStore} from "@/stores/authStore";
+import { useAuthStore } from "@/stores/authStore";
 import DropdownMenu from "@/components/layout/DropDownMenu.vue";
 
 export default {
@@ -90,7 +90,7 @@ export default {
     },
     goToFavoriteProperty() {
       this.activeMenu = "favorite"; // 즐겨찾기 메뉴 활성화
-      this.$router.push({name: "FavoritePropertyPage"});
+      this.$router.push({ name: "FavoritePropertyPage" });
     },
   },
 };
@@ -110,7 +110,7 @@ export default {
   top: 0;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-right: 1px solid #ddd;
-  z-index: 1000;
+  z-index: 15;
 }
 
 .nav-links p,
@@ -179,5 +179,4 @@ export default {
   text-align: center; /* 텍스트를 가운데 정렬 */
   white-space: nowrap; /* 텍스트가 줄 바꿈되지 않도록 */
 }
-
 </style>

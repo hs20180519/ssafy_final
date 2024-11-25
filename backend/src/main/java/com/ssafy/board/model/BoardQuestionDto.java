@@ -13,4 +13,5 @@ public class BoardQuestionDto {
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	private int viewCount;
+	private int answerCount;
 }
