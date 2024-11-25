@@ -28,7 +28,7 @@ const searchQuery = ref("");
   border: 1px solid #ccc; /* 경계선 색상 */
   border-radius: 50px; /* 부드러운 둥근 모서리 */
   padding: 0.5em 1em; /* 좌우 패딩을 조금 더 여유있게 */
-  width: 100vh;
+  width: 100%;
   background-color: #fff; /* 배경색 흰색으로 설정 */
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); /* 미세한 그림자 */
 

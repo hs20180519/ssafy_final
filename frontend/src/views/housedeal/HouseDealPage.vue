@@ -1,8 +1,7 @@
 <script setup>
 import HouseDealList from "@/components/housedeal/HouseDealList.vue";
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { getHouseDealByKeyword, getCountHouseDealByKeyword } from '@/api/houseDeal';
-import { onMounted } from 'vue';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { useHouseDealStore } from "@/stores/houseDealStore";
 import MapResult from "@/components/common/MapResult.vue";
@@ -26,7 +25,7 @@ const total = ref();
 const isDetailVisible = ref(false);
 
 onMounted(() => {
-    getResultList(type.value, keyword.value, houseDealStore.pgno);
+    getResultList(type.value, keyword.value, houseDealStore.pgno, houseDealStore.sort);
     getCountResult(type.value, keyword.value);
 })
 
@@ -58,7 +57,8 @@ const getResultList = (type, keyword, pgno = houseDealStore.pgno) => {
             type: type,
             keyword: keyword,
             pgSize: VITE_ARTICLE_LIST_SIZE,
-            pgno: pgno
+            pgno: pgno,
+            sort: houseDealStore.sort
         },
         ({ data }) => {
             console.log("getResultList: ", data);
@@ -119,11 +119,11 @@ const closeDetail = () => {
 
 <style scoped>
 
-.main-container {
-    position: relative; /* 자식 요소의 위치 기준 */
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
+.map-container {
+    display: flex; /* Flexbox 레이아웃 사용 */
+    justify-content: flex-end; /* 왼쪽 정렬 */
+    position: relative;
+    height: 100%;
 }
 
 .filter-container {

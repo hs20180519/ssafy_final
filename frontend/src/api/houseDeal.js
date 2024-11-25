@@ -9,7 +9,8 @@ function getHouseDealByKeyword(param, success, fail) {
         type: param.type,
         code: param.keyword,
         pgSize: param.pgSize,
-        pgno: param.pgno
+        pgno: param.pgno,
+        sort: param.sort
       },
     })
     .then(success)

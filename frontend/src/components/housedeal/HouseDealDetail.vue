@@ -1,7 +1,8 @@
 <script setup>
-import { ref, defineEmits, defineProps, onUpdated } from 'vue';
+import { ref, defineEmits, defineProps, onUpdated, watch } from 'vue';
 import { createFavoriteProperty, deleteFavoriteProperty, existsFavoritePropertyByAptSeqAndId } from '@/api/favoriteProperty'
 import { useAuthStore } from '@/stores/authStore';
+import { useHouseDealStore } from "@/stores/houseDealStore";
 import HouseDealDuration from './HouseDealDuration.vue';
 
 const emit = defineEmits(['closeDetail']);
@@ -11,11 +12,13 @@ const props = defineProps({
 })
 
 const authStore = useAuthStore();
+const houseDealStore = useHouseDealStore();
 
 const bookmarked = ref(false);
 const isVisibleDuration = ref(false);
 
 const selectedSortFilter = ref("date-new");
+const localDealList = ref([]);
 
 
 onUpdated(() => {
@@ -74,9 +77,42 @@ const onClickDuration = () => {
     console.log(isVisibleDuration.value);
 }
 
-const onSortChange = () => {
-    console.log("정렬필터바꿈");
+const sortDealList = () => {
+    console.log("sortDealList");
+    localDealList.value.sort((a, b) => {
+        if (selectedSortFilter.value === 'date-new') {
+            return new Date(b.dealYear, b.dealMonth - 1, b.dealDay) -
+                   new Date(a.dealYear, a.dealMonth - 1, a.dealDay);
+        } else if (selectedSortFilter.value === 'date-old') {
+            return new Date(a.dealYear, a.dealMonth - 1, a.dealDay) -
+                   new Date(b.dealYear, b.dealMonth - 1, b.dealDay);
+        } else if (selectedSortFilter.value === 'price-high') {
+            return parseFloat(b.dealAmount.replace(/,/g, '')) -
+                   parseFloat(a.dealAmount.replace(/,/g, ''));
+        } else if (selectedSortFilter.value === 'price-low') {
+            return parseFloat(a.dealAmount.replace(/,/g, '')) -
+                   parseFloat(b.dealAmount.replace(/,/g, ''));
+        }
+    });
 }
+
+// `selectedSortFilter` 값 변경 감지
+watch(selectedSortFilter, () => {
+    console.log("정렬 기준 변경:", selectedSortFilter.value);
+    sortDealList();
+});
+
+
+watch(
+    () => props.clickedItem,
+    (newVal) => {
+        if (newVal && newVal.dealList) {
+            localDealList.value = [...newVal.dealList]; // dealList 복사
+            sortDealList(); // 초기 정렬
+        }
+    },
+    { immediate: true } // 컴포넌트 초기화 시에도 실행
+);
 
 
 </script>
@@ -122,7 +158,7 @@ const onSortChange = () => {
             </div>
 
             <ul class="record-list">
-                <li v-for="record in clickedItem.dealList" :key="record.id" class="record-item">
+                <li v-for="record in localDealList" :key="record.id" class="record-item">
                     <p><strong>거래일시:</strong> {{ record.dealYear }}.{{ record.dealMonth }}.{{ record.dealDay }}</p>
                     <p><strong>금액:</strong> {{ record.dealAmount }}</p>
                     <p><strong>층:</strong> {{ record.floor }}</p>
