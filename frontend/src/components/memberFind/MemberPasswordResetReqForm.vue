@@ -1,9 +1,11 @@
 <script setup>
 import {ref} from 'vue';
-import {sendPasswordResetEmail} from "@/api/auth";
+import { sendPasswordResetEmail } from "@/api/auth";
+import {toast} from "vue3-toastify";
 
 const userId = ref("");
 const email = ref("");
+const errorMessage = ref("");
 
 const handleSubmit = () => {
   sendPasswordResetEmail(
@@ -11,11 +13,17 @@ const handleSubmit = () => {
       email: email.value,
       id: userId.value
     },
-    ({data}) => {
+    ({ data }) => {
       console.log(data);
+      toast.info("이메일 전송이 완료되었습니다.")
     },
     (error) => {
-      console.log(error);
+      console.log(error.status);
+      if (error.status === 404) {
+        errorMessage.value = "입력하신 정보로 등록된 계정을 찾을 수 없습니다.";
+      } else {
+        errorMessage.value = "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.";
+      }
     }
   )
 }
@@ -46,6 +54,10 @@ const handleSubmit = () => {
       </div>
       <button type="submit">인증번호 받기</button>
     </form>
+
+    <div v-if="errorMessage" class="error-message">
+        {{ errorMessage }}
+    </div>
   </div>
 </template>
 
@@ -77,7 +89,7 @@ const handleSubmit = () => {
 .input-group button {
   margin-top: 10px;
   padding: 10px;
-  background-color: #d87070; /* #d87070 색상 적용 */
+  background-color: #4e4e4e; /* #d87070 색상 적용 */
   color: white;
   border: none;
   border-radius: 4px;
@@ -85,7 +97,7 @@ const handleSubmit = () => {
 }
 
 .input-group button:hover {
-  background-color: #b85b5b; /* 버튼 hover 색상 */
+  background-color: #333; /* 버튼 hover 색상 */
 }
 
 button[type="submit"] {
@@ -100,5 +112,12 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
   background-color: #333 /* 버튼 hover 색상 */
+}
+
+/* 에러 메시지 스타일 */
+.error-message {
+  color: red; /* 빨간색으로 강조 */
+  font-size: 0.9rem; /* 글씨 크기 */
+  margin-top: 10px; /* 위쪽 여백 */
 }
 </style>

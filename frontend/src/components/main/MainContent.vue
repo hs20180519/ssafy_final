@@ -149,6 +149,8 @@ const onSearch = () => {
   opacity: 0;
   animation: fadeInSlideUp 2.5s ease-out forwards;
   animation-delay: 1.5s; /* 딜레이 주기 */
+  z-index: 0; /* z-index를 낮게 설정 */
+  position: relative; /* z-index가 작용하려면 position이 있어야 함 */
 }
 
 .auth-links a {

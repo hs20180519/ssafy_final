@@ -69,7 +69,8 @@ public class HouseDealController {
     		@RequestParam("type") String type,
     		@RequestParam("code") String code,
 			@RequestParam("pgSize") int pgSize,
-			@RequestParam(name = "pgno", defaultValue = "1") int pgno
+			@RequestParam(name = "pgno", defaultValue = "1") int pgno,
+			@RequestParam("sort") String sort
 			) {
 
 		GetHouseDealWithKeywordRequest request = GetHouseDealWithKeywordRequest.builder()
@@ -77,6 +78,7 @@ public class HouseDealController {
 				.code(code)
 				.pgSize(pgSize)
 				.pgno(pgno)
+				.sort(sort)
 				.build();
 		List<GetHouseDealWithKeywordResponse> houseDeals = houseDealService.getHouseDealsWithKeyword(request);
 		System.out.println(houseDeals);

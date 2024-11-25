@@ -1,7 +1,8 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import {useRoute, useRouter} from "vue-router";
-import {verifyResetUUID, resetPassword} from '@/api/auth'
+import { verifyResetUUID, resetPassword } from '@/api/auth'
+import {toast} from "vue3-toastify";
 
 const password = ref('');
 const confirmPassword = ref('');
@@ -20,7 +21,6 @@ onMounted(() => {
     ({data}) => {
       if (data == true) {
         isValidUUID.value = true;
-      } else {
       }
     },
     (error) => {
@@ -31,7 +31,7 @@ onMounted(() => {
 
 const handleSubmit = () => {
   if (password.value !== confirmPassword.value) {
-    alert("비밀번호가 일치하지 않습니다.");
+    toast.error("비밀번호가 일치하지 않습니다.");
   } else {
     resetPassword({
         email: route.query.email,
@@ -41,8 +41,11 @@ const handleSubmit = () => {
       },
       (response) => {
         console.log(response);
-        if (response.status == 204) {
-          alert("비밀번호가 변경되었습니다. 확인을 누르면 로그인 화면으로 이동합니다.")
+        if (response.status == 200) {
+          toast.info("비밀번호가 변경되었습니다. 로그인 화면으로 이동합니다.", { autoClose: false });
+          setTimeout(() => {
+            this.$router.push({ name: "Home" });
+          }, 1000);
           router.push({
             name: 'Login'
           })
@@ -114,7 +117,7 @@ const handleSubmit = () => {
 .input-group button {
   margin-top: 10px;
   padding: 10px;
-  background-color: #d87070; /* #d87070 색상 적용 */
+  background-color: #4e4e4e;
   color: white;
   border: none;
   border-radius: 4px;
@@ -122,13 +125,13 @@ const handleSubmit = () => {
 }
 
 .input-group button:hover {
-  background-color: #b85b5b; /* 버튼 hover 색상 */
+  background-color: #333; /* 버튼 hover 색상 */
 }
 
 button[type="submit"] {
   width: 100%;
   padding: 10px;
-  background-color: #d87070; /* #d87070 색상 적용 */
+  background-color: #4e4e4e; /* #d87070 색상 적용 */
   color: white;
   border: none;
   border-radius: 4px;
@@ -136,6 +139,6 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #b85b5b; /* 버튼 hover 색상 */
+  background-color: #333; /* 버튼 hover 색상 */
 }
 </style>

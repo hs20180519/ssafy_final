@@ -61,7 +61,19 @@
 				AND i.umd_cd = SUBSTRING(#{code}, 6, 10)
 			</if>
 		</where>
-		ORDER BY deal_year desc, deal_month desc, deal_day desc;
+		ORDER BY
+			<if test="sort == 'date-new'">
+				deal_year desc, deal_month desc, deal_day desc;
+			</if>
+			<if test="sort == 'date-old'">
+				deal_year, deal_month, deal_day;
+			</if>
+			<if test="sort == 'price-high'">
+				deal_amount desc;
+			</if>
+			<if test="sort == 'price-low'">
+				deal_amount;
+			</if>
     </select>
 
     <select id="getCountHouseDealsWithKeyword" parameterType="map" resultType="int">

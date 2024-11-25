@@ -8,6 +8,7 @@ import lombok.Data;
 public class GetHouseDealWithKeywordRequest {
     private String type;
     private String code;
+    private String sort;
     private int pgSize;
     private int pgno;
     private int offset;
