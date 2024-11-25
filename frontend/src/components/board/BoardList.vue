@@ -1,11 +1,11 @@
 <template>
   <div class="board-list">
-    <h2 class="title">문의하기</h2>
+    <h2 class="title">Q&A 게시판</h2>
     <div class="button-container">
       <router-link to="/board/create">
         <button class="new-question-btn">
           문의하기
-          <font-awesome-icon :icon="['fas', 'pen']"/>
+          <font-awesome-icon :icon="['fas', 'pen']" />
         </button>
       </router-link>
     </div>
@@ -19,14 +19,13 @@
     <div v-else>
       <p class="no-questions">등록된 질문이 없습니다.</p>
     </div>
-
   </div>
 </template>
 
 <script>
 import BoardListItem from "@/components/board/BoardListItem.vue";
-import {getQuestions} from "@/api/board";
-import {toast} from "vue3-toastify";
+import { getQuestions } from "@/api/board";
+import { toast } from "vue3-toastify";
 
 export default {
   name: "BoardList",
@@ -102,6 +101,4 @@ export default {
 .new-question-btn:hover {
   background-color: #333;
 }
-
-
 </style>

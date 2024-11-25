@@ -1,6 +1,6 @@
 <template>
   <div class="board-list-page">
-    <BoardList/>
+    <BoardList />
     <router-link to="/board/create"></router-link>
   </div>
 </template>
@@ -18,6 +18,6 @@ export default {
 
 <style scoped>
 .board-list-page {
-  //padding: 30px;
+  padding: 30px;
 }
 </style>
