@@ -123,7 +123,7 @@ const closeModal = () => {
   <div>
     <!-- 그래프 -->
     <div class="chart-container" @click="openModal">
-      <h3 class="chart-title">거래 금액 그래프</h3>
+      <h3 class="chart-title">거래 추이</h3>
       <Line :data="chartData" :options="chartOptions" />
     </div>
 
