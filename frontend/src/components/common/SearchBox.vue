@@ -4,6 +4,7 @@
       type="text"
       placeholder="지역, 단지명 또는 매물명을 입력해주세요."
       v-model="houseDealStore.keyword"
+      @keyup.enter='$emit("onSearch", searchQuery)'
     />
     <font-awesome-icon
       :icon="['fas', 'magnifying-glass']"
@@ -25,13 +26,12 @@ const searchQuery = ref("");
 .search-box {
   display: flex;
   align-items: center;
-  border: 1px solid #ccc; /* 경계선 색상 */
-  border-radius: 50px; /* 부드러운 둥근 모서리 */
-  padding: 0.5em 1em; /* 좌우 패딩을 조금 더 여유있게 */
-  width: 100%;
-  background-color: #fff; /* 배경색 흰색으로 설정 */
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); /* 미세한 그림자 */
-
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  padding: 0.5em 1em;
+  width: 90%; /* 부모의 width인 50% 안에서 작게 설정 */
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 input {

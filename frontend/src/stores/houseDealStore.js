@@ -9,6 +9,9 @@ export const useHouseDealStore = defineStore('housedeal', () => {
     const dongCode = ref("")
 
     const pgno = ref(1);
+    const sort = ref("date-new");
+
+    const selectedDeparture = ref();
 
     const searchOption = computed(() => {
         return {
@@ -36,6 +39,15 @@ export const useHouseDealStore = defineStore('housedeal', () => {
         pgno.value = num;
     }
 
+    const setSelectedDeparture = (newObj) => {
+        selectedDeparture.value = newObj;
+    }
+
+    const setSort = (newVal) => {
+        console.log(newVal);
+        sort.value = newVal;
+    }
+
     return {
         keyword,
         sidoName,
@@ -43,8 +55,12 @@ export const useHouseDealStore = defineStore('housedeal', () => {
         dongName,
         searchOption,
         pgno,
+        selectedDeparture,
+        sort,
         setKeyword,
         setRegion,
-        setPgno
+        setPgno,
+        setSelectedDeparture,
+        setSort,
     }
 })

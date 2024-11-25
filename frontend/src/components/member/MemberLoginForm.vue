@@ -26,7 +26,7 @@
     </form>
 
     <div class="auth-links">
-      <router-link to="/forgot-password-id">Forgot password / ID?</router-link>
+      <router-link to="/forgot-password-id">아이디/비밀번호 찾기</router-link>
       <router-link to="/signup">아직 회원이 아니세요?</router-link>
     </div>
   </div>

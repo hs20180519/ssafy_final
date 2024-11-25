@@ -57,15 +57,11 @@ const onClick = (item) => {
 .housedeal-list {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100%; /* 부모 컨테이너가 전체 높이를 차지하도록 */
-    border-right: 1px solid rgb(204, 204, 204);
-    background-color: rgb(255, 255, 255);
-    z-index: 1;
+    height: 100%;
 }
 
 .list-container {
-    margin-left: 50px;
+    margin-left: 20px;
     flex: 1; /* 리스트 컨테이너가 남은 공간을 차지하도록 */
     overflow-y: auto; /* 스크롤 가능하도록 */
 }

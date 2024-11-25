@@ -26,4 +26,18 @@ function getTransitDuration(param, success, fail) {
     .catch(fail);
 }
 
-export {getCarDuration, getWalkDuration, getTransitDuration}
+async function geocode(param) {
+    console.log(param);
+    try {
+        const response = await durationApi.get("/duration/geocode", {
+            params: {
+                address: param
+            }
+        });
+        return response.data; // 성공 시 데이터 반환
+    } catch (error) {
+        throw error; // 실패 시 에러 던짐
+    }
+}
+
+export {getCarDuration, getWalkDuration, getTransitDuration, geocode}

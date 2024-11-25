@@ -155,9 +155,15 @@ const getDongFilter = (code) => {
 
 <style scoped>
 .housedeal-filter {
-    margin-left: 50px;
-    position: relative; 
-    width: 50%;
+    margin-left: 50px; /* 원하는 여백 유지 */
+    position: absolute; /* 고정 위치로 설정 */
+    top: 20px; /* 원하는 위치로 조정 */
+    left: 20px; /* 원하는 위치로 조정 */
+    width: 50%; /* 필터의 너비 */
+    z-index: 20; /* MapResult보다 높게 설정 */
+    background-color: rgba(255, 255, 255, 0.9); /* 반투명 배경으로 MapResult 일부 보이게 설정 */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 필터에 그림자 추가 */
+    padding: 10px; /* 내부 여백 추가 */
+    border-radius: 8px; /* 둥근 모서리 추가 */
 }
-
 </style>

@@ -3,6 +3,9 @@ package com.ssafy.duration.controller;
 import com.ssafy.duration.model.request.TMapDurationRequest;
 import com.ssafy.duration.model.response.DurationResponse;
 import com.ssafy.duration.service.DurationService;
+import com.ssafy.exception.ApiException;
+import com.ssafy.exception.ErrorCode;
+import com.ssafy.util.KakaoApiUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +19,13 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class DurationController {
     private final DurationService durationService;
+    private final KakaoApiUtil kakaoApiUtil;
 
     @GetMapping("/car")
     public ResponseEntity<Mono<DurationResponse>> getCarDuration(
             @RequestParam("startX") float startX,
             @RequestParam("startY") float startY,
-            @RequestParam("startAddress") String startAddress,
+//            @RequestParam("startAddress") String startAddress,
             @RequestParam("endX") float endX,
             @RequestParam("endY") float endY
     ) throws Exception {
@@ -31,7 +35,7 @@ public class DurationController {
                         TMapDurationRequest.builder()
                                 .startX(startX)
                                 .startY(startY)
-                                .startAddress(startAddress)
+//                                .startAddress(startAddress)
                                 .endX(endX)
                                 .endY(endY)
                                 .build()
@@ -43,7 +47,7 @@ public class DurationController {
     public ResponseEntity<Mono<DurationResponse>> getWalkDuration(
             @RequestParam("startX") float startX,
             @RequestParam("startY") float startY,
-            @RequestParam("startAddress") String startAddress,
+//            @RequestParam("startAddress") String startAddress,
             @RequestParam("endX") float endX,
             @RequestParam("endY") float endY,
             @RequestParam("startName") String startName,
@@ -54,7 +58,7 @@ public class DurationController {
                         TMapDurationRequest.builder()
                                 .startX(startX)
                                 .startY(startY)
-                                .startAddress(startAddress)
+//                                .startAddress(startAddress)
                                 .endX(endX)
                                 .endY(endY)
                                 .startName(startName)
@@ -68,7 +72,7 @@ public class DurationController {
     public ResponseEntity<Mono<DurationResponse>> getTransitDuration(
             @RequestParam("startX") float startX,
             @RequestParam("startY") float startY,
-            @RequestParam("startAddress") String startAddress,
+//            @RequestParam("startAddress") String startAddress,
             @RequestParam("endX") float endX,
             @RequestParam("endY") float endY
 
@@ -78,11 +82,20 @@ public class DurationController {
                         TMapDurationRequest.builder()
                                 .startX(startX)
                                 .startY(startY)
-                                .startAddress(startAddress)
+//                                .startAddress(startAddress)
                                 .endX(endX)
                                 .endY(endY)
                                 .build()
                 )
         );
+    }
+
+    @GetMapping("/geocode")
+    public ResponseEntity<KakaoApiUtil.Location> geocode(@RequestParam("address") String address) {
+        try {
+            return ResponseEntity.ok(kakaoApiUtil.getCoordinates(address));
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.FAILED_KAKAO_GEOCODE);
+        }
     }
 }

@@ -1,14 +1,11 @@
 <script setup>
-import { defineProps, defineEmits, ref, onMounted } from 'vue'
+import { defineProps, ref, onMounted } from 'vue'
 import router from '@/router';
 
 const props = defineProps({
     foundId: String
 })
 
-const emit = defineEmits([
-    'goBack'
-])
 
 onMounted(() => {
     if (props.foundId == "") {
@@ -24,10 +21,6 @@ const goLogin = () => {
     })
 }
 
-const goBack = () => {
-    emit('goBack')
-}
-
 </script>
 
 <template>
@@ -38,12 +31,20 @@ const goBack = () => {
             <button @click='goLogin'>로그인하러 가기</button>
         </div>
     </div>
-    <div v-if='!found'>
-        <h2>정보와 일치하는 아이디가 없습니다.</h2>
-        <button @click='goBack'>뒤로가기</button>
-    </div>
 </template>
 
 <style scoped>
+button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #4e4e4e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
+button:hover {
+  background-color: #333;
+}
 </style>
