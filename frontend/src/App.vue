@@ -7,7 +7,7 @@
 <script>
 import Navbar from "@/components/layout/SideNavbar.vue";
 import "vue3-toastify/dist/index.css";
-import Chatbot from "./components/common/Chatbot.vue";
+import Chatbot from "./components/common/ChatBot.vue";
 
 export default {
   name: "App",

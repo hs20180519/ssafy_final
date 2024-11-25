@@ -2,7 +2,6 @@
 import { ref, defineEmits, defineProps, onUpdated, watch } from 'vue';
 import { createFavoriteProperty, deleteFavoriteProperty, existsFavoritePropertyByAptSeqAndId } from '@/api/favoriteProperty'
 import { useAuthStore } from '@/stores/authStore';
-import { useHouseDealStore } from "@/stores/houseDealStore";
 import HouseDealDuration from './HouseDealDuration.vue';
 
 const emit = defineEmits(['closeDetail']);
@@ -12,7 +11,6 @@ const props = defineProps({
 })
 
 const authStore = useAuthStore();
-const houseDealStore = useHouseDealStore();
 
 const bookmarked = ref(false);
 const isVisibleDuration = ref(false);
@@ -121,15 +119,15 @@ watch(
     <div class="sidebar" v-if='isVisible'>
         <!-- 닫기 버튼 -->
         <button class="close-button" @click="closeDetail">
-            X
+            <font-awesome-icon :icon="['fas', 'x']" />
         </button>
 
         <!-- 이미지 섹션 -->
         <div class="image-section">
             <img src="https://via.placeholder.com/300x200" alt="매물 이미지" />
             <button class="bookmark-button" @click="onClickBookmark">
-                <font-awesome-icon :icon="['far', 'bookmark']" v-if="!bookmarked"/>
-                <font-awesome-icon :icon="['fas', 'bookmark']" v-if="bookmarked"/>
+                <font-awesome-icon :icon="['far', 'heart']" v-if="!bookmarked"/>
+                <font-awesome-icon :icon="['fas', 'heart']" v-if="bookmarked"/>
             </button>
             <p>
                 
