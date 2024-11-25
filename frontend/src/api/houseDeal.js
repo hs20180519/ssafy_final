@@ -1,15 +1,16 @@
-import { api } from "./Instance/axiosInstance";
+import { api } from "./Instance/noAuthInstance";
 
 const houseDealApi = api();
 
 function getHouseDealByKeyword(param, success, fail) {
-    console.log(param);
-    houseDealApi.get('/house/keyword', {
-        params: {
+  console.log(param);
+  houseDealApi
+    .get("/house/keyword", {
+      params: {
         type: param.type,
         code: param.keyword,
         pgSize: param.pgSize,
-        pgno: param.pgno
+        pgno: param.pgno,
       },
     })
     .then(success)
@@ -17,8 +18,9 @@ function getHouseDealByKeyword(param, success, fail) {
 }
 
 function getCountHouseDealByKeyword(param, success, fail) {
-    houseDealApi.get('/house/keyword/count', {
-        params: {
+  houseDealApi
+    .get("/house/keyword/count", {
+      params: {
         type: param.type,
         code: param.keyword,
       },
@@ -28,18 +30,17 @@ function getCountHouseDealByKeyword(param, success, fail) {
 }
 
 function getHouseDeal(param, success, fail) {
-    houseDealApi.get('/house', {
-        params: {
-            sidoCode: param.sidoCode,
-            gugunCode: param.gugunCode,
-            dongCode: param.dongCode,
-            keyword: param.keyword
-        }
-    }).then(success).catch(fail);
+  houseDealApi
+    .get("/house", {
+      params: {
+        sidoCode: param.sidoCode,
+        gugunCode: param.gugunCode,
+        dongCode: param.dongCode,
+        keyword: param.keyword,
+      },
+    })
+    .then(success)
+    .catch(fail);
 }
 
-export {
-    getHouseDealByKeyword,
-    getHouseDeal,
-    getCountHouseDealByKeyword
-}
+export { getHouseDealByKeyword, getHouseDeal, getCountHouseDealByKeyword };

@@ -1,17 +1,17 @@
-import { api } from "./Instance/axiosInstance";
+import { api } from "./Instance/noAuthInstance";
 
 const searchApi = api();
 
 function searchKeyword(param, success, fail) {
-  console.log(param)
+  console.log(param);
   searchApi
     .get("/dong-code/search", {
       params: {
         sidoCode: param.sidoCode,
         gugunCode: param.gugunCode,
         dongCode: param.dongCode,
-        keyword: param.keyword
-      }
+        keyword: param.keyword,
+      },
     })
     .then(success)
     .catch(fail);

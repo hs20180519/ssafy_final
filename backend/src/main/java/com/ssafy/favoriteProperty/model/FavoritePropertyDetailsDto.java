@@ -15,5 +15,5 @@ public class FavoritePropertyDetailsDto {
 	private int dealYear;
 	private int dealMonth;
 	private int dealDay;
-	private List<String> distances;
+	private List<DistanceInfoDto> distances;
 }
