@@ -2,7 +2,11 @@ import axios from "axios";
 
 const {VITE_VUE_API_URL} = import.meta.env;
 import {useAuthStore} from "@/stores/authStore";
-import {toast} from "vue3-toastify";
+import { toast } from "vue3-toastify";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
 
 export const authApi = () => {
   const instance = axios.create({
@@ -77,7 +81,10 @@ export const authApi = () => {
         console.error("권한이 없습니다.");
         authStore.logout();
 
-        toast.error("권한이 없습니디.")
+        toast.error("권한이 없습니디.", { autoClose: false });
+        setTimeout(() => {
+          router.push({ name: "Login" });
+        }, 1000);
       }
 
       return Promise.reject(error);

@@ -127,11 +127,13 @@ const closeDetail = () => {
 }
 
 .filter-container {
-    position: relative;
-    z-index: 15;
-    margin-left: 50px;
-    width: 50%; /* 너비 조정 */
+    position: absolute; /* absolute로 설정 */
+    top: 20px; /* 원하는 위치로 조정 */
+    left: 20px; /* 원하는 위치로 조정 */
+    z-index: 30; /* MapResult보다 높은 z-index */
+    width: 50%; /* 너비는 그대로 유지 */
 }
+
 
 .list-overlay {
     position: absolute;
@@ -161,7 +163,7 @@ const closeDetail = () => {
 
 .detail-overlay {
     position: absolute;
-    top: 30px; /* Filter 높이 아래로 배치 */
+    top: 130px; /* Filter 높이 아래로 배치 */
     left: calc(20px + 40vh + 55px); /* HouseDealList의 너비(40vh)와 간격(10px) 만큼 오른쪽으로 배치 */
     width: 300px;
     height: calc(100vh - 150px); /* Filter 높이를 뺀 공간 사용 */

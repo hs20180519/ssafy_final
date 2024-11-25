@@ -108,6 +108,7 @@ watch(
             localDealList.value = [...newVal.dealList]; // dealList 복사
             sortDealList(); // 초기 정렬
         }
+        isVisibleDuration.value = false;
     },
     { immediate: true } // 컴포넌트 초기화 시에도 실행
 );
@@ -158,7 +159,7 @@ watch(
             <ul class="record-list">
                 <li v-for="record in localDealList" :key="record.id" class="record-item">
                     <p><strong>거래일시:</strong> {{ record.dealYear }}.{{ record.dealMonth }}.{{ record.dealDay }}</p>
-                    <p><strong>금액:</strong> {{ record.dealAmount }}</p>
+                    <p><strong>금액:</strong> {{ record.dealAmount }} (만원)</p>
                     <p><strong>층:</strong> {{ record.floor }}</p>
                 </li>
             </ul>
