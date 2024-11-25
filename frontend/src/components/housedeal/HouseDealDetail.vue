@@ -1,14 +1,19 @@
 <script setup>
-import { ref, defineEmits, defineProps, onUpdated, watch } from 'vue';
-import { createFavoriteProperty, deleteFavoriteProperty, existsFavoritePropertyByAptSeqAndId } from '@/api/favoriteProperty'
-import { useAuthStore } from '@/stores/authStore';
-import HouseDealDuration from './HouseDealDuration.vue';
+import { ref, defineEmits, defineProps, onUpdated, watch } from "vue";
+import {
+  createFavoriteProperty,
+  deleteFavoriteProperty,
+  existsFavoritePropertyByAptSeqAndId,
+} from "@/api/favoriteProperty";
+import { useAuthStore } from "@/stores/authStore";
+import HouseDealDuration from "./HouseDealDuration.vue";
+import HouseDealGraph from "./item/HouseDealGraph.vue";
 
-const emit = defineEmits(['closeDetail']);
+const emit = defineEmits(["closeDetail"]);
 const props = defineProps({
-    isVisible: Boolean,
-    clickedItem: Object
-})
+  isVisible: Boolean,
+  clickedItem: Object,
+});
 
 const authStore = useAuthStore();
 
@@ -18,279 +23,295 @@ const isVisibleDuration = ref(false);
 const selectedSortFilter = ref("date-new");
 const localDealList = ref([]);
 
-
 onUpdated(() => {
-    console.log("Item clicked: ", props.clickedItem);
-    if(authStore.isLoggedIn) { // 로그인했을 때만 북마크 여부 확인
-        existsFavoritePropertyByAptSeqAndId(
-            props.clickedItem.aptSeq,
-            ({ data }) => {
-                bookmarked.value = data;
-            },
-            (error) => {
-                console.log(error);
-            }
-        )
-    }
-})
-
+  console.log("Item clicked: ", props.clickedItem);
+  if (authStore.isLoggedIn) {
+    // 로그인했을 때만 북마크 여부 확인
+    existsFavoritePropertyByAptSeqAndId(
+      props.clickedItem.aptSeq,
+      ({ data }) => {
+        bookmarked.value = data;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+});
 
 const closeDetail = () => {
-    emit('closeDetail');
-}
+  emit("closeDetail");
+};
 
 const onClickBookmark = () => {
-    bookmarked.value = !bookmarked.value
-    if(bookmarked.value) { // 북마크 추가
-        createFavoriteProperty(
-            {
-                aptSeq: props.clickedItem.aptSeq
-            },
-            ({ data }) => {
-                console.log(props.clickedItem);
-                console.log(data);
-                bookmarked.value = true;
-                console.log(bookmarked.value);
-            },
-            (error) => {
-                console.log(error);
-            }
-        )
-    } else { // 북마크 삭제
-        console.log("북마크 삭제됨");
-        deleteFavoriteProperty(
-            props.clickedItem.aptSeq,
-            ({data}) => {
-                console.log(data);
-            },
-            (error) => {
-                console.log(error);
-            }
-        )
-    }
-}
+  bookmarked.value = !bookmarked.value;
+  if (bookmarked.value) {
+    // 북마크 추가
+    createFavoriteProperty(
+      {
+        aptSeq: props.clickedItem.aptSeq,
+      },
+      ({ data }) => {
+        console.log(props.clickedItem);
+        console.log(data);
+        bookmarked.value = true;
+        console.log(bookmarked.value);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  } else {
+    // 북마크 삭제
+    console.log("북마크 삭제됨");
+    deleteFavoriteProperty(
+      props.clickedItem.aptSeq,
+      ({ data }) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+};
 
 const onClickDuration = () => {
-    isVisibleDuration.value = !isVisibleDuration.value;
-    console.log(isVisibleDuration.value);
-}
+  isVisibleDuration.value = !isVisibleDuration.value;
+  console.log(isVisibleDuration.value);
+};
 
 const sortDealList = () => {
-    console.log("sortDealList");
-    localDealList.value.sort((a, b) => {
-        if (selectedSortFilter.value === 'date-new') {
-            return new Date(b.dealYear, b.dealMonth - 1, b.dealDay) -
-                   new Date(a.dealYear, a.dealMonth - 1, a.dealDay);
-        } else if (selectedSortFilter.value === 'date-old') {
-            return new Date(a.dealYear, a.dealMonth - 1, a.dealDay) -
-                   new Date(b.dealYear, b.dealMonth - 1, b.dealDay);
-        } else if (selectedSortFilter.value === 'price-high') {
-            return parseFloat(b.dealAmount.replace(/,/g, '')) -
-                   parseFloat(a.dealAmount.replace(/,/g, ''));
-        } else if (selectedSortFilter.value === 'price-low') {
-            return parseFloat(a.dealAmount.replace(/,/g, '')) -
-                   parseFloat(b.dealAmount.replace(/,/g, ''));
-        }
-    });
-}
+  console.log("sortDealList");
+  localDealList.value.sort((a, b) => {
+    if (selectedSortFilter.value === "date-new") {
+      return (
+        new Date(b.dealYear, b.dealMonth - 1, b.dealDay) -
+        new Date(a.dealYear, a.dealMonth - 1, a.dealDay)
+      );
+    } else if (selectedSortFilter.value === "date-old") {
+      return (
+        new Date(a.dealYear, a.dealMonth - 1, a.dealDay) -
+        new Date(b.dealYear, b.dealMonth - 1, b.dealDay)
+      );
+    } else if (selectedSortFilter.value === "price-high") {
+      return (
+        parseFloat(b.dealAmount.replace(/,/g, "")) -
+        parseFloat(a.dealAmount.replace(/,/g, ""))
+      );
+    } else if (selectedSortFilter.value === "price-low") {
+      return (
+        parseFloat(a.dealAmount.replace(/,/g, "")) -
+        parseFloat(b.dealAmount.replace(/,/g, ""))
+      );
+    }
+  });
+};
 
 // `selectedSortFilter` 값 변경 감지
 watch(selectedSortFilter, () => {
-    console.log("정렬 기준 변경:", selectedSortFilter.value);
-    sortDealList();
+  console.log("정렬 기준 변경:", selectedSortFilter.value);
+  sortDealList();
 });
 
-
 watch(
-    () => props.clickedItem,
-    (newVal) => {
-        if (newVal && newVal.dealList) {
-            localDealList.value = [...newVal.dealList]; // dealList 복사
-            sortDealList(); // 초기 정렬
-        }
-    },
-    { immediate: true } // 컴포넌트 초기화 시에도 실행
+  () => props.clickedItem,
+  (newVal) => {
+    if (newVal && newVal.dealList) {
+      localDealList.value = [...newVal.dealList]; // dealList 복사
+      sortDealList(); // 초기 정렬
+    }
+  },
+  { immediate: true } // 컴포넌트 초기화 시에도 실행
 );
-
-
 </script>
 
 <template>
-    <div class="sidebar" v-if='isVisible'>
-        <!-- 닫기 버튼 -->
-        <button class="close-button" @click="closeDetail">
-            <font-awesome-icon :icon="['fas', 'x']" />
-        </button>
+  <div class="sidebar" v-if="isVisible">
+    <!-- 닫기 버튼 -->
+    <button class="close-button" @click="closeDetail">
+      <font-awesome-icon :icon="['fas', 'x']" />
+    </button>
 
-        <!-- 이미지 섹션 -->
-        <div class="image-section">
-            <img src="https://via.placeholder.com/300x200" alt="매물 이미지" />
-            <button class="bookmark-button" @click="onClickBookmark">
-                <font-awesome-icon :icon="['far', 'heart']" v-if="!bookmarked"/>
-                <font-awesome-icon :icon="['fas', 'heart']" v-if="bookmarked"/>
-            </button>
-            <p>
-                
-            </p>
-        </div>
-
-        <!-- 길찾기 버튼 -->
-        <div class="navigate-button">
-            <button @click="onClickDuration">길찾기</button>
-        </div>
-
-        <div class="duration-container" v-if="isVisibleDuration">
-            <HouseDealDuration :lat="clickedItem.latitude" :lng="clickedItem.longitude"/>
-        </div>
-
-        <!-- 거래 기록 섹션 -->
-        <div class="record-section">
-            <div class="record-header">
-                <h3>거래 기록</h3>
-                <select id="filter-select" v-model="selectedSortFilter" @change="onSortChange">
-                    <option value="date-new">최신순</option>
-                    <option value="date-old">오래된순</option>
-                    <option value="price-high">높은거래가순</option>
-                    <option value="price-low">낮은거래가순</option>
-                </select>
-            </div>
-
-            <ul class="record-list">
-                <li v-for="record in localDealList" :key="record.id" class="record-item">
-                    <p><strong>거래일시:</strong> {{ record.dealYear }}.{{ record.dealMonth }}.{{ record.dealDay }}</p>
-                    <p><strong>금액:</strong> {{ record.dealAmount }}</p>
-                    <p><strong>층:</strong> {{ record.floor }}</p>
-                </li>
-            </ul>
-        </div>
-
+    <!-- 이미지 섹션 -->
+    <div class="image-section">
+      <img src="https://via.placeholder.com/300x200" alt="매물 이미지" />
+      <button class="bookmark-button" @click="onClickBookmark">
+        <font-awesome-icon :icon="['far', 'heart']" v-if="!bookmarked" />
+        <font-awesome-icon :icon="['fas', 'heart']" v-if="bookmarked" />
+      </button>
+      <p></p>
     </div>
-</template>
 
+    <!-- 거래 내역 그래프 -->
+    <HouseDealGraph :dealList="localDealList" />
+    <!-- 길찾기 버튼 -->
+    <div class="navigate-button">
+      <button @click="onClickDuration">길찾기</button>
+    </div>
+
+    <div class="duration-container" v-if="isVisibleDuration">
+      <HouseDealDuration
+        :lat="clickedItem.latitude"
+        :lng="clickedItem.longitude"
+      />
+    </div>
+
+    <!-- 거래 기록 섹션 -->
+    <div class="record-section">
+      <div class="record-header">
+        <h3>거래 기록</h3>
+        <select
+          id="filter-select"
+          v-model="selectedSortFilter"
+          @change="onSortChange"
+        >
+          <option value="date-new">최신순</option>
+          <option value="date-old">오래된순</option>
+          <option value="price-high">높은거래가순</option>
+          <option value="price-low">낮은거래가순</option>
+        </select>
+      </div>
+
+      <ul class="record-list">
+        <li
+          v-for="record in localDealList"
+          :key="record.id"
+          class="record-item"
+        >
+          <p>
+            <strong>거래일시:</strong> {{ record.dealYear }}.{{
+              record.dealMonth
+            }}.{{ record.dealDay }}
+          </p>
+          <p><strong>금액:</strong> {{ record.dealAmount }}</p>
+          <p><strong>층:</strong> {{ record.floor }}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 /* .sidebar: 사이드바의 전체 스타일 */
 .sidebar {
-    display: flex;
-    flex-direction: column; /* 수직으로 정렬 */
-    width: 300px;
-    height: 100%; /* 화면 전체 높이 */
-    background-color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-left: 1px solid #ddd;
-    position: relative;
+  display: flex;
+  flex-direction: column; /* 수직으로 정렬 */
+  width: 300px;
+  height: 100%; /* 화면 전체 높이 */
+  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-left: 1px solid #ddd;
+  position: relative;
 }
 
 /* .image-section: 이미지 섹션 */
 .image-section {
-    height: 200px; /* 고정 높이 */
-    width: 100%;
-    border-bottom: 1px solid #ddd;
+  height: 200px; /* 고정 높이 */
+  width: 100%;
+  border-bottom: 1px solid #ddd;
 }
 
 /* .navigate-button: 길찾기 버튼 */
 .navigate-button {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
 }
 
 .navigate-button button {
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    background-color: #4e4e4e;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  background-color: #4e4e4e;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 .navigate-button button:hover {
-    background-color: #4e4e4e;
+  background-color: #4e4e4e;
 }
 
 .duration-container {
-    width: 100%;
+  width: 100%;
 }
 
 /* .record-section: 거래 기록 */
 .record-section {
-    flex-grow: 1; /* 남은 공간을 모두 차지 */
-    overflow-y: auto;
-    padding: 15px;
-    box-sizing: border-box;
+  flex-grow: 1; /* 남은 공간을 모두 차지 */
+  overflow-y: auto;
+  padding: 15px;
+  box-sizing: border-box;
 }
-
-
 
 /* .close-button: 닫기 버튼 */
 .close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    z-index: 11;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 11;
 }
 
 .bookmark-button {
-    position: absolute;
-    top: 50px; /* 닫기 버튼과 겹치지 않도록 아래로 이동 */
-    right: 10px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    cursor: pointer;
+  position: absolute;
+  top: 50px; /* 닫기 버튼과 겹치지 않도록 아래로 이동 */
+  right: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 .record-header {
-    display: flex;
-    align-items: center; /* 수직 정렬 */
-    justify-content: space-between; /* 양 끝으로 배치 */
-    margin-bottom: 10px; /* 하단 여백 추가 */
+  display: flex;
+  align-items: center; /* 수직 정렬 */
+  justify-content: space-between; /* 양 끝으로 배치 */
+  margin-bottom: 10px; /* 하단 여백 추가 */
 }
 
 .record-header h3 {
-    font-size: 1.2rem; /* 거래 기록 텍스트 크기 */
-    margin: 0;
+  font-size: 1.2rem; /* 거래 기록 텍스트 크기 */
+  margin: 0;
 }
 
 #filter-select {
-    width: auto; /* 너비를 내용에 맞춤 */
-    max-width: 120px; /* 최대 너비 설정 */
-    font-size: 0.9rem; /* 거래 기록 폰트 크기에 맞게 조정 */
-    margin-left: 10px; /* 제목과 약간의 간격 */
-    padding: 4px 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background-color: #ffffff;
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    background-size: 12px;
-    appearance: none;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
+  width: auto; /* 너비를 내용에 맞춤 */
+  max-width: 120px; /* 최대 너비 설정 */
+  font-size: 0.9rem; /* 거래 기록 폰트 크기에 맞게 조정 */
+  margin-left: 10px; /* 제목과 약간의 간격 */
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #ffffff;
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+  appearance: none;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 #filter-select:hover {
-    border-color: #4e4e4e;
+  border-color: #4e4e4e;
 }
 
 #filter-select:focus {
-    outline: none;
-    border-color: #4e4e4e;
-    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+  outline: none;
+  border-color: #4e4e4e;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
 }
-
 </style>
