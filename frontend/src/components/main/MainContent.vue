@@ -6,7 +6,7 @@
 
     <!-- 검색 영역 -->
     <div class="search-container animated-search">
-      <SearchBox @onSearch="onSearch"/>
+      <SearchBox @onSearch="onSearch" />
       <SearchBoxResult
         v-if="isLoaded"
         :result="result"
@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import {ref} from "vue";
+import { ref } from "vue";
 import SearchBox from "@/components/common/SearchBox.vue";
 
 export default {
@@ -33,10 +33,10 @@ export default {
 </script>
 
 <script setup>
-import {defineEmits, onMounted} from "vue";
-import {searchKeyword} from "@/api/search";
-import {useHouseDealStore} from "@/stores/houseDealStore";
-import {useAuthStore} from "@/stores/authStore";
+import { defineEmits, onMounted } from "vue";
+import { searchKeyword } from "@/api/search";
+import { useHouseDealStore } from "@/stores/houseDealStore";
+import { useAuthStore } from "@/stores/authStore";
 import SearchBoxResult from "@/components/common/SearchBoxResult.vue";
 
 defineEmits(["onSearch"]);
@@ -57,9 +57,9 @@ const onSearch = () => {
       sidoCode: "",
       gugunCode: "",
       dongCode: "",
-      keyword: houseDealStore.keyword
+      keyword: houseDealStore.keyword,
     },
-    ({data}) => {
+    ({ data }) => {
       result.value = data;
       isLoaded.value = true;
     },
@@ -69,7 +69,6 @@ const onSearch = () => {
   );
 };
 </script>
-
 
 <style scoped>
 .main-content {
@@ -169,4 +168,3 @@ const onSearch = () => {
   text-decoration: underline;
 }
 </style>
-

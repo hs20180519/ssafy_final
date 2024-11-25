@@ -3,8 +3,10 @@
     <div v-if="favoriteProperties.length === 0" class="no-properties-message">
       <h3>즐겨찾기 매물이 없습니다.</h3>
       <p>
-        <router-link :to="{ name: 'Home' }" class="link"> 매물 찾기</router-link
-        >를 통해 즐겨찾기를 등록할 수 있어요
+        <router-link :to="{ name: 'Home' }" class="link">
+          매물 찾기
+        </router-link>
+        를 통해 즐겨찾기를 등록할 수 있어요
       </p>
     </div>
     <div v-else class="property-cards-container">

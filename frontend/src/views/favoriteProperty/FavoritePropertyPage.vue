@@ -1,6 +1,6 @@
 <template>
   <div class="favorite-property-page">
-    <FavoritePropertyList/>
+    <FavoritePropertyList />
   </div>
 </template>
 
@@ -10,6 +10,10 @@ import FavoritePropertyList from "@/components/favoriteProperty/FavoriteProperty
 
 <style scoped>
 .favorite-property-page {
-  padding: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
 }
 </style>

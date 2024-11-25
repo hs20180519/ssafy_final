@@ -1,16 +1,16 @@
 <template>
   <div class="home">
     <div class="main-content-wrapper">
-      <MainContent/>
+      <MainContent />
     </div>
   </div>
 </template>
 
 <script>
-import MainContent from '@/components/main/MainContent.vue';
+import MainContent from "@/components/main/MainContent.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     MainContent,
   },
@@ -26,6 +26,4 @@ export default {
   flex: 1;
   background-color: #f8f9fa; /* 메인 배경색 */
 }
-
-
 </style>

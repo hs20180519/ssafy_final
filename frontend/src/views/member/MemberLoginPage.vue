@@ -1,17 +1,17 @@
 <template>
   <div class="login-page">
-    <MemberLoginForm/>
+    <MemberLoginForm />
   </div>
 </template>
 
 <script>
-import MemberLoginForm from "@/components/member/MemberLoginForm.vue"
+import MemberLoginForm from "@/components/member/MemberLoginForm.vue";
 
 export default {
-  name: 'Login',
+  name: "Login",
   components: {
     MemberLoginForm,
-  }
+  },
 };
 </script>
 
@@ -22,8 +22,8 @@ export default {
   flex-direction: column;
   align-items: center;
   /* //padding: 20px; */
-  padding-top: 150px;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
 }
-
 </style>
-

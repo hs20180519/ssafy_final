@@ -1,6 +1,6 @@
 <template>
   <div class="login-form">
-    <h2>로그인</h2>
+    <h2 class="login-title">로그인</h2>
     <form @submit.prevent="handleLogin">
       <div class="input-group">
         <label for="username">아이디</label>
@@ -33,9 +33,9 @@
 </template>
 
 <script>
-import {login} from "@/api/auth";
-import {useAuthStore} from "@/stores/authStore";
-import {toast} from "vue3-toastify";
+import { login } from "@/api/auth";
+import { useAuthStore } from "@/stores/authStore";
+import { toast } from "vue3-toastify";
 
 export default {
   data() {
@@ -66,11 +66,10 @@ export default {
           const authStore = useAuthStore();
           authStore.login(accessToken, memberName, memberId, memberRole);
           document.cookie = `refreshToken=${refreshToken}; path=/; HttpOnly`;
-          toast.success("로그인 성공", {autoClose: false});
+          toast.success("로그인 성공", { autoClose: false });
           setTimeout(() => {
-            this.$router.push({name: "Home"});
+            this.$router.push({ name: "Home" });
           }, 1000);
-
         }
       } catch (error) {
         // 로그인 실패 시 처리
@@ -91,6 +90,10 @@ export default {
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
+}
+
+.login-title {
+  margin-top: 0;
 }
 
 .input-group {
