@@ -16,15 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.address.model.AddressDto;
 import com.ssafy.address.model.service.AddressService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/api/address")
+@RequiredArgsConstructor
 public class AddressController {
 
 	private final AddressService addressService;
-
-	public AddressController(AddressService addressService) {
-		this.addressService = addressService;
-	}
 
 	// 주소지 조회
 	@GetMapping
