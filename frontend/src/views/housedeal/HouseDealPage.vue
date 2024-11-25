@@ -165,7 +165,7 @@ const closeDetail = () => {
     left: calc(20px + 40vh + 55px); /* HouseDealList의 너비(40vh)와 간격(10px) 만큼 오른쪽으로 배치 */
     width: 300px;
     height: calc(100vh - 150px); /* Filter 높이를 뺀 공간 사용 */
-    z-index: 20;
+    z-index: 10;
     overflow-y: auto; /* 스크롤 추가 */
     /* border-left: 1px solid rgb(204, 204, 204); */
     border-radius: 8px;

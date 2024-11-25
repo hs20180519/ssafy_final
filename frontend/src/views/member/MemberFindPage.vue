@@ -11,11 +11,18 @@ const isIdFormLoaded = ref(true);
 const isPasswordFormLoaded = ref(true);
 
 const foundId = ref("");
+const errorMessage = ref("");
 
 const onFindId = (data) => {
   console.log("onFineId", data);
-  isIdFormLoaded.value = false;
-  foundId.value = data;
+
+  if (data) {
+    isIdFormLoaded.value = false;
+    foundId.value = data;
+    errorMessage.value = "";
+  } else {
+    errorMessage.value = "해당 정보로 등록된 아이디를 찾을 수 없습니다.";
+  }
 }
 
 const maskId = (id) => {
@@ -33,8 +40,23 @@ const maskId = (id) => {
   <div class='main-container'>
     <el-tabs v-model="activeName">
       <el-tab-pane label="아이디 찾기" name="findId">
-        <MemberIdFindForm v-if='isIdFormLoaded' @onFindId='onFindId'/>
-        <MemberIdFindResult v-if='!isIdFormLoaded' :foundId='maskId(foundId)' @goBack='isIdFormLoaded = true'/>
+        <!-- ID 찾기 폼 -->
+        <MemberIdFindForm 
+          v-if="isIdFormLoaded" 
+          @onFindId="onFindId" 
+        />
+        
+        <!-- 에러 메시지 -->
+        <div v-if="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+        
+        <!-- ID 찾기 결과 -->
+        <MemberIdFindResult 
+          v-if="!isIdFormLoaded" 
+          :foundId="maskId(foundId)" 
+          @goBack="isIdFormLoaded = true" 
+        />
       </el-tab-pane>
       <el-tab-pane label="비밀번호 찾기" name="findPassword">
         <MemberPasswordResetReqForm v-if='isPasswordFormLoaded'/>
@@ -60,6 +82,13 @@ const maskId = (id) => {
 
 .el-tabs__nav is-top {
   justify-content: center;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 15px;
+  padding-left: 50px;
 }
 
 </style>
