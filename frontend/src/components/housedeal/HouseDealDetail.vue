@@ -128,88 +128,83 @@ watch(
 </script>
 
 <template>
-    <div class="sidebar" v-if='isVisible'>
-        <!-- 닫기 버튼 -->
-        <button class="close-button" @click="closeDetail">
-            <font-awesome-icon :icon="['fas', 'x']" />
-        </button>
+  <div class="sidebar" v-if="isVisible">
+    <!-- 닫기 버튼 -->
+    <button class="close-button" @click="closeDetail">
+      <font-awesome-icon :icon="['fas', 'x']" />
+    </button>
+    <button class="bookmark-button" @click="onClickBookmark">
+      <font-awesome-icon :icon="['far', 'heart']" v-if="!bookmarked" />
+      <font-awesome-icon :icon="['fas', 'heart']" v-if="bookmarked" />
+    </button>
 
-        <!-- 이미지 섹션 -->
-        <div class="image-section">
-          <img src="https://via.placeholder.com/300x200" alt="매물 이미지" />
-          <button class="bookmark-button" @click="onClickBookmark">
-            <font-awesome-icon :icon="['far', 'heart']" v-if="!bookmarked" />
-            <font-awesome-icon :icon="['fas', 'heart']" v-if="bookmarked" />
-          </button>
-          <p></p>
+    
+    <!-- 스크롤 가능한 콘텐츠 -->
+    <div class="content">
+      <!-- 이미지 섹션 -->
+      <div class="image-section">
+        <img src="https://via.placeholder.com/300x200" alt="매물 이미지" />
+      </div>
+      <!-- 거래 내역 그래프 -->
+      <HouseDealGraph :dealList="localDealList" />
+
+      <!-- 길찾기 버튼 -->
+      <div class="navigate-button">
+        <button @click="onClickDuration">길찾기</button>
+      </div>
+
+      <div class="duration-container" v-if="isVisibleDuration">
+        <HouseDealDuration :lat="clickedItem.latitude" :lng="clickedItem.longitude" />
+      </div>
+
+      <!-- 거래 기록 섹션 -->
+      <div class="record-section">
+        <div class="record-header">
+          <h3>거래 기록</h3>
+          <select id="filter-select" v-model="selectedSortFilter" @change="onSortChange">
+            <option value="date-new">최신순</option>
+            <option value="date-old">오래된순</option>
+            <option value="price-high">높은거래가순</option>
+            <option value="price-low">낮은거래가순</option>
+          </select>
         </div>
 
-        <!-- 거래 내역 그래프 -->
-        <HouseDealGraph :dealList="localDealList" />
-        <!-- 길찾기 버튼 -->
-        <div class="navigate-button">
-          <button @click="onClickDuration">길찾기</button>
-        </div>
-
-        <div class="duration-container" v-if="isVisibleDuration">
-          <HouseDealDuration
-            :lat="clickedItem.latitude"
-            :lng="clickedItem.longitude"
-          />
-        </div>
-
-        <!-- 거래 기록 섹션 -->
-        <div class="record-section">
-          <div class="record-header">
-            <h3>거래 기록</h3>
-            <select
-              id="filter-select"
-              v-model="selectedSortFilter"
-              @change="onSortChange"
-            >
-              <option value="date-new">최신순</option>
-              <option value="date-old">오래된순</option>
-              <option value="price-high">높은거래가순</option>
-              <option value="price-low">낮은거래가순</option>
-            </select>
-          </div>
-
-          <ul class="record-list">
-            <li
-              v-for="record in localDealList"
-              :key="record.id"
-              class="record-item"
-            >
+        <ul class="record-list">
+          <li v-for="record in localDealList" :key="record.id" class="record-item">
             <p>
-              <strong>거래일시:</strong> {{ record.dealYear }}.{{
-                record.dealMonth
-              }}.{{ record.dealDay }}
+              <strong>거래일시:</strong> {{ record.dealYear }}.{{ record.dealMonth }}.{{ record.dealDay }}
             </p>
             <p><strong>금액:</strong> {{ record.dealAmount }}</p>
             <p><strong>층:</strong> {{ record.floor }}</p>
-        </li>
-      </ul>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
+
 <style scoped>
 /* .sidebar: 사이드바의 전체 스타일 */
 .sidebar {
-  display: flex;
-  flex-direction: column; /* 수직으로 정렬 */
+  position: relative;
   width: 300px;
   height: 100%; /* 화면 전체 높이 */
-  background-color: #ffffff;
   background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-left: 1px solid #ddd;
-  position: relative;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex-grow: 1; /* 남은 공간을 차지 */
+  overflow-y: auto; /* 세로 스크롤 활성화 */
 }
 
 /* .image-section: 이미지 섹션 */
 .image-section {
+  position: relative; /* 자식의 절대 위치를 위해 필요 */
   height: 200px; /* 고정 높이 */
   width: 100%;
   border-bottom: 1px solid #ddd;
@@ -262,7 +257,7 @@ watch(
 
 .bookmark-button {
   position: absolute;
-  top: 50px; /* 닫기 버튼과 겹치지 않도록 아래로 이동 */
+  top: 50px; /* 닫기 버튼 아래에 위치 */
   right: 10px;
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -274,6 +269,7 @@ watch(
   justify-content: center;
   font-size: 1rem;
   cursor: pointer;
+  z-index: 11;
 }
 
 .record-header {

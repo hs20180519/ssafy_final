@@ -44,12 +44,18 @@ watch(
     () => houseDealStore.selectedDeparture,
     (newObj) => {
         initMarkerList();
-        // let markerImage = new kakao.maps.MarkerImage('http://www.w3.org/2000/svg', new kakao.maps.Size(24,35));
+        let markerImage = {
+            imageSrc: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
+            imageWidth: 24,
+            imageHeight: 35,
+            imageOptions: {}
+        };
+        
         markerInfoList.value.push({
             key: 2,
             lat: newObj.coordinates.latitude,
             lng: newObj.coordinates.longitude,
-            // image: markerImage
+            image: markerImage
         });
     }
 )

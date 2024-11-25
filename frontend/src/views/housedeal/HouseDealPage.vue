@@ -138,7 +138,7 @@ const closeDetail = () => {
     position: absolute; /* absolute로 위치를 고정 */
     top: 20px; /* 화면 상단에서 20px */
     left: 20px; /* 화면 왼쪽에서 20px */
-    z-index: 30; /* MapResult보다 높은 z-index */
+    z-index: 10; /* MapResult보다 높은 z-index */
     width: 600px; /* 고정된 너비로 설정 (또는 50vw로 설정 가능) */
     max-width: 50%; /* 화면이 작아지면 최대 너비를 50%로 제한 */
 }
