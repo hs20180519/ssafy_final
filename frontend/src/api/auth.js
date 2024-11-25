@@ -1,4 +1,4 @@
-import { api } from "./Instance/axiosInstance";
+import { api } from "./Instance/noAuthInstance";
 import { authApi } from "@/api/Instance/authInstance.js";
 
 const noAuth = api();
@@ -44,25 +44,34 @@ function resetPassword(body, success, fail) {
 }
 
 function sendSignUpEmail(email, success, fail) {
-  noAuth.post("/auth/signup-email", null, {
-    params: {
-      email: email
-    }
-  })
-  .then(success)
-  .catch(fail);
+  noAuth
+    .post("/auth/signup-email", null, {
+      params: {
+        email: email,
+      },
+    })
+    .then(success)
+    .catch(fail);
 }
 
 function verifySignUpCode(param, success, fail) {
-  noAuth.post("/auth/signup-verification", {
-    email: param.email,
-    code: param.code
-  })
-  .then(success)
-  .catch(fail);
+  noAuth
+    .post("/auth/signup-verification", {
+      email: param.email,
+      code: param.code,
+    })
+    .then(success)
+    .catch(fail);
 }
 
-export { findId, sendPasswordResetEmail, verifyResetUUID, resetPassword, sendSignUpEmail, verifySignUpCode };
+export {
+  findId,
+  sendPasswordResetEmail,
+  verifyResetUUID,
+  resetPassword,
+  sendSignUpEmail,
+  verifySignUpCode,
+};
 
 // 인증 필요 없는 api 사용
 export async function signup(memberData) {
