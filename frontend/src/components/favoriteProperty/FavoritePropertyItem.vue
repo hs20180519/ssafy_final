@@ -1,6 +1,10 @@
 <template>
   <div class="favorite-property-card">
+    <div v-if="loadingImage" class="loading-placeholder">
+      <font-awesome-icon :icon="['fas', 'spinner']" />
+    </div>
     <img
+      v-else
       :src="property.image || '/images/default-property-image.jpg'"
       alt="Property Image"
       class="property-image"
@@ -50,21 +54,32 @@
 
       <!-- 삭제 버튼 -->
       <button @click="removeFavorite" class="remove-button">
-        <font-awesome-icon :icon="['fas', 'trash']"/>
+        <font-awesome-icon :icon="['fas', 'trash']" />
       </button>
     </div>
   </div>
 </template>
 
 <script>
-import {deleteFavoriteProperty} from "@/api/favoriteProperty.js";
+import { deleteFavoriteProperty } from "@/api/favoriteProperty.js";
+import { fetchUnsplashImage } from "@/api/image";
 
 export default {
   name: "FavoritePropertyItem",
   props: {
     property: Object, // Property 정보를 받아오는 prop
   },
+  data() {
+    return {
+      loadingImage: true,
+    };
+  },
   methods: {
+    async fetchRandomImage() {
+      const imageUrl = await fetchUnsplashImage("house");
+      this.property.image = imageUrl || "/images/default-property-image.jpg";
+      this.loadingImage = false;
+    },
     removeFavorite() {
       // 관심 매물 삭제 API 호출
       deleteFavoriteProperty(
@@ -78,6 +93,9 @@ export default {
         }
       );
     },
+  },
+  mounted() {
+    this.fetchRandomImage();
   },
 };
 </script>
