@@ -45,7 +45,6 @@ const closeDetail = () => {
   localDealList.value = [];
 };
 
-
 const onClickBookmark = () => {
   if (!bookmarked.value) {
     // 북마크 추가
@@ -104,7 +103,6 @@ const sortDealList = () => {
   });
 };
 
-
 // `selectedSortFilter` 값 변경 감지
 watch(selectedSortFilter, () => {
   console.log("정렬 기준 변경:", selectedSortFilter.value);
@@ -124,7 +122,6 @@ watch(
   },
   { immediate: true }
 );
-
 </script>
 
 <template>
@@ -138,7 +135,6 @@ watch(
       <font-awesome-icon :icon="['fas', 'heart']" v-if="bookmarked" />
     </button>
 
-    
     <!-- 스크롤 가능한 콘텐츠 -->
     <div class="content">
       <!-- 이미지 섹션 -->
@@ -154,14 +150,21 @@ watch(
       </div>
 
       <div class="duration-container" v-if="isVisibleDuration">
-        <HouseDealDuration :lat="clickedItem.latitude" :lng="clickedItem.longitude" />
+        <HouseDealDuration
+          :lat="clickedItem.latitude"
+          :lng="clickedItem.longitude"
+        />
       </div>
 
       <!-- 거래 기록 섹션 -->
       <div class="record-section">
         <div class="record-header">
           <h3>거래 기록</h3>
-          <select id="filter-select" v-model="selectedSortFilter" @change="onSortChange">
+          <select
+            id="filter-select"
+            v-model="selectedSortFilter"
+            @change="onSortChange"
+          >
             <option value="date-new">최신순</option>
             <option value="date-old">오래된순</option>
             <option value="price-high">높은거래가순</option>
@@ -170,9 +173,15 @@ watch(
         </div>
 
         <ul class="record-list">
-          <li v-for="record in localDealList" :key="record.id" class="record-item">
+          <li
+            v-for="record in localDealList"
+            :key="record.id"
+            class="record-item"
+          >
             <p>
-              <strong>거래일시:</strong> {{ record.dealYear }}.{{ record.dealMonth }}.{{ record.dealDay }}
+              <strong>거래일시:</strong> {{ record.dealYear }}.{{
+                record.dealMonth
+              }}.{{ record.dealDay }}
             </p>
             <p><strong>금액(만원):</strong> {{ record.dealAmount }}</p>
             <p><strong>층:</strong> {{ record.floor }}</p>
@@ -182,7 +191,6 @@ watch(
     </div>
   </div>
 </template>
-
 
 <style scoped>
 /* .sidebar: 사이드바의 전체 스타일 */
@@ -272,7 +280,6 @@ watch(
   background-color: transparent; /* 섹션 배경 없음으로 설정 */
 }
 
-
 .record-header {
   display: flex;
   align-items: center;
@@ -343,5 +350,4 @@ watch(
   height: 1px;
   background-color: #eaeaea;
 }
-
 </style>

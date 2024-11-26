@@ -1,8 +1,6 @@
 import { authApi } from "./Instance/authInstance";
-import { api } from "./Instance/noAuthInstance";
 
 const favoritePropertyApi = authApi();
-const noAuthApi = api();
 
 export function createFavoriteProperty(body, success, fail) {
   return favoritePropertyApi
