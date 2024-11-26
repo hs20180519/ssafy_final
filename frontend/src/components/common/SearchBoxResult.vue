@@ -57,7 +57,7 @@ function goDetail(type, data) {
             <h2>지역</h2>
             <template v-if="regions.length === 0">
                 <div>
-                    <NoResult emoji="👀" message="검색 결과가 없습니다." />
+                    <NoResult message="검색 결과가 없습니다." />
                 </div>
             </template>
             <template v-else>
@@ -77,7 +77,7 @@ function goDetail(type, data) {
             <h2>매물</h2>
             <template v-if="houses.length === 0">
                 <div>
-                    <NoResult emoji="👀" message="검색 결과가 없습니다." />
+                    <NoResult message="검색 결과가 없습니다." />
                 </div>
             </template>
             <template v-else>
