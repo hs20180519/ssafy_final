@@ -11,6 +11,7 @@ import {
   LinearScale,
   PointElement,
 } from "chart.js";
+import { useHouseDealStore } from "@/stores/houseDealStore";
 
 // Chart.js 플러그인 등록
 ChartJS.register(
@@ -32,8 +33,10 @@ const props = defineProps({
   },
 });
 
+const houseDealStore = useHouseDealStore();
+
 // 모달 상태 정의
-const isModalVisible = ref(false);
+const isModalVisible = ref(houseDealStore.isGraphModalVisible);
 
 // Chart.js 데이터와 옵션 초기화
 const chartData = ref({
@@ -112,10 +115,12 @@ watch(
 // 모달 열기/닫기
 const openModal = () => {
   isModalVisible.value = true;
+  houseDealStore.setIsGraphModalVisible(true);
 };
 
 const closeModal = () => {
   isModalVisible.value = false;
+  houseDealStore.setIsGraphModalVisible(false);
 };
 </script>
 
