@@ -47,7 +47,7 @@ const closeDetail = () => {
 
 
 const onClickBookmark = () => {
-  if (bookmarked.value) {
+  if (!bookmarked.value) {
     // 북마크 추가
     createFavoriteProperty(
       {
@@ -240,7 +240,7 @@ watch(
 .close-button {
   position: absolute;
   top: 10px;
-  right: 10px;
+  right: 20px;
   background: none;
   border: none;
   font-size: 1.2rem;
@@ -250,8 +250,8 @@ watch(
 
 .bookmark-button {
   position: absolute;
-  top: 50px; /* 닫기 버튼 아래에 위치 */
-  right: 10px;
+  top: 45px; /* 닫기 버튼 아래에 위치 */
+  right: 18px;
   background-color: #ffffff;
   border: 1px solid #ddd;
   border-radius: 50%;

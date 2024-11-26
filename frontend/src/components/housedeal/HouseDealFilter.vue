@@ -141,6 +141,10 @@ const getDongFilter = (code) => {
     )
 }
 
+const onCloseSearchBox = () => {
+    isLoaded.value = false;
+}
+
 </script>
 
 <template>
@@ -149,7 +153,7 @@ const getDongFilter = (code) => {
         <VSelect :selectOption=sidoOptions :selectedOption='selectedSido' @onKeySelect='onSelectSido'/>
         <VSelect :selectOption=gugunOptions :selectedOption='selectedGugun.slice(2, 5) == "000" ? "전체" : selectedGugun' @onKeySelect='onSelectGugun' />
         <VSelect :selectOption=dongOptions :selectedOption='selectedDong.slice(-5) == "00000" ? "전체" : selectedDong' @onKeySelect='onSelectDong' />
-        <SearchBoxResult v-if="isLoaded" :result="result" @onResultClicked="isLoaded = false" class='search-box-result'/>
+        <SearchBoxResult v-if="isLoaded" :result="result" @onResultClicked="isLoaded = false" class='search-box-result' @closeSearchBox='onCloseSearchBox'/>
     </div>
 </template>
 

@@ -56,8 +56,8 @@ function goDetail(type, data) {
         <div class="search-column">
             <h2>지역</h2>
             <template v-if="regions.length === 0">
-                <div >
-                    <NoResult emoji="👀" message="검색 결과가 없습니다."/>
+                <div>
+                    <NoResult emoji="👀" message="검색 결과가 없습니다." />
                 </div>
             </template>
             <template v-else>
@@ -76,8 +76,8 @@ function goDetail(type, data) {
         <div class="search-column">
             <h2>매물</h2>
             <template v-if="houses.length === 0">
-                <div >
-                    <NoResult emoji="👀" message="검색 결과가 없습니다."/>
+                <div>
+                    <NoResult emoji="👀" message="검색 결과가 없습니다." />
                 </div>
             </template>
             <template v-else>
@@ -89,11 +89,15 @@ function goDetail(type, data) {
                 >
                     <p class="house-title">{{ house.aptNm }}</p>
                     <p class="house-location">{{ house.sidoName }} {{ house.gugunName }} {{ house.dongName }}</p>
-                </div> 
+                </div>
             </template>
         </div>
+
+        <!-- 닫기 버튼 -->
+        <button class="close-button" @click="$emit('closeSearchBox')">닫기</button>
     </div>
 </template>
+
 
 <style scoped>
 .search-box-result {
@@ -169,4 +173,24 @@ h2 {
     color: #666;
     margin: 4px 0 0;
 }
+
+.close-button {
+    position: absolute; /* 위치 고정 */
+    bottom: 15px; /* 아래쪽 여백 */
+    right: 15px; /* 오른쪽 여백 */
+    font-size: 0.8rem; /* 작은 크기 */
+    color: rgba(0, 0, 0, 0.5); /* 흐릿한 글자 색 */
+    background: none; /* 배경 제거 */
+    border: none; /* 테두리 제거 */
+    cursor: pointer; /* 클릭 가능 표시 */
+    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out; /* 부드러운 효과 */
+}
+
+.close-button:hover {
+    color: rgba(0, 0, 0, 0.8); /* hover 시 더 진한 색상 */
+    /* transform: scale(1.1); hover 시 살짝 확대 */
+}
+
+
+
 </style>

@@ -13,6 +13,8 @@ export const useHouseDealStore = defineStore('housedeal', () => {
 
     const selectedDeparture = ref();
 
+    const isGraphModalVisible = ref(false);
+
     const searchOption = computed(() => {
         return {
             keyword: keyword.value,
@@ -48,6 +50,10 @@ export const useHouseDealStore = defineStore('housedeal', () => {
         sort.value = newVal;
     }
 
+    const setIsGraphModalVisible = (newVal) => {
+        isGraphModalVisible.value = newVal;
+    }
+
     return {
         keyword,
         sidoName,
@@ -57,10 +63,12 @@ export const useHouseDealStore = defineStore('housedeal', () => {
         pgno,
         selectedDeparture,
         sort,
+        isGraphModalVisible,
         setKeyword,
         setRegion,
         setPgno,
         setSelectedDeparture,
         setSort,
+        setIsGraphModalVisible
     }
 })
