@@ -28,6 +28,7 @@ const searchQuery = ref("");
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 50px;
+  margin-left: 10px;
   padding: 0.5em 1em;
   width: 90%; /* 부모의 width인 50% 안에서 작게 설정 */
   background-color: #fff;

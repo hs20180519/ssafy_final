@@ -10,6 +10,7 @@
       <SearchBoxResult
         v-if="isLoaded"
         :result="result"
+        @closeSearchBox='onCloseSearchBox'
         class="search-box-result"
       />
     </div>
@@ -47,6 +48,10 @@ const authStore = useAuthStore();
 const isLoaded = ref(false);
 const result = ref();
 
+const authLinkMarginTop = ref("1em");
+const authLinkMarginBtm = ref("150px");
+
+
 onMounted(() => {
   houseDealStore.setKeyword("");
 });
@@ -62,12 +67,19 @@ const onSearch = () => {
     ({ data }) => {
       result.value = data;
       isLoaded.value = true;
-    },
+      authLinkMarginTop.value = "350px";
+      authLinkMarginBtm.value = "0px";
+      },
     (error) => {
       console.log(error);
     }
   );
 };
+
+const onCloseSearchBox = () => {
+  isLoaded.value = false;
+  authLinkMarginTop.value = "1em";
+}
 </script>
 
 <style scoped>
@@ -78,11 +90,14 @@ const onSearch = () => {
   justify-content: center;
   text-align: center;
   min-height: 100vh;
-  height: 100%;
+  height: auto; /* 높이를 동적으로 설정 */
   width: 100%;
   background-color: #f8f9fa;
   color: #333;
+  position: static; /* 고정된 위치를 제거 */
+  padding-top: 20px; /* 필요 시 상단 여백 추가 */
 }
+
 
 /* 제목 스타일 */
 .main-title {
@@ -145,8 +160,8 @@ const onSearch = () => {
 }
 
 .auth-links {
-  margin-top: 1em;
-  margin-bottom: 150px;
+  margin-top: v-bind(authLinkMarginTop);
+  margin-bottom: v-bind(authLinkMarginBtm);
   opacity: 0;
   animation: fadeInSlideUp 2.5s ease-out forwards;
   animation-delay: 1.5s; /* 딜레이 주기 */
