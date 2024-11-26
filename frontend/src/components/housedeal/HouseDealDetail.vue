@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineEmits, defineProps, onUpdated, watch } from "vue";
+import { ref, defineEmits, defineProps, watch, onMounted } from "vue";
 import {
   createFavoriteProperty,
   deleteFavoriteProperty,
@@ -8,6 +8,7 @@ import {
 import { useAuthStore } from "@/stores/authStore";
 import HouseDealDuration from "./HouseDealDuration.vue";
 import HouseDealGraph from "./item/HouseDealGraph.vue";
+import { fetchUnsplashImage } from "@/api/image";
 
 const emit = defineEmits(["closeDetail"]);
 const props = defineProps({
@@ -23,8 +24,12 @@ const isVisibleDuration = ref(false);
 const selectedSortFilter = ref("date-new");
 const localDealList = ref([]);
 
-onUpdated(() => {
+// image
+const loadingImage = ref(true);
+
+onMounted(() => {
   console.log("Item clicked: ", props.clickedItem);
+  fetchRandomImage();
   if (authStore.isLoggedIn) {
     // 로그인했을 때만 북마크 여부 확인
     existsFavoritePropertyByAptSeqAndId(
@@ -122,6 +127,14 @@ watch(
   },
   { immediate: true }
 );
+
+// image
+const fetchRandomImage = async () => {
+  console.log("fetchRand");
+  const imageUrl = await fetchUnsplashImage("house");
+  props.clickedItem.image = imageUrl || "/images/default-property-image.jpg";
+  loadingImage.value = false;
+}
 </script>
 
 <template>
@@ -137,9 +150,17 @@ watch(
 
     <!-- 스크롤 가능한 콘텐츠 -->
     <div class="content">
-      <!-- 이미지 섹션 -->
-      <div class="image-section">
-        <img src="https://via.placeholder.com/300x200" alt="매물 이미지" />
+      <div class='image-section'>
+        <!-- 이미지 섹션 -->
+        <div v-if="loadingImage" class="loading-placeholder">
+          <font-awesome-icon :icon="['fas', 'spinner']" />
+        </div>
+        <img
+          v-else
+          :src="clickedItem.image || '/images/default-property-image.jpg'"
+          alt="clickedItem Image"
+          class="clickedItem-image"
+        />
       </div>
       <!-- 거래 내역 그래프 -->
       <HouseDealGraph :dealList="localDealList" />
@@ -211,11 +232,10 @@ watch(
 }
 
 /* .image-section: 이미지 섹션 */
-.image-section {
-  position: relative; /* 자식의 절대 위치를 위해 필요 */
-  height: 200px; /* 고정 높이 */
-  width: 100%;
-  border-bottom: 1px solid #ddd;
+.image-section img {
+  width: 100%; /* .sidebar의 width에 맞춤 */
+  height: 180px; /* height를 180px로 고정 */
+  object-fit: cover; /* 비율을 유지하며 영역에 맞게 조정 */
 }
 
 /* .navigate-button: 길찾기 버튼 */
@@ -244,22 +264,10 @@ watch(
   width: 100%;
 }
 
-/* .close-button: 닫기 버튼 */
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  z-index: 11;
-}
 
+.close-button,
 .bookmark-button {
   position: absolute;
-  top: 45px; /* 닫기 버튼 아래에 위치 */
-  right: 18px;
   background-color: #ffffff;
   border: 1px solid #ddd;
   border-radius: 50%;
@@ -271,7 +279,27 @@ watch(
   font-size: 1rem;
   cursor: pointer;
   z-index: 11;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 부드러운 그림자 추가 */
+  transition: box-shadow 0.2s ease, background-color 0.2s ease; /* 부드러운 전환 효과 */
 }
+
+.close-button {
+  top: 10px;
+  right: 20px;
+}
+
+.bookmark-button {
+  top: 45px; /* 닫기 버튼 아래에 위치 */
+  right: 20px;
+}
+
+.close-button:hover,
+.bookmark-button:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* hover 시 그림자 강조 */
+  background-color: #f9f9f9; /* hover 시 약간의 색상 변화 */
+}
+
+
 /* .record-section: 거래 기록 */
 .record-section {
   flex-grow: 1;
