@@ -80,6 +80,8 @@ public class HouseDealController {
 				.pgno(pgno)
 				.sort(sort)
 				.build();
+		
+		System.out.println(request);
 		List<GetHouseDealWithKeywordResponse> houseDeals = houseDealService.getHouseDealsWithKeyword(request);
 		System.out.println(houseDeals);
     	return ResponseEntity.ok(houseDeals);

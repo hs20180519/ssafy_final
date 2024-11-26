@@ -146,6 +146,7 @@ const onSearch = () => {
 
 .auth-links {
   margin-top: 1em;
+  margin-bottom: 150px;
   opacity: 0;
   animation: fadeInSlideUp 2.5s ease-out forwards;
   animation-delay: 1.5s; /* 딜레이 주기 */

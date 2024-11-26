@@ -2,6 +2,7 @@
 import router from '@/router';
 import { defineProps, defineEmits, watch, ref } from 'vue';
 import { useHouseDealStore } from '@/stores/houseDealStore';
+import NoResult from './NoResult.vue';
 
 const houseDealStore = useHouseDealStore();
 
@@ -54,49 +55,66 @@ function goDetail(type, data) {
         <!-- 지역 결과 -->
         <div class="search-column">
             <h2>지역</h2>
-            <div
-                v-for="region in regions"
-                :key="region.dongCode"
-                class="search-item"
-                @click="goDetail('region', region)"
-            >
-                {{ region.sidoName }} {{ region.gugunName }} {{ region.dongName }}
-            </div>
+            <template v-if="regions.length === 0">
+                <div >
+                    <NoResult emoji="👀" message="검색 결과가 없습니다."/>
+                </div>
+            </template>
+            <template v-else>
+                <div
+                    v-for="region in regions"
+                    :key="region.dongCode"
+                    class="search-item"
+                    @click="goDetail('region', region)"
+                >
+                    {{ region.sidoName }} {{ region.gugunName }} {{ region.dongName }}
+                </div>
+            </template>
         </div>
 
         <!-- 매물 결과 -->
         <div class="search-column">
             <h2>매물</h2>
-            <div
-                v-for="house in houses"
-                :key="house.aptSeq"
-                class="search-item"
-                @click="goDetail('house', house.aptSeq)"
-            >
-                <p class="house-title">{{ house.aptNm }}</p>
-                <p class="house-location">{{ house.sidoName }} {{ house.gugunName }} {{ house.dongName }}</p>
-            </div>
+            <template v-if="houses.length === 0">
+                <div >
+                    <NoResult emoji="👀" message="검색 결과가 없습니다."/>
+                </div>
+            </template>
+            <template v-else>
+                <div
+                    v-for="house in houses"
+                    :key="house.aptSeq"
+                    class="search-item"
+                    @click="goDetail('house', house.aptSeq)"
+                >
+                    <p class="house-title">{{ house.aptNm }}</p>
+                    <p class="house-location">{{ house.sidoName }} {{ house.gugunName }} {{ house.dongName }}</p>
+                </div> 
+            </template>
         </div>
     </div>
 </template>
 
 <style scoped>
 .search-box-result {
-    display: flex; /* 두 칸으로 나누기 위해 flex 사용 */
+    /* 기존 스타일 유지 */
+    display: flex;
     margin-top: 10px;
     background-color: white;
-    padding: 0; /* 패딩 제거 */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 100%; /* 검색창과 동일한 너비 */
-    z-index: 30; /* HouseDealDetail보다 높은 z-index 값 */
+    width: 100%;
+    z-index: 30;
     position: absolute;
-    top: 100%; /* 검색창 바로 아래 */
+    top: 100%;
     left: 0;
+    max-height: 300px;
 
-    /* 전체 높이 제한 */
-    max-height: 300px; /* 검색 결과 전체 높이 고정 */
+    /* 추가 스타일 */
+    padding: 20px; /* 내부 여백 추가 */
+    box-sizing: border-box; /* 패딩을 포함한 너비 계산 */
 }
+
 
 .search-column {
     flex: 1; /* 두 칸을 균등 분배 */

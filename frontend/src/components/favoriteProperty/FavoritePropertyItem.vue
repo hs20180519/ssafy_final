@@ -98,7 +98,6 @@ export default {
   height: 180px;
   object-fit: cover;
   border-radius: 4px;
-  //background-color: #ecebeb;
 }
 
 .property-details {

@@ -113,9 +113,11 @@ const closeDetail = () => {
     <div class="map-container">
       <MapResult :clickedItem="clickedItem" />
       <div class="detail-overlay">
-        <HouseDealDetail
-          class="sidebar"
-          :isVisible="isDetailVisible"
+        <HouseDealDetail 
+          v-if="isDetailVisible" 
+          class="sidebar" 
+          :isVisible="isDetailVisible" 
+          :key="clickedItem.aptSeq"
           @closeDetail="closeDetail"
           :clickedItem="clickedItem"
         />
@@ -133,11 +135,14 @@ const closeDetail = () => {
 }
 
 .filter-container {
-  position: relative;
-  z-index: 10;
-  margin-left: 50px;
-  width: 50%; /* 너비 조정 */
+    position: absolute; /* absolute로 위치를 고정 */
+    top: 20px; /* 화면 상단에서 20px */
+    left: 20px; /* 화면 왼쪽에서 20px */
+    z-index: 15; /* MapResult보다 높은 z-index */
+    width: 600px; /* 고정된 너비로 설정 (또는 50vw로 설정 가능) */
+    max-width: 50%; /* 화면이 작아지면 최대 너비를 50%로 제한 */
 }
+
 
 .list-overlay {
   position: absolute;
@@ -166,17 +171,15 @@ const closeDetail = () => {
 }
 
 .detail-overlay {
-  position: absolute;
-  top: 30px; /* Filter 높이 아래로 배치 */
-  left: calc(
-    20px + 40vh + 55px
-  ); /* HouseDealList의 너비(40vh)와 간격(10px) 만큼 오른쪽으로 배치 */
-  width: 300px;
-  height: calc(100vh - 150px); /* Filter 높이를 뺀 공간 사용 */
-  z-index: 10;
-  overflow-y: auto; /* 스크롤 추가 */
-  /* border-left: 1px solid rgb(204, 204, 204); */
-  border-radius: 8px;
+    position: absolute;
+    top: 130px; /* Filter 높이 아래로 배치 */
+    left: calc(20px + 40vh + 55px); /* HouseDealList의 너비(40vh)와 간격(10px) 만큼 오른쪽으로 배치 */
+    width: 300px;
+    height: calc(100vh - 150px); /* Filter 높이를 뺀 공간 사용 */
+    z-index: 10;
+    overflow-y: auto; /* 스크롤 추가 */
+    /* border-left: 1px solid rgb(204, 204, 204); */
+    border-radius: 8px;
 }
 
 .sidebar {
